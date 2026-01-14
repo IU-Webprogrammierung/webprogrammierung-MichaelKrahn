@@ -14,3 +14,17 @@ function typing() {
     }
 }
 typing();
+
+gsap.to(".header", {
+  scrollTrigger: {
+    trigger: "#hero",
+    start: "top top",
+    end: "120 top",
+    scrub: true,
+  },
+  top: 18,
+  left: "50%",
+  xPercent: -50,
+  yPercent: 0,
+  borderRadius: 18,
+});

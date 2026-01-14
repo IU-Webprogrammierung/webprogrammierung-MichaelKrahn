@@ -1,467 +1,503 @@
 /* =========================================
-   GLOBAL STYLE / DESIGN BASIS
+   GLOBAL / THEME
 ========================================= */
 
-/* Farb- & Designvariablen */
 :root {
-    --bg-dark: #0e0e12;
-    --bg-light: #ffffff;
-    --accent: #5ab9ff;
-    --text-light: #e6e6e6;
-    --text-dark: #111111;
-    --glass-bg: rgba(255, 255, 255, 0.08);
-    --glass-border: rgba(255, 255, 255, 0.25);
+  --bg: #f6f6f8;
+  --text: #0f1115;
+  --accent: #8ed0ff;
+
+  --glass: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.25);
 }
 
-/* Reset - saubere Ausgangsbasis */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    line-height: 1.6;
-    background: var(--bg-light);
-    color: var(--text-dark);
-    transition: background 0.8s ease, color 0.8s ease;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.8s ease, color 0.8s ease;
 }
-
 
 body.dark-mode {
-  background: #0a0a0a;
-  color: #fff;
+  --bg: #0a0d14;
+  --text: #f2f5ff;
+  --glass: rgba(20, 20, 28, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.16);
 }
 
-
-/* =========================================
-   LAYOUT / STRUKTUR
-========================================= */
-
-section {
-    padding: 100px 10%;
-    min-height: 60vh;
+/* Base sections */
+main section {
+  min-height: 100vh;
+  padding: 120px 10%;
+  scroll-snap-align: start;
+  scroll-margin-top: 84px;
 }
 
-h1, h2, h3 {
-    font-family: 'Inter', sans-serif;
-    letter-spacing: 1px;
-    font-weight: 500;
+/* Typography */
+h1,
+h2,
+h3 {
+  letter-spacing: 1px;
+  font-weight: 500;
 }
 
 h2 {
-    margin-bottom: 30px;
-    font-size: 2.2rem;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
 }
-
 
 /* =========================================
-   HEADER + NAVIGATION (FROSTED GLASS)
+   HERO / HEADER
 ========================================= */
 
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    padding: 15px 10%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--glass-border);
-
-    z-index: 1000;
-}
-
-header h1 {
-    font-size: 1.3rem;
-    font-weight: 400;
-}
-
-nav ul {
-    list-style: none;
-    display: flex;
-    gap: 25px;
-}
-
-nav a {
-    text-decoration: none;
-    color: var(--text-light);
-    opacity: 0.8;
-    transition: 0.3s;
-}
-
-nav a:hover {
-    opacity: 1;
-    color: var(--accent);
-}
-
-
-/* =========================================
-   HERO / STARTBEREICH
-========================================= */
-
-/* =========================
-        HERO SECTION
-========================= */
-/*.hero {
-    height: 100vh;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 25% 1fr 30%;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-}*/
-
-.hero {
+.site-header {
   height: 100vh;
-  display: flex;
-  align-items: center;
+  position: relative;
   overflow: hidden;
 }
 
-.hero-inner {
+/* Blurred background portrait */
+.hero-bg {
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+}
+
+.hero-bg img {
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  transform: translate(6%, 6%) scale(1.08);
+  filter: blur(24px);
+  opacity: 0.35;
+}
+
+/* Foreground portrait */
+.hero-portrait {
+  position: absolute;
+  right: 6%;
+  top: 16%;
+  z-index: 2;
+  width: min(420px, 38vw);
+}
+
+.hero-portrait img {
   width: 100%;
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  align-items: center;
-  padding: 80px;
+  border-radius: 22px;
+  filter: drop-shadow(0 20px 50px rgba(0, 0, 0, 0.18));
 }
 
-.hero-left {
-  font-size: 2.2rem;
-  font-weight: 700;
-  position: relative;
+/* Center typing text */
+.hero-center {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  text-align: center;
+  width: min(760px, 86vw);
 }
 
+.typing-block {
+  width: min(520px, 86vw);
+  margin: 0 auto;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 650;
+  line-height: 1.15;
+}
 
-.typing-bar {
-  display: flex;
-  align-items: center;
-  opacity: 1;
+#typingText {
+  white-space: normal;
 }
 
 .cursor {
-  font-weight: bold;
   margin-left: 8px;
-  animation: blink 0.6s infinite alternate;
+  animation: blink 0.7s infinite alternate;
 }
 
 @keyframes blink {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
+  from {
+    opacity: 1;
+  }
 
-.hero-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.hero-img {
-  width: 420px;
-  height: auto;
-  border-radius: 22px;
-  filter: drop-shadow(0 20px 50px rgba(0,0,0,0.2));
-  transform: translateY(0px);
-  transition: filter 0.6s ease;
-}
-
-body.dark-mode .hero-img {
-  filter: drop-shadow(0 25px 70px rgba(255,255,255,0.08));
-}
-
-/* =========================
-    LEFT PANEL (FROSTED)
-========================= */
-
-.hero-panel {
-    height: 100%;
-    width: 100%;
-    background: rgba(20, 20, 30, 0.6);
-    backdrop-filter: blur(12px);
-    border-right: 1px solid rgba(255,255,255,0.15);
-    position: relative;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.hero-panel.fade-out {
+  to {
     opacity: 0;
-    transform: translateX(-50px);
+  }
 }
 
-.panel-content {
-    position: absolute;
-    bottom: 15%;
-    left: 15%;
-    font-size: 2rem;
-    font-weight: 600;
-    color: white;
-}
-
-/* =========================
-        CENTER TEXT
-========================= */
-.hero-text {
-    text-align: center;
-    transform: translateY(20px);
-    transition: transform 0.6s ease;
-}
-
-/* =========================
-        IMAGE RIGHT
-========================= */
-.hero-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-image img {
-    width: 85%;
-    max-width: 480px;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
-    transition: transform 0.5s ease, opacity 0.5s ease;
-}
-
-.hero-image img:hover {
-    transform: translateY(-5px) scale(1.02);
-}
-
-
-/* =========================================
-   ÜBER MICH
-========================================= */
-
-#about {
-    max-width: 900px;
-    margin: auto;
-}
-
-
-/* =========================================
-   PROJEKTE (CARDS MIT GLASS-EFFEKT)
-========================================= */
-
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-}
-
-.project-card {
-    padding: 25px;
-    border-radius: 16px;
-
-    background: var(--glass-bg);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    border: 1px solid var(--glass-border);
-
-    transition: 0.4s;
-}
-
-.project-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent);
-}
-
-
-/* =========================================
-   CV
-========================================= */
-
-#cv {
-    max-width: 900px;
-    margin: auto;
-}
-
-
-/* =========================================
-   KONTAKT
-========================================= */
-
-#contact {
-    max-width: 900px;
-    margin: auto;
-}
-
-
-/* =========================================
-   FOOTER
-========================================= */
-
-footer {
-    text-align: center;
-    padding: 40px 0;
-    opacity: 0.7;
-}
-
-
-/* =========================================
-   RESPONSIVE DESIGN
-========================================= */
-
-@media (max-width: 900px) {
-
-    header {
-        padding: 12px 6%;
-    }
-
-    section {
-        padding: 80px 6%;
-    }
-
-    nav ul {
-        gap: 15px;
-    }
-
+.hero-subline {
+  margin-top: 14px;
+  opacity: 0.75;
 }
 
 /* =========================================
-   Project Section
+   TOPBAR (SINGLE NAVBAR SYSTEM)
 ========================================= */
 
-.projects {
+/* Hero state (page load) */
+.topbar {
+  position: absolute;
+  top: 30%;
+  left: 6%;
+  transform: translateY(-50%);
+  width: min(72vw, 820px);
+  z-index: 10;
+}
+
+/* Sticky state (after collapse) */
+.topbar.is-sticky{
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: none;
+
   width: 100vw;
-  height: 100vh;
+  z-index: 9999;
+}
+
+/* Make the glass container full-width and edge-to-edge */
+.topbar.is-sticky .topbar-glass{
+  width: 100%;
+  border: none;
+  border-radius: 0;
+
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Glass styling */
+.topbar-glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  padding: 14px 18px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+/* Nav links */
+.brand {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+}
+
+.topbar-center {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+
+.topbar-center a {
+  text-decoration: none;
+  color: inherit;
+  opacity: 0.82;
+  font-weight: 500;
+  padding: 8px 10px;
+  border-radius: 999px;
+  position: relative;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* Rainbow underline hover */
+.topbar-center a::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: scaleX(0.6);
+  background: linear-gradient(90deg,
+      rgba(255, 0, 150, .85),
+      rgba(0, 200, 255, .85),
+      rgba(120, 255, 0, .75),
+      rgba(255, 200, 0, .75),
+      rgba(255, 0, 150, .85));
+  filter: blur(5px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+.topbar-center a:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.topbar-center a:hover::after {
+  opacity: .7;
+  transform: scaleX(1);
+}
+
+/* =========================================
+   PROJECTS
+========================================= */
+
+#projects {
   display: grid;
   place-items: center;
 }
 
 .projects-container {
-  width: 90%;
-  height: 70%;
+  width: min(1200px, 92vw);
+  height: min(70vh, 720px);
   display: flex;
   gap: 2rem;
-  position: relative;
 }
 
 .project-card {
   flex: 1;
-  height: 100%;
-  border-radius: 24px;
-  position: relative;
+  border-radius: 20px;
   overflow: hidden;
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(20px);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.3);
-  transition: all .6s ease;
-  transform-origin: center;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.project-card iframe {
-  width: 100%;
+.project-content {
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  border: none;
-  opacity: .9;
 }
 
-.project-card:hover {
-  z-index: 10;
-  scale: 1.1;
+.project-content h2 {
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-/* Wenn eins hovert → das andere nach außen */
-.projects-container:hover .project-card:not(:hover) {
-  filter: grayscale(70%) brightness(0.6);
-  transform: translateX(-50px);
+.project-content iframe {
+  flex: 1;
+  border: 0;
 }
 
-#project2:hover ~ #project1 {
-  transform: translateX(50px);
-}
-
-
-/* =========================================
-   Clouds+Globe Section
-========================================= */
-
-#cloudScene{
+/* ========================================= CLOUDS + GLOBE ========================================= */
+#cloudScene {
   position: relative;
-  height: 100vh;
   overflow: hidden;
 }
 
-/* Clouds Container */
-.cloud-layer{
+.globe-wrapper {
   position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 55vh;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  opacity: 0;
+  /* reveal via GSAP */
+  transform: scale(0.7);
+}
+
+/* Clouds sit above globe */
+.cloud-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
   pointer-events: none;
 }
 
-/* Cloud Base */
-.cloud{
+/* Place clouds initially to cover top area (adjust as you like) */
+.cloud {
   position: absolute;
+  top: 12%;
   width: 240px;
   height: 130px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.92);
   border-radius: 120px;
-  filter: drop-shadow(0px 20px 25px rgba(0,0,0,0.25));
+  filter: drop-shadow(0px 20px 25px rgba(0, 0, 0, 0.25));
   will-change: transform, opacity;
 }
 
-.cloud::before,
-.cloud::after{
-  content:"";
+.c1 {
+  left: 5%;
+  bottom: -30%;
+}
+
+.c2 {
+  left: 35%;
+  bottom: -32%;
+}
+
+.c3 {
+  left: 60%;
+  bottom: -36%;
+}
+
+.c4 {
+  left: 80%;
+  bottom: -40%;
+}
+
+.c5 {
+  left: 90%;
+  bottom: -44%;
+}
+
+.c6 {
+  left: 15%;
+  bottom: -38%;
+}
+
+.globe-wrapper {
   position: absolute;
-  background: inherit;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  scale: 0.7;
+}
+
+.globe-placeholder {
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
-}
-
-.cloud::before{
-  width: 150px;
-  height: 110px;
-  top:-35px;
-  left:25px;
-}
-
-.cloud::after{
-  width:170px;
-  height:120px;
-  top:-15px;
-  left: 90px;
-}
-
-/* Positions */
-.c1{ left: 5%; bottom: 10%; }
-.c2{ left: 35%; bottom: 12%; }
-.c3{ left: 60%; bottom: 8%; }
-.c4{ left: 80%; bottom: 14%; }
-
-/* Globe area */
-.globe-wrapper{
-  position: absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  opacity:0;
-  scale:0.7;
-}
-
-.globe-placeholder{
-  width:400px;
-  height:400px;
-  border-radius:50%;
   background: radial-gradient(circle, #1a1a1a, #000);
-  border:2px solid rgba(255,255,255,0.2);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:white;
-  font-family: sans-serif;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
 }
 
+/* ========================================= CONTACT ========================================= */
+.contact-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
+.contact-wrapper {
+  width: 100%;
+  max-width: 720px;
+  padding: 60px;
+  border-radius: 32px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+}
+
+.contact-header {
+  margin-bottom: 40px;
+}
+
+.contact-header h2 {
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.contact-header p {
+  opacity: 0.8;
+  max-width: 480px;
+}
+
+.contact-form {
+  display: grid;
+  gap: 26px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.85);
+  color: #111;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea {
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  box-shadow: 0 0 0 2px rgba(90, 185, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.submit-btn {
+  margin-top: 10px;
+  align-self: flex-start;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #5ab9ff, #7fffd4);
+  color: #111;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(90, 185, 255, 0.4);
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+  main section {
+    padding: 90px 6%;
+  }
+
+  .hero-portrait {
+    display: none;
+  }
+
+  .topbar-center {
+    flex-wrap: wrap;
+  }
+
+  .projects-container {
+    flex-direction: column;
+  }
+}
+
+/* ============================= FOOTER ==================================*/
+footer {
+  text-align: center;
+  padding: 40px 0;
+  opacity: 0.7;
+}
