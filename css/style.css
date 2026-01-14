@@ -26,9 +26,16 @@ html {
 
 body {
     font-family: 'Inter', sans-serif;
-    background: var(--bg-dark);
-    color: var(--text-light);
     line-height: 1.6;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: background 0.8s ease, color 0.8s ease;
+}
+
+
+body.dark-mode {
+  background: #0a0a0a;
+  color: #fff;
 }
 
 
@@ -67,6 +74,7 @@ header {
     align-items: center;
 
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--glass-border);
 
@@ -101,19 +109,132 @@ nav a:hover {
    HERO / STARTBEREICH
 ========================================= */
 
-#hero {
+/* =========================
+        HERO SECTION
+========================= */
+/*.hero {
     height: 100vh;
-    display: flex;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25% 1fr 30%;
     align-items: center;
-    padding-top: 120px;
     position: relative;
+    overflow: hidden;
+}*/
+
+.hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
-/* Parallax / Three.js Platzhalter */
-#hero-background {
+.hero-inner {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  padding: 80px;
+}
+
+.hero-left {
+  font-size: 2.2rem;
+  font-weight: 700;
+  position: relative;
+}
+
+
+.typing-bar {
+  display: flex;
+  align-items: center;
+  opacity: 1;
+}
+
+.cursor {
+  font-weight: bold;
+  margin-left: 8px;
+  animation: blink 0.6s infinite alternate;
+}
+
+@keyframes blink {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.hero-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-img {
+  width: 420px;
+  height: auto;
+  border-radius: 22px;
+  filter: drop-shadow(0 20px 50px rgba(0,0,0,0.2));
+  transform: translateY(0px);
+  transition: filter 0.6s ease;
+}
+
+body.dark-mode .hero-img {
+  filter: drop-shadow(0 25px 70px rgba(255,255,255,0.08));
+}
+
+/* =========================
+    LEFT PANEL (FROSTED)
+========================= */
+
+.hero-panel {
+    height: 100%;
+    width: 100%;
+    background: rgba(20, 20, 30, 0.6);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255,255,255,0.15);
+    position: relative;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.hero-panel.fade-out {
+    opacity: 0;
+    transform: translateX(-50px);
+}
+
+.panel-content {
     position: absolute;
-    inset: 0;
-    z-index: -1;
+    bottom: 15%;
+    left: 15%;
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* =========================
+        CENTER TEXT
+========================= */
+.hero-text {
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.6s ease;
+}
+
+/* =========================
+        IMAGE RIGHT
+========================= */
+.hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-image img {
+    width: 85%;
+    max-width: 480px;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.3));
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.hero-image img:hover {
+    transform: translateY(-5px) scale(1.02);
 }
 
 
@@ -142,7 +263,8 @@ nav a:hover {
     border-radius: 16px;
 
     background: var(--glass-bg);
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
 
     transition: 0.4s;
@@ -204,3 +326,142 @@ footer {
     }
 
 }
+
+/* =========================================
+   Project Section
+========================================= */
+
+.projects {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.projects-container {
+  width: 90%;
+  height: 70%;
+  display: flex;
+  gap: 2rem;
+  position: relative;
+}
+
+.project-card {
+  flex: 1;
+  height: 100%;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: all .6s ease;
+  transform-origin: center;
+}
+
+.project-card iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  opacity: .9;
+}
+
+.project-card:hover {
+  z-index: 10;
+  scale: 1.1;
+}
+
+/* Wenn eins hovert → das andere nach außen */
+.projects-container:hover .project-card:not(:hover) {
+  filter: grayscale(70%) brightness(0.6);
+  transform: translateX(-50px);
+}
+
+#project2:hover ~ #project1 {
+  transform: translateX(50px);
+}
+
+
+/* =========================================
+   Clouds+Globe Section
+========================================= */
+
+#cloudScene{
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Clouds Container */
+.cloud-layer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 55vh;
+  pointer-events: none;
+}
+
+/* Cloud Base */
+.cloud{
+  position: absolute;
+  width: 240px;
+  height: 130px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 120px;
+  filter: drop-shadow(0px 20px 25px rgba(0,0,0,0.25));
+  will-change: transform, opacity;
+}
+
+.cloud::before,
+.cloud::after{
+  content:"";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud::before{
+  width: 150px;
+  height: 110px;
+  top:-35px;
+  left:25px;
+}
+
+.cloud::after{
+  width:170px;
+  height:120px;
+  top:-15px;
+  left: 90px;
+}
+
+/* Positions */
+.c1{ left: 5%; bottom: 10%; }
+.c2{ left: 35%; bottom: 12%; }
+.c3{ left: 60%; bottom: 8%; }
+.c4{ left: 80%; bottom: 14%; }
+
+/* Globe area */
+.globe-wrapper{
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  scale:0.7;
+}
+
+.globe-placeholder{
+  width:400px;
+  height:400px;
+  border-radius:50%;
+  background: radial-gradient(circle, #1a1a1a, #000);
+  border:2px solid rgba(255,255,255,0.2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:white;
+  font-family: sans-serif;
+}
+
+

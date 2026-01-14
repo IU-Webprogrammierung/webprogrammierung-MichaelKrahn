@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- GOOGLE FONT EINBINDUNG -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- GASAP EINBINDUNG (for smooth scrolling animations) -->
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+
 
 </head>
 <body>
@@ -20,7 +27,7 @@
     <!-- =========================
          HEADER & NAVIGATION
     ========================== -->
-    <header id="header">
+    <header id="header" class="hero">
         <div class="logo">
             <h1>Michael Krahn</h1>
         </div>
@@ -34,6 +41,24 @@
                 <li><a href="#contact">Kontakt</a></li>
             </ul>
         </nav>
+
+
+        <div class="hero-inner">
+
+            <div class="hero-left">
+            <div class="typing-bar">
+                <span class="typing-text">
+                Creative Developer • UI/UX Lover • Problem Solver
+                </span>
+                <span class="cursor">|</span>
+            </div>
+            </div>
+
+            <div class="hero-right">
+            <img src="assets/images/michael-hero.png" alt="Portfolio Portrait" class="hero-img">
+            </div>
+
+        </div>
     </header>
 
 
@@ -41,14 +66,79 @@
          HERO / STARTBEREICH
     ========================== -->
     <section id="hero">
-        <div class="hero-content">
-            <h2>Willkommen auf meiner Portfolio-Website</h2>
-            <p>Hier stelle ich mich vor, präsentiere Projekte und zeige meinen Weg im Bereich Webentwicklung.</p>
+        <!-- LEFT GLASS PANEL -->
+        <div class="hero-panel">
+            <div class="panel-content">
+                <span id="typingText"></span>
+            </div>
         </div>
 
-        <!-- Platzhalter für Parallax / Three.js -->
-        <div id="hero-background"></div>
+        <!-- CENTER TEXT -->
+        <div class="hero-text">
+            <h1>Hi, ich bin Michael</h1>
+            <p>Web Developer | Creative Engineering | Portfolio</p>
+        </div>
+
+        <!-- RIGHT PORTRAIT IMAGE -->
+        <div class="hero-image">
+            <img src="assets/images/michael-hero.png" alt="Michael Portrait">
+        </div>
     </section>
+
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Intro Entrance Animation
+        gsap.from(".hero-left", {
+        x: -80,
+        opacity: 0,
+        duration: 1.2,
+        ease: "power3.out"
+        });
+
+        gsap.from(".hero-img", {
+        x: 120,
+        opacity: 0,
+        duration: 1.4,
+        ease: "power3.out"
+        });
+    </script>
+
+    <script>
+        // Parallax Portrait
+        gsap.to(".hero-img", {
+        y: -80,
+        scale: 1.05,
+        ease: "none",
+        scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true
+        }
+        });
+
+        // Typing/Bar Fade Out
+        gsap.to(".typing-bar", {
+        opacity: 0,
+        y: -40,
+        scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "60% top",
+            scrub: true
+        }
+        });
+
+        // Light → Dark Theme Scroll Switch
+        ScrollTrigger.create({
+        trigger: ".hero",
+        start: "70% top",
+        onEnter: () => document.body.classList.add("dark-mode"),
+        onLeaveBack: () => document.body.classList.remove("dark-mode")
+        });
+    </script>
 
 
     <!-- =========================
@@ -68,24 +158,21 @@
          PROJEKTE
     ========================== -->
     <section id="projects">
-        <h2>Meine Projekte</h2>
+        <div class="projects-container">
+            
+            <div class="project-card" id="project1">
+            <div class="project-content">
+                <h2>Projekt kinderuni-koblenz</h2>
+                <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"></iframe>
+            </div>
+            </div>
 
-        <div class="project-grid">
-
-            <article class="project-card">
-                <h3>Projekt 1</h3>
-                <p>Kurzbeschreibung des Projekts.</p>
-            </article>
-
-            <article class="project-card">
-                <h3>Projekt 2</h3>
-                <p>Kurzbeschreibung des Projekts.</p>
-            </article>
-
-            <article class="project-card">
-                <h3>Projekt 3</h3>
-                <p>Kurzbeschreibung des Projekts.</p>
-            </article>
+            <div class="project-card" id="project2">
+            <div class="project-content">
+                <h2>Projekt RiE 2024</h2>
+                <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"></iframe>
+            </div>
+            </div>
 
         </div>
     </section>
@@ -100,6 +187,25 @@
         <p>
             Tabellarischer Überblick über Ausbildung, Kenntnisse und Erfahrungen.
         </p>
+    </section>
+
+
+    <!-- =========================
+         Clouds+Globe
+    ========================== -->
+    <section id="cloudScene">
+        <div class="cloud-layer">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+
+        <div class="globe-wrapper">
+            <div class="globe-placeholder">
+                Hier kommt später Globe.gl hin
+            </div>
+        </div>
     </section>
 
 
