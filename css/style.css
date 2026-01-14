@@ -157,7 +157,7 @@ h2 {
 }
 
 /* Sticky state (after collapse) */
-.topbar.is-sticky{
+.topbar.is-sticky {
   position: fixed;
   top: 0;
   left: 0;
@@ -168,7 +168,7 @@ h2 {
 }
 
 /* Make the glass container full-width and edge-to-edge */
-.topbar.is-sticky .topbar-glass{
+.topbar.is-sticky .topbar-glass {
   width: 100%;
   border: none;
   border-radius: 0;
@@ -270,6 +270,7 @@ h2 {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
@@ -379,6 +380,245 @@ h2 {
   justify-content: center;
   align-items: center;
   color: white;
+}
+
+
+/* ===== Timeline layout ===== */
+.timeline {
+  margin-top: 26px;
+}
+
+.timeline-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.timeline-window {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}
+
+.window-label {
+  opacity: .75;
+  font-size: .95rem;
+}
+
+.window-date {
+  font-weight: 600;
+}
+
+.window-sep {
+  opacity: .7;
+}
+
+/* ===== Viewport + track ===== */
+.timeline-viewport {
+  position: relative;
+  overflow: hidden;
+  border: none;
+  height: 160px;
+
+}
+
+/* Bottom corner labels */
+.timeline-window-label{
+  position: absolute;
+  bottom: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  padding: 8px 12px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.14);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  z-index: 20;
+}
+
+.window-left{ left: 12px; }
+.window-right{ right: 12px; }
+
+.timeline-track {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2200px;
+  /* controls how long the track is; adjust as needed */
+}
+
+/* The horizontal bar */
+.timeline-track::before {
+  content: "";
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 78px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ===== Milestones ===== */
+/* Axis bar */
+.timeline-track::before{
+  content:"";
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 78px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.25);
+}
+
+.milestone{
+  position: absolute;
+  left: calc(60px + (var(--pos) * 1%));
+}
+
+.milestone-dot{
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.25);
+
+  cursor: pointer;
+  opacity: 1; /* MUST stay 1 */
+
+  transition:
+    transform .22s ease,
+    background .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease;
+
+  will-change: transform;
+}
+
+/* Rainbow blob */
+.milestone-dot::after{
+  content:"";
+  position: absolute;
+  inset: -14px;
+  border-radius: 999px;
+
+  opacity: 0;
+  transform: scale(0.55);
+  filter: blur(14px);
+
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.85),
+    rgba(0,200,255,.85),
+    rgba(120,255,0,.75),
+    rgba(255,200,0,.75),
+    rgba(255,0,150,.85)
+  );
+
+  transition:
+    opacity .22s ease,
+    transform .22s ease,
+    filter .22s ease;
+
+  z-index: -1;
+}
+
+/* Morph */
+.milestone-dot:hover,
+.milestone-dot:focus-visible{
+  background: rgba(255,255,255,0); /* dot vanishes */
+  border-color: rgba(255,255,255,0);
+  box-shadow: none;
+  filter: blur(0.6px);
+  transform: translate(-50%, -50%) scale(0.6);
+  outline: none;
+}
+
+.milestone-dot:hover::after,
+.milestone-dot:focus-visible::after{
+  opacity: 0.75;
+  transform: scale(1);
+  filter: blur(10px);
+  animation: blobPulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes blobPulse{
+  from{ transform: scale(0.90); }
+  to{ transform: scale(1.1); }
+}
+
+/* Labels: above or below based on class */
+.milestone-label{
+  position: absolute;
+  left: 50%;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  white-space: nowrap;
+}
+
+/* ===== Tooltip ===== */
+.timeline-tooltip {
+  position: absolute;
+  min-width: 260px;
+  max-width: 360px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  pointer-events: none;
+
+  background: rgba(20, 20, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+
+  transform: translate(-50%, -100%);
+  opacity: 0;
+}
+
+.tt-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tt-range {
+  opacity: 0.85;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.tt-desc {
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ========================================= CONTACT ========================================= */

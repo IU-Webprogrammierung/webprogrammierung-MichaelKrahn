@@ -113,40 +113,81 @@
             </div>
         </section>
 
-        <section id="cv">
+       <section id="cv">
             <h2>Lebenslauf</h2>
 
-            <h3>Ausbildung</h3>
-            <ul>
-                <li>
-                    <strong>Studium im Bereich Webentwicklung / Medieninformatik</strong><br>
-                    IU Internationale Hochschule<br>
-                    <em>Seit 20XX</em>
-                </li>
-            </ul>
+            <div class="timeline">
+                <div class="timeline-viewport" id="timelineViewport">
+                    <div class="timeline-window-label window-left">
+                        <span id="windowStart">—</span>
+                    </div>
+                    <div class="timeline-window-label window-right">
+                        <span id="windowEnd">—</span>
+                    </div>
+                <div class="timeline-track" id="timelineTrack" aria-label="Timeline">
 
-            <h3>Kenntnisse & Technologien</h3>
-            <ul>
-                <li>HTML5, CSS3 (Flexbox, Grid, Responsive Design)</li>
-                <li>JavaScript (ES6+), DOM-Manipulation, Animationen</li>
-                <li>GSAP & ScrollTrigger für Scroll- und UI-Animationen</li>
-                <li>Grundlagen in Three.js / WebGL</li>
-                <li>Git & GitHub (Versionskontrolle)</li>
-                <li>UI/UX-Grundlagen, Prototyping & Design Thinking</li>
-            </ul>
+                    <!-- Milestone example -->
+                    <div class="milestone" style="--pos: 6;">
+                    <button class="milestone-dot" type="button"
+                            data-start="2019-10" data-end="2020-03"
+                            data-title="Erstes Webprojekt"
+                            data-desc="HTML/CSS Basics, erste Layouts, kleine Animationen.">
+                        <span class="sr-only">Erstes Webprojekt (2019-10 bis 2020-03)</span>
+                    </button>
+                    <span class="milestone-label">2019</span>
+                    </div>
 
-            <h3>Projekte & Praxiserfahrung</h3>
-            <ul>
-                <li>
-                    Umsetzung und Weiterentwicklung mehrerer Webprojekte im Rahmen des Studiums
-                    sowie eigenständiger Projektarbeiten.
-                </li>
-                <li>
-                    Fokus auf interaktive Interfaces, moderne Layouts und visuelle Effekte.
-                </li>
-            </ul>
-        </section>
+                    <div class="milestone" style="--pos: 22;">
+                    <button class="milestone-dot" type="button"
+                            data-start="2021-04" data-end="2022-01"
+                            data-title="Hiwi: Kinderuni Webseite online"
+                            data-desc="Konzeption, UI-Umsetzung, Responsive Design, Inhalte.">
+                        <span class="sr-only">Hiwi: Website A (2021-04 bis 2022-01)</span>
+                    </button>
+                    <span class="milestone-label">2021–22</span>
+                    </div>
 
+                    <div class="milestone" style="--pos: 40;">
+                    <button class="milestone-dot" type="button"
+                            data-start="2023-02" data-end="2023-11"
+                            data-title="Studium / Module"
+                            data-desc="Webentwicklung, UX, Projekte, Git-Workflow.">
+                        <span class="sr-only">Studium / Module (2023-02 bis 2023-11)</span>
+                    </button>
+                    <span class="milestone-label">Studium Medieninformatik IU</span>
+                    </div>
+
+                    <div class="milestone" style="--pos: 62;">
+                    <button class="milestone-dot" type="button"
+                            data-start="2024-03" data-end="2024-10"
+                            data-title="Hiwi: Website B"
+                            data-desc="Interaktive Komponenten, Motion Design, Content-Integration.">
+                        <span class="sr-only">Hiwi: Website B (2024-03 bis 2024-10)</span>
+                    </button>
+                    <span class="milestone-label">test</span>
+                    </div>
+
+                    <div class="milestone" style="--pos: 85;">
+                    <button class="milestone-dot" type="button"
+                            data-start="2025-01" data-end="2026-01"
+                            data-title="Portfolio / GSAP"
+                            data-desc="Scroll-Animationen, Parallax, Glass UI, Prototyping.">
+                        <span class="sr-only">Portfolio / GSAP (2025-01 bis 2026-01)</span>
+                    </button>
+                    <span class="milestone-label">test</span>
+                    </div>
+
+                </div>
+
+                <!-- Tooltip -->
+                <div class="timeline-tooltip" id="timelineTooltip" role="tooltip" aria-hidden="true">
+                    <div class="tt-title" id="ttTitle"></div>
+                    <div class="tt-range" id="ttRange"></div>
+                    <div class="tt-desc" id="ttDesc"></div>
+                </div>
+                </div>
+            </div>
+            </section>
 
         <!-- Clouds + Globe section (ID aligned with CSS/JS) -->
         <section id="cloudScene">
@@ -162,6 +203,8 @@
                 <div class="cloud c2"></div>
                 <div class="cloud c3"></div>
                 <div class="cloud c4"></div>
+                <div class="cloud c5"></div>
+                <div class="cloud c6"></div>
             </div>
         </section>
 

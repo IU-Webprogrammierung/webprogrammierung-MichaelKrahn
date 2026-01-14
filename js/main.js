@@ -57,12 +57,12 @@ gsap.timeline({
     scrub: true
   }
 })
-.to(".globe-wrapper", { autoAlpha: 1, scale: 1 }, 0)
-.to(clouds, {
-  x: i => i % 2 === 0 ? -500 : 500,
-  y: -120,
-  autoAlpha: 0.5
-}, 0);
+  .to(".globe-wrapper", { autoAlpha: 1, scale: 1 }, 0)
+  .to(clouds, {
+    x: i => i % 2 === 0 ? -500 : 500,
+    y: -120,
+    autoAlpha: 0.5
+  }, 0);
 
 
 /* =====================================================
@@ -146,9 +146,209 @@ function initHeroCollapse() {
       }
     }
   })
-  // The actual collapse animation happens early in the overall timeline
-  // Because we extended end distance, we keep the motion near the beginning.
-  .to(nav, { y: -220, scale: 0.92, ease: "power3.out" }, 0)
-  .to(".hero-center", { autoAlpha: 0, y: -80, ease: "power2.out" }, 0)
-  .to(".hero-portrait", { autoAlpha: 0, x: 60, ease: "power2.out" }, 0);
+    // The actual collapse animation happens early in the overall timeline
+    // Because we extended end distance, we keep the motion near the beginning.
+    .to(nav, { y: -220, scale: 0.92, ease: "power3.out" }, 0)
+    .to(".hero-center", { autoAlpha: 0, y: -80, ease: "power2.out" }, 0)
+    .to(".hero-portrait", { autoAlpha: 0, x: 60, ease: "power2.out" }, 0);
 }
+
+
+// =============================
+// Timeline auto-scroll + tooltip
+// =============================
+(function initTimeline() {
+  const viewport = document.getElementById("timelineViewport");
+  const track = document.getElementById("timelineTrack");
+  if (!viewport || !track) return;
+
+  const startEl = document.getElementById("windowStart");
+  const endEl = document.getElementById("windowEnd");
+  const btn = document.getElementById("timelineToggle");
+
+  const tooltip = document.getElementById("timelineTooltip");
+  const ttTitle = document.getElementById("ttTitle");
+  const ttRange = document.getElementById("ttRange");
+  const ttDesc = document.getElementById("ttDesc");
+
+  // Define the overall time range for the track (for window labels)
+  // Adjust to your real timeline boundaries.
+  const RANGE_START = new Date("2019-01-01");
+  const RANGE_END = new Date("2026-01-01");
+
+  const fmt = (d) =>
+    d.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+
+  const lerpDate = (a, b, t) => new Date(a.getTime() + (b.getTime() - a.getTime()) * t);
+
+  // Track movement: move left continuously, loop seamlessly by wrapping.
+  // We animate x from 0 to -(trackWidth - viewportWidth).
+  const updateBounds = () => {
+    const vw = viewport.clientWidth;
+    const tw = track.scrollWidth;
+    const maxShift = Math.max(0, tw - vw);
+    return { vw, tw, maxShift };
+  };
+
+  let { maxShift } = updateBounds();
+
+  const tween = gsap.to(track, {
+    x: -maxShift,
+    duration: 100,               // slower/faster auto-scroll
+    ease: "none",
+    repeat: -1,
+    modifiers: {
+      x: (x) => {
+        // Wrap x smoothly (keeps it looping)
+        const value = parseFloat(x);
+        const wrapped = value % -maxShift;
+        return `${wrapped}px`;
+      }
+    }
+  });
+
+  // Update "window start/end" labels based on current x
+  const updateWindowLabels = () => {
+    ({ maxShift } = updateBounds());
+    const x = gsap.getProperty(track, "x");
+    const progress = maxShift > 0 ? Math.min(1, Math.max(0, (-x) / maxShift)) : 0;
+
+    // Window shows a slice of time. You can tune the “window size”.
+    const windowSpan = 0.22; // 22% of the full time range visible at once
+    const t0 = progress;
+    const t1 = Math.min(1, progress + windowSpan);
+
+    const d0 = lerpDate(RANGE_START, RANGE_END, t0);
+    const d1 = lerpDate(RANGE_START, RANGE_END, t1);
+
+    startEl.textContent = fmt(d0);
+    endEl.textContent = fmt(d1);
+  };
+
+  gsap.ticker.add(updateWindowLabels);
+
+  // Pause auto-scroll on hover over viewport (or a dot)
+  const pause = () => tween.pause();
+  const play = () => tween.resume();
+
+  viewport.addEventListener("mouseenter", pause);
+  viewport.addEventListener("mouseleave", () => {
+    hideTooltip();
+    play();
+  });
+
+  // Manual toggle
+  let isPaused = false;
+  btn?.addEventListener("click", () => {
+    isPaused = !isPaused;
+    btn.textContent = isPaused ? "Play" : "Pause";
+    isPaused ? tween.pause() : tween.resume();
+  });
+
+  // Tooltip handlers
+  const dots = track.querySelectorAll(".milestone-dot");
+  const milestones = track.querySelectorAll(".milestone");
+
+
+  milestones.forEach((m, i) => {
+    m.classList.add(i % 2 === 0 ? "up" : "down");
+
+    const dot = m.querySelector(".milestone-dot");
+    const label = m.querySelector(".milestone-label");
+    if (!dot || !label) return;
+
+    const title = dot.dataset.title || "";
+    const start = dot.dataset.start || "";
+    // optional: end if you want "start–end"
+    // const end = dot.dataset.end || "";
+
+    // label format: "Monat Jahr • Titel"
+    // if you store start as "2024-03", this keeps it readable.
+    label.textContent = `${start} • ${title}`;
+  });
+
+
+  const parseYM = (s) => {
+    if (!s) return null;
+    const [y, m] = String(s).split("-").map(Number);
+    if (!y || !m) return null;
+    return new Date(y, m - 1, 1);
+  };
+
+  const nice = (s) => {
+    const d = parseYM(s);
+    return d ? fmt(d) : String(s);
+  };
+
+  // Build labels + alternate up/down
+  milestones.forEach((m, i) => {
+    m.classList.add(i % 2 === 0 ? "up" : "down");
+
+    const dot = m.querySelector(".milestone-dot");
+    let label = m.querySelector(".milestone-label");
+    if (!dot) return;
+
+    if (!label) {
+      label = document.createElement("span");
+      label.className = "milestone-label";
+      m.appendChild(label);
+    }
+
+    const title = dot.dataset.title || "";
+    const start = dot.dataset.start || "";
+    label.textContent = `${nice(start)} • ${title}`;
+  });
+
+  function showTooltip(dot) {
+    const rectV = viewport.getBoundingClientRect();
+    const rectD = dot.getBoundingClientRect();
+
+    const title = dot.dataset.title || "";
+    const start = dot.dataset.start || "";
+    const end = dot.dataset.end || "";
+    const desc = dot.dataset.desc || "";
+
+    ttTitle.textContent = title;
+    ttRange.textContent = `${nice(start)} → ${nice(end)}`;
+    ttDesc.textContent = desc;
+
+    const x = rectD.left - rectV.left + rectD.width / 2;
+    const y = rectD.top - rectV.top;
+
+    tooltip.style.left = `${x}px`;
+    tooltip.style.top = `${y}px`;
+    tooltip.setAttribute("aria-hidden", "false");
+
+    gsap.to(tooltip, { autoAlpha: 1, duration: 0.18, ease: "power2.out" });
+  }
+
+  function hideTooltip() {
+    tooltip.setAttribute("aria-hidden", "true");
+    gsap.to(tooltip, { autoAlpha: 0, duration: 0.12, ease: "power2.out" });
+  }
+
+  dots.forEach((dot) => {
+    dot.addEventListener("mouseenter", () => {
+      pause();
+      showTooltip(dot);
+    });
+    dot.addEventListener("mouseleave", hideTooltip);
+
+    // keyboard support
+    dot.addEventListener("focus", () => {
+      pause();
+      showTooltip(dot);
+    });
+    dot.addEventListener("blur", () => {
+      hideTooltip();
+      play();
+    });
+  });
+
+  // Recalc on resize
+  window.addEventListener("resize", () => {
+    const b = updateBounds();
+    maxShift = b.maxShift;
+  });
+})();
+
