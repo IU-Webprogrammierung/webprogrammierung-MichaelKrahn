@@ -14,9 +14,6 @@
     <!-- GOOGLE FONT EINBINDUNG -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- GASAP EINBINDUNG (for smooth scrolling animations) -->
-    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 
@@ -37,6 +34,7 @@
                 <li><a href="#hero">Start</a></li>
                 <li><a href="#about">Über mich</a></li>
                 <li><a href="#projects">Projekte</a></li>
+                <li><a href="#globe">Projekte</a></li>
                 <li><a href="#cv">Lebenslauf</a></li>
                 <li><a href="#contact">Kontakt</a></li>
             </ul>
@@ -85,7 +83,93 @@
         </div>
     </section>
 
+    <!-- =========================
+         ÜBER MICH
+    ========================== -->
+    <section id="about">
+        <h2>Über mich</h2>
+        <p>
+            Kurze persönliche Vorstellung, Motivation, Studienschwerpunkt 
+            und Hintergrundinformationen zu meiner Person.
+        </p>
+    </section>
 
+
+    <!-- =========================
+         PROJEKTE
+    ========================== -->
+    <section id="projects">
+        <div class="projects-container">
+            
+            <div class="project-card" id="project1">
+            <div class="project-content">
+                <h2>Projekt kinderuni-koblenz</h2>
+                <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"></iframe>
+            </div>
+            </div>
+
+            <div class="project-card" id="project2">
+            <div class="project-content">
+                <h2>Projekt RiE 2024</h2>
+                <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"></iframe>
+            </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- =========================
+         LEBENSLAUF
+    ========================== -->
+    <section id="cv">
+        <h2>Lebenslauf</h2>
+
+        <p>
+            Tabellarischer Überblick über Ausbildung, Kenntnisse und Erfahrungen.
+        </p>
+    </section>
+
+
+    <!-- =========================
+         Clouds+Globe
+    ========================== -->
+    <section id="globe">
+        <div class="cloud-layer">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+            <div class="cloud c4"></div>
+        </div>
+
+        <div class="globe-wrapper">
+            <div class="globe-placeholder">
+                Hier kommt später Globe.gl hin
+            </div>
+        </div>
+    </section>
+
+
+    <!-- =========================
+         KONTAKT
+    ========================== -->
+    <section id="contact">
+        <h2>Kontakt</h2>
+
+        <p>Hier folgen Kontaktmöglichkeiten und ggf. ein Formular.</p>
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer>
+        <p>© 2026 – Michael Krahn</p>
+        <p>Impressum | Datenschutz</p>
+    </footer>
+
+
+    <!-- Optional: Skripte für Animationen / Parallax / Three.js -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
@@ -139,98 +223,8 @@
         onLeaveBack: () => document.body.classList.remove("dark-mode")
         });
     </script>
-
-
-    <!-- =========================
-         ÜBER MICH
-    ========================== -->
-    <section id="about">
-        <h2>Über mich</h2>
-
-        <p>
-            Kurze persönliche Vorstellung, Motivation, Studienschwerpunkt 
-            und Hintergrundinformationen zu meiner Person.
-        </p>
-    </section>
-
-
-    <!-- =========================
-         PROJEKTE
-    ========================== -->
-    <section id="projects">
-        <div class="projects-container">
-            
-            <div class="project-card" id="project1">
-            <div class="project-content">
-                <h2>Projekt kinderuni-koblenz</h2>
-                <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"></iframe>
-            </div>
-            </div>
-
-            <div class="project-card" id="project2">
-            <div class="project-content">
-                <h2>Projekt RiE 2024</h2>
-                <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"></iframe>
-            </div>
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- =========================
-         LEBENSLAUF
-    ========================== -->
-    <section id="cv">
-        <h2>Lebenslauf</h2>
-
-        <p>
-            Tabellarischer Überblick über Ausbildung, Kenntnisse und Erfahrungen.
-        </p>
-    </section>
-
-
-    <!-- =========================
-         Clouds+Globe
-    ========================== -->
-    <section id="cloudScene">
-        <div class="cloud-layer">
-            <div class="cloud c1"></div>
-            <div class="cloud c2"></div>
-            <div class="cloud c3"></div>
-            <div class="cloud c4"></div>
-        </div>
-
-        <div class="globe-wrapper">
-            <div class="globe-placeholder">
-                Hier kommt später Globe.gl hin
-            </div>
-        </div>
-    </section>
-
-
-    <!-- =========================
-         KONTAKT
-    ========================== -->
-    <section id="contact">
-        <h2>Kontakt</h2>
-
-        <p>Hier folgen Kontaktmöglichkeiten und ggf. ein Formular.</p>
-    </section>
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-    <footer>
-        <p>© 2026 – Michael Krahn</p>
-        <p>Impressum | Datenschutz</p>
-    </footer>
-
-
-    <!-- Optional: Skripte für Animationen / Parallax / Three.js -->
-    <!-- <script src="js/main.js"></script> -->
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js"></script> -->
-
+    <script src="js/header.js" defer></script>
+    <script src="js/main.js" defer></script>
 </body>
 </html>
