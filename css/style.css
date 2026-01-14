@@ -1,0 +1,206 @@
+/* =========================================
+   GLOBAL STYLE / DESIGN BASIS
+========================================= */
+
+/* Farb- & Designvariablen */
+:root {
+    --bg-dark: #0e0e12;
+    --bg-light: #ffffff;
+    --accent: #5ab9ff;
+    --text-light: #e6e6e6;
+    --text-dark: #111111;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.25);
+}
+
+/* Reset - saubere Ausgangsbasis */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   LAYOUT / STRUKTUR
+========================================= */
+
+section {
+    padding: 100px 10%;
+    min-height: 60vh;
+}
+
+h1, h2, h3 {
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+    font-weight: 500;
+}
+
+h2 {
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+}
+
+
+/* =========================================
+   HEADER + NAVIGATION (FROSTED GLASS)
+========================================= */
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px 10%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+
+    z-index: 1000;
+}
+
+header h1 {
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-light);
+    opacity: 0.8;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    opacity: 1;
+    color: var(--accent);
+}
+
+
+/* =========================================
+   HERO / STARTBEREICH
+========================================= */
+
+#hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+    position: relative;
+}
+
+/* Parallax / Three.js Platzhalter */
+#hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+}
+
+
+/* =========================================
+   ÜBER MICH
+========================================= */
+
+#about {
+    max-width: 900px;
+    margin: auto;
+}
+
+
+/* =========================================
+   PROJEKTE (CARDS MIT GLASS-EFFEKT)
+========================================= */
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.project-card {
+    padding: 25px;
+    border-radius: 16px;
+
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+
+    transition: 0.4s;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+}
+
+
+/* =========================================
+   CV
+========================================= */
+
+#cv {
+    max-width: 900px;
+    margin: auto;
+}
+
+
+/* =========================================
+   KONTAKT
+========================================= */
+
+#contact {
+    max-width: 900px;
+    margin: auto;
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    opacity: 0.7;
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
+
+@media (max-width: 900px) {
+
+    header {
+        padding: 12px 6%;
+    }
+
+    section {
+        padding: 80px 6%;
+    }
+
+    nav ul {
+        gap: 15px;
+    }
+
+}
