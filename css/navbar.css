@@ -1,0 +1,93 @@
+/* =========================================
+   NAVBAR
+========================================= */
+.navbar nav a.active{
+  opacity: 1;
+}
+
+/* Keep your rainbow underline visible when active */
+.navbar nav a.active::after{
+  opacity: 0.75;
+  transform: scaleX(1);
+}
+
+/* Sliding indicator bar (created by JS) */
+.nav-indicator{
+  position: absolute;
+  bottom: 6px;
+  height: 3px;
+  border-radius: 999px;
+  opacity: 0.65;
+
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.85),
+    rgba(0,200,255,.85),
+    rgba(120,255,0,.75),
+    rgba(255,200,0,.75),
+    rgba(255,0,150,.85)
+  );
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+/* Ensure nav is a positioning context for the indicator */
+.navbar nav{
+  position: relative;
+}
+
+/* Hero state (page load) */
+.navbar {
+  position: absolute;
+  top: 30%;
+  left: 6%;
+  transform: translateY(-50%);
+  width: min(72vw, 820px);
+  z-index: 10;
+
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  padding: 14px 18px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+/* Sticky state (after collapse) */
+.navbar.is-sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: none;
+
+  width: 100vw;
+  z-index: 9999;
+}
+
+/* Make the glass container full-width and edge-to-edge */
+.navbar.is-sticky {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+/* Navbar */
+.brand {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+}
+
+.navbar-center {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}

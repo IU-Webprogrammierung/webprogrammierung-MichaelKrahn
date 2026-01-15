@@ -1,0 +1,80 @@
+
+/* =========================================
+   GLOBE
+========================================= */
+
+#cloudScene {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Clouds sit above globe */
+.cloud-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Place clouds initially to cover top area (adjust as you like) */
+.cloud {
+  position: absolute;
+  top: 12%;
+  width: 240px;
+  height: 130px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 120px;
+  filter: drop-shadow(0px 20px 25px rgba(0, 0, 0, 0.25));
+  will-change: transform, opacity;
+}
+
+.c1 {
+  left: 5%;
+  bottom: -30%;
+}
+
+.c2 {
+  left: 35%;
+  bottom: -32%;
+}
+
+.c3 {
+  left: 60%;
+  bottom: -36%;
+}
+
+.c4 {
+  left: 80%;
+  bottom: -40%;
+}
+
+.c5 {
+  left: 90%;
+  bottom: -44%;
+}
+
+.c6 {
+  left: 15%;
+  bottom: -38%;
+}
+
+.globe-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  scale: 0.7;
+}
+
+.globe-placeholder {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #1a1a1a, #000);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}

@@ -1,0 +1,81 @@
+/* =============================
+             FOOTER
+==================================*/
+
+footer{
+  position: relative;
+  padding: 50px 10%;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.footer-rainbow{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  border-radius: 0;
+
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.85),
+    rgba(0,200,255,.85),
+    rgba(120,255,0,.75),
+    rgba(255,200,0,.75),
+    rgba(255,0,150,.85)
+  );
+  background-size: 240% 100%;
+  filter: blur(6px);
+  opacity: 0.55;
+
+  animation: footerFlow 6s ease-in-out infinite alternate;
+}
+
+.footer-rainbow::after{
+  content:"";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -16px;
+  height: 34px;
+
+  background: inherit;
+  filter: blur(22px);
+  opacity: 0.18;
+
+  animation: footerPulse 9s ease-in-out infinite alternate;
+}
+
+@keyframes footerPulse{
+  from { opacity: 0.12; }
+  to   { opacity: 0.30; }
+}
+
+@keyframes footerFlow {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+/* Footer links: subtle */
+.site-footer a{
+  color: inherit;
+  opacity: 0.85;
+  text-decoration: none;
+  position: relative;
+}
+
+.site-footer a:hover{
+  opacity: 1;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .footer-rainbow,
+  .footer-rainbow::after{
+    animation: none !important;
+  }
+}

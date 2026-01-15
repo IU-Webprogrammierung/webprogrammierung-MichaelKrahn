@@ -10,6 +10,13 @@
         content="Persönliche Portfolio-Website von Michael Krahn – Informationen zu meiner Person, Projekten, Lebenslauf und Kontaktmöglichkeiten.">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/projects.css">
+    <link rel="stylesheet" href="css/globe.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- GSAP -->
@@ -18,78 +25,111 @@
 </head>
 
 <body>
-
-    <!-- FULLSCREEN HERO HEADER -->
-    <header id="siteHeader" class="site-header">
-
-        <!-- Blurred background portrait (behind glass) -->
-        <div class="hero-bg" aria-hidden="true">
-            <img src="assets/images/michael-hero.png" alt="">
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="topbar-left">
+            <div class="brand">Michael Krahn</div>
         </div>
 
-        <!-- Foreground portrait (right) -->
-        <div class="hero-portrait" aria-hidden="true">
-            <img src="assets/images/michael-hero.png" alt="Michael Portrait">
-        </div>
+        <nav class="topbar-center" aria-label="Hauptnavigation">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#cloudScene">Globe</a>
+            <a href="#cv">CV</a>
+            <a href="#contact">Contact</a>
+        </nav>
 
-        <!-- Center typing headline -->
-        <div class="hero-center">
-            <div class="typing-block" aria-label="Intro Text">
-                <span id="typingText"></span>
-                <span class="cursor" aria-hidden="true">|</span>
-            </div>
-            <p class="hero-subline">Web Designer • UI/UX Enthusiast • Problem Solver</p>
-        </div>
-    </header>
-
-    <!-- Collapsed top navbar (shown after collapse) -->
-    <div class="topbar">
-        <div class="topbar-glass">
-            <div class="topbar-left">
-                <a class="brand" href="#top">Michael Krahn</a>
-            </div>
-
-            <nav class="topbar-center" aria-label="Hauptnavigation (kompakt)">
-                <a href="#about">About</a>
-                <a href="#projects">Projects</a>
-                <a href="#cloudScene">Globe</a>
-                <a href="#cv">CV</a>
-                <a href="#contact">Contact</a>
-            </nav>
-
-            <div class="topbar-right">
-                <span class="topbar-miniText" id="topbarText"></span>
-            </div>
+        <div class="topbar-right">
+            <span class="topbar-miniText" id="topbarText"></span>
         </div>
     </div>
-
-
 
 
     <!-- MAIN CONTENT -->
     <main id="mainContent">
 
-        <section id="about">
-            <h2>Über mich</h2>
-            <p>
-                Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
-                Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
-                und visuellen Web-Erlebnissen.
-            </p>
+        <!-- HERO HEADER -->
+        <section id="siteHeader">
 
-            <p>
-                Mein Fokus liegt auf der Verbindung von technischem Verständnis und
-                gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
-                JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
-                performanter und zugänglicher Webanwendungen.
-            </p>
+            <!-- Blurred background portrait (behind glass) -->
+            <div class="hero-bg" aria-hidden="true">
+                <img src="assets/images/michael-hero.png" alt="Blurred Background">
+            </div>
 
-            <p>
-                Diese Website dient als persönliches Portfolio und Experimentierfläche.
-                Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
-                die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
-            </p>
+            <!-- Foreground portrait (right) -->
+            <div class="hero-portrait" aria-hidden="true">
+                <img src="assets/images/michael-hero.png" alt="Michael Portrait">
+            </div>
+
+            <!-- Center typing headline -->
+            <div class="hero-center">
+                <div class="typing-block">
+                    <span id="typingText"></span>
+                    <span class="cursor">|</span>
+                </div>
+                <p class="hero-subline">Web Designer • UI/UX Enthusiast • Problem Solver</p>
+            </div>
         </section>
+
+        <section id="about" class="about">
+            <div class="about-wrap glass">
+                <header class="about-head">
+                <h2>Über mich</h2>
+                <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
+                <div class="about-accent" aria-hidden="true"></div>
+                </header>
+
+                <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                    Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
+                    Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
+                    und visuellen Web-Erlebnissen.
+                    </p>
+
+                    <p>
+                    Mein Fokus liegt auf der Verbindung von technischem Verständnis und
+                    gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
+                    JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
+                    performanter und zugänglicher Webanwendungen.
+                    </p>
+
+                    <p>
+                    Diese Website dient als persönliches Portfolio und Experimentierfläche.
+                    Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
+                    die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
+                    </p>
+                </div>
+
+                <aside class="about-aside">
+                    <div class="about-card">
+                    <h3>Schwerpunkte</h3>
+                    <ul class="about-list">
+                        <li>Frontend Engineering (HTML/CSS/JS)</li>
+                        <li>GSAP Motion & Scroll Experience</li>
+                        <li>UI/UX & Design Systems</li>
+                        <li>Performance & Accessibility</li>
+                    </ul>
+                    </div>
+
+                    <div class="about-card">
+                    <h3>Tech Stack</h3>
+                    <div class="skill-chips">
+                        <span class="chip">HTML</span>
+                        <span class="chip">CSS</span>
+                        <span class="chip">JavaScript</span>
+                        <span class="chip">GSAP</span>
+                        <span class="chip">Git</span>
+                        <span class="chip">Three.js (Basics)</span>
+                    </div>
+                    </div>
+                </aside>
+                </div>
+            </div>
+            </section>
+
+
+
 
         <section id="projects">
             <h2>Projekte</h2>
@@ -113,68 +153,61 @@
             </div>
         </section>
 
-       <section id="cv">
+
+
+        <section id="cv">
             <h2>Lebenslauf</h2>
 
-            <div class="timeline">
-                <div class="timeline-viewport" id="timelineViewport">
-                    <div class="timeline-window-label window-left">
-                        <span id="windowStart">—</span>
-                    </div>
-                    <div class="timeline-window-label window-right">
-                        <span id="windowEnd">—</span>
-                    </div>
+            <div class="timeline" id="timeline">
+                <div class="timeline-window-label window-left">
+                    <span id="windowStart">—</span>
+                </div>
+                <div class="timeline-window-label window-right">
+                    <span id="windowEnd">—</span>
+                </div>
                 <div class="timeline-track" id="timelineTrack" aria-label="Timeline">
-
-                    <!-- Milestone example -->
                     <div class="milestone" style="--pos: 6;">
-                    <button class="milestone-dot" type="button"
-                            data-start="2019-10" data-end="2020-03"
+                        <button class="milestone-dot" type="button" data-start="2019-10" data-end="2020-03"
                             data-title="Erstes Webprojekt"
                             data-desc="HTML/CSS Basics, erste Layouts, kleine Animationen.">
-                        <span class="sr-only">Erstes Webprojekt (2019-10 bis 2020-03)</span>
-                    </button>
-                    <span class="milestone-label">2019</span>
+                            <span class="sr-only">Erstes Webprojekt (2019-10 bis 2020-03)</span>
+                        </button>
+                        <span class="milestone-label">2019</span>
                     </div>
 
                     <div class="milestone" style="--pos: 22;">
-                    <button class="milestone-dot" type="button"
-                            data-start="2021-04" data-end="2022-01"
-                            data-title="Hiwi: Kinderuni Webseite online"
+                        <button class="milestone-dot" type="button" data-start="2021-04" data-end="2022-01"
+                            data-title="Hiwi: Kinderuni Webseite"
                             data-desc="Konzeption, UI-Umsetzung, Responsive Design, Inhalte.">
-                        <span class="sr-only">Hiwi: Website A (2021-04 bis 2022-01)</span>
-                    </button>
-                    <span class="milestone-label">2021–22</span>
+                            <span class="sr-only">Hiwi: Kinderuni Webseite (2021-04 bis 2022-01)</span>
+                        </button>
+                        <span class="milestone-label">2021–22</span>
                     </div>
 
                     <div class="milestone" style="--pos: 40;">
-                    <button class="milestone-dot" type="button"
-                            data-start="2023-02" data-end="2023-11"
-                            data-title="Studium / Module"
-                            data-desc="Webentwicklung, UX, Projekte, Git-Workflow.">
-                        <span class="sr-only">Studium / Module (2023-02 bis 2023-11)</span>
-                    </button>
-                    <span class="milestone-label">Studium Medieninformatik IU</span>
+                        <button class="milestone-dot" type="button" data-start="2023-02" data-end="2023-11"
+                            data-title="Studium and der IU" data-desc="Webentwicklung, UX, Projekte, Git-Workflow.">
+                            <span class="sr-only">Medieninformatik Studium an der IU (2023-02 bis 2023-11)</span>
+                        </button>
+                        <span class="milestone-label">Studium Medieninformatik IU</span>
                     </div>
 
                     <div class="milestone" style="--pos: 62;">
-                    <button class="milestone-dot" type="button"
-                            data-start="2024-03" data-end="2024-10"
-                            data-title="Hiwi: Website B"
+                        <button class="milestone-dot" type="button" data-start="2024-03" data-end="2024-10"
+                            data-title="Hiwi: RiE 2024"
                             data-desc="Interaktive Komponenten, Motion Design, Content-Integration.">
-                        <span class="sr-only">Hiwi: Website B (2024-03 bis 2024-10)</span>
-                    </button>
-                    <span class="milestone-label">test</span>
+                            <span class="sr-only">Hiwi: RiE 2024 (2024-03 bis 2024-10)</span>
+                        </button>
+                        <span class="milestone-label">RiE 2024</span>
                     </div>
 
                     <div class="milestone" style="--pos: 85;">
-                    <button class="milestone-dot" type="button"
-                            data-start="2025-01" data-end="2026-01"
-                            data-title="Portfolio / GSAP"
+                        <button class="milestone-dot" type="button" data-start="2025-01" data-end="2026-01"
+                            data-title="Portfolio Webseite"
                             data-desc="Scroll-Animationen, Parallax, Glass UI, Prototyping.">
-                        <span class="sr-only">Portfolio / GSAP (2025-01 bis 2026-01)</span>
-                    </button>
-                    <span class="milestone-label">test</span>
+                            <span class="sr-only">Portfolio (2025-01 bis 2026-01)</span>
+                        </button>
+                        <span class="milestone-label">Portfolio-Website</span>
                     </div>
 
                 </div>
@@ -185,9 +218,13 @@
                     <div class="tt-range" id="ttRange"></div>
                     <div class="tt-desc" id="ttDesc"></div>
                 </div>
-                </div>
             </div>
-            </section>
+            <div class="cv-facts">
+                <div class="fact"><span class="fact-k">Fokus</span><span class="fact-v">Frontend & Motion</span></div>
+                <div class="fact"><span class="fact-k">Tools</span><span class="fact-v">GSAP • Git • UI Systems</span></div>
+                <div class="fact"><span class="fact-k">Interessen</span><span class="fact-v">WebGL • Interaction • Accessibility</span></div>
+            </div>
+        </section>
 
         <!-- Clouds + Globe section (ID aligned with CSS/JS) -->
         <section id="cloudScene">
@@ -240,9 +277,11 @@
 
     </main>
 
-    <footer>
-        <p>© 2026 – Michael Krahn</p>
-        <p>Impressum | Datenschutz</p>
+    <footer class="site-footer">
+    <div class="footer-rainbow" aria-hidden="true"></div>
+
+    <p>© 2026 – Michael Krahn</p>
+    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
     </footer>
 
     <!-- Your scripts (defer so DOM exists) -->

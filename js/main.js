@@ -1,7 +1,8 @@
 gsap.registerPlugin(ScrollTrigger);
 
+
 /* =====================================================
-   PROJECT HOVER ANIMATIONS (UNCHANGED, SAFE)
+   PROJECT HOVER ANIMATIONS
 ===================================================== */
 const cards = [...document.querySelectorAll(".project-card")];
 
@@ -45,7 +46,7 @@ cards.forEach((card) => {
 
 
 /* =====================================================
-   CLOUDS + GLOBE (SAFE)
+   CLOUDS + GLOBE
 ===================================================== */
 const clouds = gsap.utils.toArray("#cloudScene .cloud");
 
@@ -65,8 +66,10 @@ gsap.timeline({
   }, 0);
 
 
+
+
 /* =====================================================
-   TYPING EFFECT (SAFE)
+   TYPING EFFECT
 ===================================================== */
 const text = "Hallo, ich bin Michael";
 let index = 0;
@@ -82,98 +85,25 @@ function typing() {
 typing();
 
 
-/* =====================================================
-   HERO HEADER COLLAPSE (SINGLE SOURCE OF TRUTH)
-===================================================== */
-ScrollTrigger.clearScrollMemory();
-initHeroCollapse();
-
-function initHeroCollapse() {
-  const header = document.querySelector("#siteHeader");
-  const nav = document.querySelector(".topbar");
-  if (!header || !nav) return;
-
-  // Threshold before anything happens
-  const INTENT_PX = 90;
-
-  // Collapse animation portion
-  const COLLAPSE_DISTANCE = 320;
-
-  // Extra distance to ensure hero is completely out of view after snap
-  // Use a larger value than before; this is the main reason "background still visible".
-  const EXIT_PADDING = window.innerHeight * 0.9;
-
-  // When should we consider the collapse “committed”?
-  // 0.3 means at least 30% of the timeline.
-  const SNAP_THRESHOLD = 0.30;
-
-  // Reset
-  document.body.classList.remove("dark-mode");
-  nav.classList.remove("is-sticky");
-  gsap.set(nav, { y: 0, scale: 1 });
-  gsap.set(".hero-center", { autoAlpha: 1, y: 0 });
-  gsap.set(".hero-portrait", { autoAlpha: 1, x: 0 });
-
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: header,
-      start: `top+=${INTENT_PX} top`,
-      end: `+=${COLLAPSE_DISTANCE + EXIT_PADDING}`,
-      scrub: true,
-      pin: true,
-      anticipatePin: 1,
-
-      // Snapping that engages around 50% and feels immediate
-      snap: {
-        snapTo: (value) => (value < SNAP_THRESHOLD ? 0 : 1),
-        duration: 0.30,
-        ease: "power.inOut",
-        delay: 0
-      },
-
-      onUpdate: (self) => {
-        // Dark mode comes on once collapse is noticeably underway
-        document.body.classList.toggle("dark-mode", self.progress > 0.12);
-      },
-
-      onLeave: () => {
-        nav.classList.add("is-sticky");
-        // Clear transforms so sticky CSS isn't offset by GSAP transforms
-        gsap.set(nav, { clearProps: "transform" });
-      },
-      onEnterBack: () => {
-        nav.classList.remove("is-sticky");
-      }
-    }
-  })
-    // The actual collapse animation happens early in the overall timeline
-    // Because we extended end distance, we keep the motion near the beginning.
-    .to(nav, { y: -220, scale: 0.92, ease: "power3.out" }, 0)
-    .to(".hero-center", { autoAlpha: 0, y: -80, ease: "power2.out" }, 0)
-    .to(".hero-portrait", { autoAlpha: 0, x: 60, ease: "power2.out" }, 0);
-}
-
 
 // =============================
 // Timeline auto-scroll + tooltip
 // =============================
 (function initTimeline() {
-  const viewport = document.getElementById("timelineViewport");
+  const viewport = document.getElementById("timeline");
   const track = document.getElementById("timelineTrack");
   if (!viewport || !track) return;
 
   const startEl = document.getElementById("windowStart");
   const endEl = document.getElementById("windowEnd");
-  const btn = document.getElementById("timelineToggle");
 
   const tooltip = document.getElementById("timelineTooltip");
   const ttTitle = document.getElementById("ttTitle");
   const ttRange = document.getElementById("ttRange");
   const ttDesc = document.getElementById("ttDesc");
 
-  // Define the overall time range for the track (for window labels)
-  // Adjust to your real timeline boundaries.
-  const RANGE_START = new Date("2019-01-01");
+  // Define the overall time range for the track
+  const RANGE_START = new Date("2017-01-01");
   const RANGE_END = new Date("2026-01-01");
 
   const fmt = (d) =>
@@ -237,18 +167,8 @@ function initHeroCollapse() {
     play();
   });
 
-  // Manual toggle
-  let isPaused = false;
-  btn?.addEventListener("click", () => {
-    isPaused = !isPaused;
-    btn.textContent = isPaused ? "Play" : "Pause";
-    isPaused ? tween.pause() : tween.resume();
-  });
-
-  // Tooltip handlers
   const dots = track.querySelectorAll(".milestone-dot");
   const milestones = track.querySelectorAll(".milestone");
-
 
   milestones.forEach((m, i) => {
     m.classList.add(i % 2 === 0 ? "up" : "down");
@@ -261,9 +181,6 @@ function initHeroCollapse() {
     const start = dot.dataset.start || "";
     // optional: end if you want "start–end"
     // const end = dot.dataset.end || "";
-
-    // label format: "Monat Jahr • Titel"
-    // if you store start as "2024-03", this keeps it readable.
     label.textContent = `${start} • ${title}`;
   });
 
@@ -315,8 +232,13 @@ function initHeroCollapse() {
     const x = rectD.left - rectV.left + rectD.width / 2;
     const y = rectD.top - rectV.top;
 
+    const tooltipHeight = 120; // approx; we can measure too
+    const placeBelow = y < 110; // near top -> place below
+
     tooltip.style.left = `${x}px`;
-    tooltip.style.top = `${y}px`;
+    tooltip.style.top = placeBelow ? `${y + 22}px` : `${y}px`;
+    tooltip.style.transform = placeBelow ? "translate(-50%, 10%)" : "translate(-50%, -110%)";
+
     tooltip.setAttribute("aria-hidden", "false");
 
     gsap.to(tooltip, { autoAlpha: 1, duration: 0.18, ease: "power2.out" });
@@ -351,4 +273,195 @@ function initHeroCollapse() {
     maxShift = b.maxShift;
   });
 })();
+
+
+
+/* =====================================================
+   SCROLL TO TOP ON RELOAD
+===================================================== */
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+window.scrollTo(0, 0);
+
+
+
+
+
+
+/* =====================================================
+   HERO HEADER COLLAPSE
+===================================================== */
+initHeroCollapse();
+
+function initHeroCollapse() {
+  const header = document.querySelector("#siteHeader");
+  const nav = document.querySelector(".navbar");
+  if (!header || !nav) return;
+
+  // Reset
+  document.body.classList.remove("dark-mode");
+  nav.classList.remove("is-sticky");
+  gsap.set(nav, { y: 0, scale: 1 });
+  gsap.set(".hero-center", { autoAlpha: 1, y: 0 });
+  gsap.set(".hero-portrait", { autoAlpha: 1, x: 0 });
+  ScrollTrigger.create({
+    trigger: header,
+    start: "top top",
+    end: "bottom top", // hero fully scrolled away
+    scrub: true,
+
+    onUpdate: (self) => {
+      const p = self.progress;
+
+      /* ===== visual collapse ===== */
+      gsap.to(nav, {
+        y: gsap.utils.interpolate(0, -220, p),
+        scale: gsap.utils.interpolate(1, 0.92, p),
+        overwrite: true
+      });
+
+      gsap.to(".hero-center", {
+        autoAlpha: 1 - p * 1.4,
+        y: -80 * p,
+        overwrite: true
+      });
+
+      gsap.to(".hero-portrait", {
+        autoAlpha: 1 - p * 1.2,
+        x: 60 * p,
+        overwrite: true
+      });
+
+      /* ===== dark mode threshold ===== */
+      document.body.classList.toggle("dark-mode", p > 0.15);
+
+      /* ===== sticky navbar switch ===== */
+      if (p > 0.95) {
+        nav.classList.add("is-sticky");
+      } else {
+        nav.classList.remove("is-sticky");
+      }
+    }
+  });
+}
+
+// =========================================
+// NAV ACTIVE SECTION HIGHLIGHT (ScrollTrigger)
+// =========================================
+(function initActiveNav() {
+  const nav = document.querySelector(".navbar nav");
+  if (!nav) return;
+
+  const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
+  if (!links.length) return;
+
+  // Create indicator element once
+  let indicator = nav.querySelector(".nav-indicator");
+  if (!indicator) {
+    indicator = document.createElement("span");
+    indicator.className = "nav-indicator";
+    nav.appendChild(indicator);
+  }
+
+  const getLinkForId = (id) =>
+    links.find(a => a.getAttribute("href") === `#${id}`);
+
+  const moveIndicatorTo = (link) => {
+    if (!link) return;
+
+    // Set active class
+    links.forEach(a => a.classList.toggle("active", a === link));
+
+    // Compute indicator position relative to nav
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = link.getBoundingClientRect();
+
+    const left = linkRect.left - navRect.left + 10; // align with your underline inset
+    const width = Math.max(18, linkRect.width - 20);
+
+    gsap.to(indicator, {
+      x: left,
+      width: width,
+      duration: 0.35,
+      ease: "power2.out",
+      overwrite: "auto"
+    });
+  };
+
+  // Initialize to current hash or first section link
+  const initialHash = (location.hash || "").replace("#", "");
+  const initial = initialHash ? getLinkForId(initialHash) : links[0];
+  requestAnimationFrame(() => moveIndicatorTo(initial));
+
+  // Create ScrollTriggers for each linked section
+  links.forEach((link) => {
+    const id = (link.getAttribute("href") || "").replace("#", "");
+    if (!id) return;
+
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    ScrollTrigger.create({
+      trigger: section,
+      start: "top 55%",      // adjust feel
+      end: "bottom 45%",
+      onEnter: () => moveIndicatorTo(link),
+      onEnterBack: () => moveIndicatorTo(link)
+    });
+  });
+
+  // Also react to manual clicks
+  links.forEach((link) => {
+    link.addEventListener("click", () => {
+      // indicator updates instantly on click, ScrollTrigger will keep it correct on scroll
+      moveIndicatorTo(link);
+    });
+  });
+})();
+
+
+
+
+
+
+
+//ABOUT PAGE
+gsap.from("#about .about-wrap", {
+  scrollTrigger: {
+    trigger: "#about",
+    start: "top 75%",
+    toggleActions: "play none none reverse"
+  },
+  y: 18,
+  opacity: 0,
+  duration: 0.7,
+  ease: "power2.out"
+});
+
+gsap.from("#about .about-text p", {
+  scrollTrigger: {
+    trigger: "#about",
+    start: "top 75%",
+    toggleActions: "play none none reverse"
+  },
+  y: 10,
+  opacity: 0,
+  duration: 0.55,
+  stagger: 0.08,
+  ease: "power2.out"
+});
+
+gsap.from("#about .about-card", {
+  scrollTrigger: {
+    trigger: "#about",
+    start: "top 75%",
+    toggleActions: "play none none reverse"
+  },
+  y: 12,
+  opacity: 0,
+  duration: 0.6,
+  stagger: 0.10,
+  ease: "power2.out"
+});
 

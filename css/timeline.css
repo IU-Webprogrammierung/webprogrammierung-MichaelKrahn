@@ -1,0 +1,277 @@
+
+/* =========================================
+   TIMELINE
+========================================= */
+
+/* Full-width ambient glow behind the timeline area */
+#cv{
+  position: relative; /* required for ::before */
+}
+
+#cv::before{
+  content:"";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 200px;
+
+  /* place it roughly behind the axis; tweak if needed */
+  top: 40%;
+  translate: 0 -50%;
+
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 0;
+
+  background: linear-gradient(90deg,
+    rgba(255,0,150,0.10),
+    rgba(0,200,255,0.10),
+    rgba(120,255,0,0.08),
+    rgba(255,200,0,0.08),
+    rgba(255,0,150,0.10)
+  );
+  filter: blur(32px);
+  opacity: 0.5;
+}
+
+/* Ensure your timeline is above the glow */
+.timeline{
+  position: relative;
+  z-index: 1;
+
+  width: 100vw;
+  height: 350px;
+
+  /* BREAK OUT OF SECTION PADDING */
+  left: 50%;
+  transform: translateX(-50%);
+
+  overflow: visible;
+}
+
+
+  /* MILESTONES */
+.milestone{
+  position: absolute;
+  top: 0;
+  left: calc(60px + (var(--pos) * 1%));
+  height: 100%;
+  width: 1px;
+}
+
+/* Labels: above or below based on class */
+.milestone-label{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  opacity: 0.9;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.milestone.up .milestone-label{
+  top: calc(50% - 62px);
+}
+
+.milestone.down .milestone-label{
+  top: calc(50% + 42px);
+}
+
+.milestone-dot{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: none;
+
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 12px 20px rgba(0,0,0,0.5);
+
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .22s ease, opacity .18s ease;
+}
+
+/* Hover: lift + rainbow shadow */
+.milestone-dot:hover,
+.milestone-dot:focus-visible{
+  transform: translate(-50%, -60%) scale(1.07);
+  outline: none;
+
+  box-shadow:
+    0 12px 22px rgba(0,0,0,0.22),
+    0 0 18px rgba(0,200,255,0.36),
+    0 0 22px rgba(255,0,150,0.29),
+    0 0 18px rgba(255,200,0,0.22);
+}
+
+.milestone-dot:hover::after,
+.milestone-dot:focus-visible::after{
+  opacity: 0.35;
+}
+
+/* Bottom corner labels */
+.timeline-window-label{
+  position: absolute;
+  bottom: 10px;
+  width: 125px;
+  font-weight: 600;
+  font-size: 0.95rem;
+
+  z-index: 20;
+}
+.window-left{ left: 30px; }
+.window-right{ right: 30px; }
+
+/* Subtle vignette behind the axis to make it pop */
+.timeline::before{
+  content:"";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 260px;
+  border-radius: 28px;
+
+  background: radial-gradient(circle at 30% 50%,
+    rgba(255,255,255,0.055),
+    rgba(255,255,255,0.013) 40%,
+    rgba(0,0,0,0) 70%
+  );
+  pointer-events: none;
+}
+
+
+.timeline-track{
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2200px;
+  overflow: visible;
+}
+
+.timeline-track::before{
+  content:"";
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  top: 50%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(10, 13, 20, 0.8);
+}
+
+.timeline-track::after{
+  content:"";
+  position: absolute;
+  left: 60px;
+  right: 60px;
+  height: 2px;
+  border-radius: 999px;
+  top: 50%;
+  transform: translateY(6px);
+
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.45),
+    rgba(0,200,255,.45),
+    rgba(120,255,0,.35),
+    rgba(255,200,0,.35),
+    rgba(255,0,150,.45)
+  );
+
+  filter: blur(7px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+
+
+
+/* ===== Tooltip ===== */
+.timeline-tooltip {
+  position: absolute;
+  min-width: 260px;
+  max-width: 360px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  pointer-events: none;
+
+  background: rgba(20, 20, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+
+  opacity: 0;
+}
+
+.tt-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.tt-range {
+  opacity: 0.85;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.tt-desc {
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cv-facts{
+  width: min(1100px, 92vw);
+  margin: 14px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.fact{
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+}
+
+.fact-k{
+  display:block;
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+
+.fact-v{
+  display:block;
+  font-weight: 600;
+}
+
+@media (max-width: 900px){
+  .cv-facts{ grid-template-columns: 1fr; }
+}

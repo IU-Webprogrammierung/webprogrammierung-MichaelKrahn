@@ -1,0 +1,159 @@
+
+/* =========================
+   ABOUT
+========================= */
+
+.about{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-wrap{
+  width: min(1100px, 92vw);
+  padding: clamp(22px, 3vw, 44px);
+  border-radius: 26px;
+}
+
+.about-head{
+  position: relative;
+  padding-bottom: 18px;
+  margin-bottom: 22px;
+}
+
+.about-kicker{
+  margin-top: 6px;
+  opacity: 0.75;
+}
+
+.about-accent{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 999px;
+  opacity: 0.70;
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.65),
+    rgba(0,200,255,.65),
+    rgba(120,255,0,.55),
+    rgba(255,200,0,.55),
+    rgba(255,0,150,.65)
+  );
+  filter: blur(6px);
+}
+
+/* Layout */
+.about-grid{
+  display: grid;
+  grid-template-columns: 1.3fr 0.9fr;
+  gap: 26px;
+}
+
+.about-text p{
+  opacity: 0.92;
+  margin-bottom: 14px;
+}
+
+.about-aside{
+  display: grid;
+  gap: 16px;
+}
+
+.about-card{
+  padding: 16px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+body.dark-mode .about-card{
+  background: rgba(0,0,0,0.25);
+  border-color: rgba(255,255,255,0.12);
+}
+
+.about-card h3{
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+}
+
+.about-list{
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.about-list li{
+  opacity: 0.9;
+  padding-left: 14px;
+  position: relative;
+}
+
+.about-list li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.65em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.55);
+}
+
+/* Skill chips */
+.skill-chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip{
+  position: relative;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  opacity: 0.92;
+
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  transition: transform .2s ease, opacity .2s ease;
+}
+
+.chip::after{
+  content:"";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 999px;
+  opacity: 0;
+  transform: scaleX(0.6);
+  background: linear-gradient(90deg,
+    rgba(255,0,150,.85),
+    rgba(0,200,255,.85),
+    rgba(120,255,0,.75),
+    rgba(255,200,0,.75),
+    rgba(255,0,150,.85)
+  );
+  filter: blur(6px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+.chip:hover{
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.chip:hover::after{
+  opacity: 0.65;
+  transform: scaleX(1);
+}
+
+/* Responsive */
+@media (max-width: 900px){
+  .about-grid{
+    grid-template-columns: 1fr;
+  }
+}
