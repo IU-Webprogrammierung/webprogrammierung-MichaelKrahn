@@ -28,6 +28,7 @@ body {
   background-color: var(--bg);
   color: var(--text);
   transition: background-color 0.5s ease, color 0.5s ease;
+  overflow-x: hidden; /* absolutely no horizontal scroll */
 }
 
 body.dark-mode {
@@ -46,14 +47,14 @@ body::before{
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 999999; /* above everything */
-  opacity: 0.2;   /* keep subtle */
+  z-index: 999999;
+  opacity: 0.1;
 
-  /* lightweight noise via tiny SVG data URI */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-  background-size: 220px 220px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 
-  mix-blend-mode: overlay; /* nice on light/dark */
+  mix-blend-mode: overlay;
+
   animation: grainMove 10s steps(10) infinite;
 }
 

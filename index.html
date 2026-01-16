@@ -74,59 +74,59 @@
         <section id="about" class="about">
             <div class="about-wrap glass">
                 <header class="about-head">
-                <h2>Über mich</h2>
-                <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
-                <div class="about-accent" aria-hidden="true"></div>
+                    <h2>Über mich</h2>
+                    <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
+                    <div class="about-accent" aria-hidden="true"></div>
                 </header>
 
                 <div class="about-grid">
-                <div class="about-text">
-                    <p>
-                    Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
-                    Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
-                    und visuellen Web-Erlebnissen.
-                    </p>
+                    <div class="about-text">
+                        <p>
+                            Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
+                            Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
+                            und visuellen Web-Erlebnissen.
+                        </p>
 
-                    <p>
-                    Mein Fokus liegt auf der Verbindung von technischem Verständnis und
-                    gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
-                    JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
-                    performanter und zugänglicher Webanwendungen.
-                    </p>
+                        <p>
+                            Mein Fokus liegt auf der Verbindung von technischem Verständnis und
+                            gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
+                            JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
+                            performanter und zugänglicher Webanwendungen.
+                        </p>
 
-                    <p>
-                    Diese Website dient als persönliches Portfolio und Experimentierfläche.
-                    Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
-                    die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
-                    </p>
-                </div>
-
-                <aside class="about-aside">
-                    <div class="about-card">
-                    <h3>Schwerpunkte</h3>
-                    <ul class="about-list">
-                        <li>Frontend Engineering (HTML/CSS/JS)</li>
-                        <li>GSAP Motion & Scroll Experience</li>
-                        <li>UI/UX & Design Systems</li>
-                        <li>Performance & Accessibility</li>
-                    </ul>
+                        <p>
+                            Diese Website dient als persönliches Portfolio und Experimentierfläche.
+                            Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
+                            die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
+                        </p>
                     </div>
 
-                    <div class="about-card">
-                    <h3>Tech Stack</h3>
-                    <div class="skill-chips">
-                        <span class="chip">HTML</span>
-                        <span class="chip">CSS</span>
-                        <span class="chip">JavaScript</span>
-                        <span class="chip">GSAP</span>
-                        <span class="chip">Git</span>
-                        <span class="chip">Three.js (Basics)</span>
-                    </div>
-                    </div>
-                </aside>
+                    <aside class="about-aside">
+                        <div class="about-card">
+                            <h3>Schwerpunkte</h3>
+                            <ul class="about-list">
+                                <li>Frontend Engineering (HTML/CSS/JS)</li>
+                                <li>GSAP Motion & Scroll Experience</li>
+                                <li>UI/UX & Design Systems</li>
+                                <li>Performance & Accessibility</li>
+                            </ul>
+                        </div>
+
+                        <div class="about-card">
+                            <h3>Tech Stack</h3>
+                            <div class="skill-chips">
+                                <span class="chip">HTML</span>
+                                <span class="chip">CSS</span>
+                                <span class="chip">JavaScript</span>
+                                <span class="chip">GSAP</span>
+                                <span class="chip">Git</span>
+                                <span class="chip">Three.js (Basics)</span>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </div>
-            </section>
+        </section>
 
 
 
@@ -221,28 +221,90 @@
             </div>
             <div class="cv-facts">
                 <div class="fact"><span class="fact-k">Fokus</span><span class="fact-v">Frontend & Motion</span></div>
-                <div class="fact"><span class="fact-k">Tools</span><span class="fact-v">GSAP • Git • UI Systems</span></div>
-                <div class="fact"><span class="fact-k">Interessen</span><span class="fact-v">WebGL • Interaction • Accessibility</span></div>
+                <div class="fact"><span class="fact-k">Tools</span><span class="fact-v">GSAP • Git • UI Systems</span>
+                </div>
+                <div class="fact"><span class="fact-k">Interessen</span><span class="fact-v">WebGL • Interaction •
+                        Accessibility</span></div>
             </div>
         </section>
 
-        <!-- Clouds + Globe section (ID aligned with CSS/JS) -->
+        <!-- Clouds + Globe section -->
         <section id="cloudScene">
             <h2>Globe</h2>
+
+            <!-- Background layer for light reveal -->
+            <div class="cloud-backdrop" aria-hidden="true"></div>
 
             <div class="globe-wrapper">
                 <div class="globe-placeholder">Hier kommt später Globe.gl hin</div>
             </div>
 
-            <!-- Clouds ON TOP -->
             <div class="cloud-layer" aria-hidden="true">
-                <div class="cloud c1"></div>
-                <div class="cloud c2"></div>
-                <div class="cloud c3"></div>
-                <div class="cloud c4"></div>
-                <div class="cloud c5"></div>
-                <div class="cloud c6"></div>
+                <!-- Left group -->
+                <svg class="cloud cloud--a c1" viewBox="0 0 260 140" aria-hidden="true">
+                    <path
+                        d="M70 115h130c22 0 40-12 40-30s-15-30-35-30c-6-24-28-40-54-40-23 0-43 12-52 30-3-1-7-2-12-2-20 0-36 14-36 32s16 40 19 40z" />
+                </svg>
+
+                <svg class="cloud cloud--b c2" viewBox="0 0 280 150" aria-hidden="true">
+                    <path
+                        d="M85 122h140c28 0 50-14 50-35 0-19-17-33-39-34-9-28-34-46-64-46-27 0-50 14-61 35-4-2-9-3-16-3-23 0-42 16-42 37 0 23 20 46 32 46z" />
+                </svg>
+
+                <svg class="cloud cloud--c c3" viewBox="0 0 300 160" aria-hidden="true">
+                    <path
+                        d="M95 130h150c30 0 55-16 55-38 0-21-18-36-43-38-9-32-38-53-72-53-30 0-56 16-69 40-5-2-11-3-19-3-26 0-47 18-47 41 0 26 24 51 45 51z" />
+                </svg>
+
+                <!-- Center group -->
+                <svg class="cloud cloud--b c4" viewBox="0 0 280 150" aria-hidden="true">
+                    <path
+                        d="M85 122h140c28 0 50-14 50-35 0-19-17-33-39-34-9-28-34-46-64-46-27 0-50 14-61 35-4-2-9-3-16-3-23 0-42 16-42 37 0 23 20 46 32 46z" />
+                </svg>
+
+                <svg class="cloud cloud--a c5" viewBox="0 0 260 140" aria-hidden="true">
+                    <path
+                        d="M70 115h130c22 0 40-12 40-30s-15-30-35-30c-6-24-28-40-54-40-23 0-43 12-52 30-3-1-7-2-12-2-20 0-36 14-36 32s16 40 19 40z" />
+                </svg>
+
+                <svg class="cloud cloud--c c6" viewBox="0 0 300 160" aria-hidden="true">
+                    <path
+                        d="M95 130h150c30 0 55-16 55-38 0-21-18-36-43-38-9-32-38-53-72-53-30 0-56 16-69 40-5-2-11-3-19-3-26 0-47 18-47 41 0 26 24 51 45 51z" />
+                </svg>
+
+                <!-- Right group -->
+                <svg class="cloud cloud--a c7" viewBox="0 0 260 140" aria-hidden="true">
+                    <path
+                        d="M70 115h130c22 0 40-12 40-30s-15-30-35-30c-6-24-28-40-54-40-23 0-43 12-52 30-3-1-7-2-12-2-20 0-36 14-36 32s16 40 19 40z" />
+                </svg>
+
+                <svg class="cloud cloud--c c8" viewBox="0 0 300 160" aria-hidden="true">
+                    <path
+                        d="M95 130h150c30 0 55-16 55-38 0-21-18-36-43-38-9-32-38-53-72-53-30 0-56 16-69 40-5-2-11-3-19-3-26 0-47 18-47 41 0 26 24 51 45 51z" />
+                </svg>
+
+                <svg class="cloud cloud--b c9" viewBox="0 0 280 150" aria-hidden="true">
+                    <path
+                        d="M85 122h140c28 0 50-14 50-35 0-19-17-33-39-34-9-28-34-46-64-46-27 0-50 14-61 35-4-2-9-3-16-3-23 0-42 16-42 37 0 23 20 46 32 46z" />
+                </svg>
+
+                <!-- Bottom group -->
+                <svg class="cloud cloud--a c10" viewBox="0 0 260 140" aria-hidden="true">
+                    <path
+                        d="M70 115h130c22 0 40-12 40-30s-15-30-35-30c-6-24-28-40-54-40-23 0-43 12-52 30-3-1-7-2-12-2-20 0-36 14-36 32s16 40 19 40z" />
+                </svg>
+
+                <svg class="cloud cloud--c c11" viewBox="0 0 300 160" aria-hidden="true">
+                    <path
+                        d="M95 130h150c30 0 55-16 55-38 0-21-18-36-43-38-9-32-38-53-72-53-30 0-56 16-69 40-5-2-11-3-19-3-26 0-47 18-47 41 0 26 24 51 45 51z" />
+                </svg>
+
+                <svg class="cloud cloud--b c12" viewBox="0 0 280 150" aria-hidden="true">
+                    <path
+                        d="M85 122h140c28 0 50-14 50-35 0-19-17-33-39-34-9-28-34-46-64-46-27 0-50 14-61 35-4-2-9-3-16-3-23 0-42 16-42 37 0 23 20 46 32 46z" />
+                </svg>
             </div>
+
         </section>
 
         <section id="contact" class="contact-section">
@@ -278,14 +340,15 @@
     </main>
 
     <footer class="site-footer">
-    <div class="footer-rainbow" aria-hidden="true"></div>
+        <div class="footer-rainbow" aria-hidden="true"></div>
 
-    <p>© 2026 – Michael Krahn</p>
-    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+        <p>© 2026 – Michael Krahn</p>
+        <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
     </footer>
 
     <!-- Your scripts (defer so DOM exists) -->
     <script src="js/main.js" defer></script>
+    <script src="js/clouds.js" defer></script>
 
 </body>
 

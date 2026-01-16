@@ -46,29 +46,6 @@ cards.forEach((card) => {
 
 
 /* =====================================================
-   CLOUDS + GLOBE
-===================================================== */
-const clouds = gsap.utils.toArray("#cloudScene .cloud");
-
-gsap.timeline({
-  scrollTrigger: {
-    trigger: "#cloudScene",
-    start: "top 75%",
-    end: "top 25%",
-    scrub: true
-  }
-})
-  .to(".globe-wrapper", { autoAlpha: 1, scale: 1 }, 0)
-  .to(clouds, {
-    x: i => i % 2 === 0 ? -500 : 500,
-    y: -120,
-    autoAlpha: 0.5
-  }, 0);
-
-
-
-
-/* =====================================================
    TYPING EFFECT
 ===================================================== */
 const text = "Hallo, ich bin Michael";
