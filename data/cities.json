@@ -1,0 +1,22 @@
+[
+  { "name": "Hamburg", "lat": 53.551086, "lng": 9.993682 },
+  { "name": "München", "lat": 48.137154, "lng": 11.576124 },
+  { "name": "Koblenz", "lat": 50.360023, "lng": 7.589907 },
+  { "name": "Trier", "lat": 49.75, "lng": 6.633333 },
+  { "name": "Frankfurt", "lat": 50.110924, "lng": 8.682127 },
+
+  { "name": "Ubud (Bali)", "lat": -8.519268, "lng": 115.263298 },
+  { "name": "Bangkok", "lat": 13.736717, "lng": 100.523186 },
+  { "name": "Thessaloniki", "lat": 40.629269, "lng": 22.947412 },
+
+  { "name": "London", "lat": 51.509865, "lng": -0.118092 },
+  { "name": "Marrakech", "lat": 31.628674, "lng": -7.992047 },
+  { "name": "Malta (Valletta)", "lat": 35.884445, "lng": 14.506944 },
+
+  { "name": "Rom", "lat": 41.902782, "lng": 12.496366 },
+  { "name": "Tokyo", "lat": 35.68972, "lng": 139.69222 },
+
+  { "name": "Dolomiten", "lat": 46.383333, "lng": 11.85 },
+
+  { "name": "Peking", "lat": 39.916668, "lng": 116.383331 }
+]

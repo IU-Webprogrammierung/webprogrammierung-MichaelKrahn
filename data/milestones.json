@@ -1,0 +1,58 @@
+[
+  {
+    "category": "edu",
+    "start": "1997-01-28",
+    "end": "",
+    "title": "Geburt",
+    "desc": "Born in a small village called Waldbreitbach im staying loyal to my roots.",
+    "label": "Geburt"
+  },
+  {
+    "category": "edu",
+    "start": "2017-04",
+    "end": "2018-03",
+    "title": "Studium Architektur (HS Koblenz)",
+    "desc": "Grundlagen Entwurf, Gestaltung, technisches Verständnis.",
+    "label": "Architektur"
+  },
+  {
+    "category": "edu",
+    "start": "2018-10",
+    "end": "2019-09",
+    "title": "Maschinenbau (DHBW Mannheim)",
+    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+    "label": "Maschinenbau"
+  },
+  {
+    "category": "edu",
+    "start": "2019-10",
+    "end": "2026-01",
+    "title": "Computervisualistik (Uni Koblenz)",
+    "desc": "Schwerpunkt: Visual Computing, Interaktion, Web/UX-nahe Projekte.",
+    "label": "Studium"
+  },
+  {
+    "category": "proj",
+    "start": "2019-10",
+    "end": "2020-03",
+    "title": "Erstes Webprojekt",
+    "desc": "HTML/CSS Basics, erste Layouts, kleine Animationen.",
+    "label": "2019"
+  },
+  {
+    "category": "work",
+    "start": "2021-04",
+    "end": "2026-01",
+    "title": "HiWi: KinderUni / Web Design",
+    "desc": "Konzeption, UI-Umsetzung, Responsive Design.",
+    "label": "HiWi Web"
+  },
+  {
+    "category": "proj",
+    "start": "2025-01",
+    "end": "2026-01",
+    "title": "Portfolio Webseite",
+    "desc": "Scroll-Animationen, Parallax, Glass UI, Prototyping.",
+    "label": "Portfolio"
+  }
+]

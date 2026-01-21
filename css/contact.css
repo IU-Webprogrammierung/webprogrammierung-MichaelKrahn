@@ -11,10 +11,6 @@
   max-width: 720px;
   padding: 60px;
   border-radius: 32px;
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
 }
 
 .contact-header {
@@ -70,23 +66,4 @@ body.dark-mode .form-group textarea {
 .form-group textarea:focus {
   box-shadow: 0 0 0 2px rgba(90, 185, 255, 0.6);
   transform: translateY(-1px);
-}
-
-.submit-btn {
-  margin-top: 10px;
-  align-self: flex-start;
-  padding: 14px 28px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(135deg, #5ab9ff, #7fffd4);
-  color: #111;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(90, 185, 255, 0.4);
 }

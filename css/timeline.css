@@ -245,6 +245,20 @@
   border: 0;
 }
 
+.cv-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+
+/* Optional category styling hooks */
+.milestone--edu .milestone-label { opacity: .85; }
+.milestone--work .milestone-label { opacity: .95; }
+.milestone--proj .milestone-label { opacity: 1; }
+
+
 .cv-facts{
   width: min(1100px, 92vw);
   margin: 14px auto 0;

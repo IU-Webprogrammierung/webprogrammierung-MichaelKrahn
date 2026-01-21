@@ -1,18 +1,18 @@
 /* =========================================
    NAVBAR
 ========================================= */
-.navbar nav a.active{
+.navbar a.active {
   opacity: 1;
 }
 
 /* Keep your rainbow underline visible when active */
-.navbar nav a.active::after{
+.navbar a.active::after {
   opacity: 0.75;
   transform: scaleX(1);
 }
 
-/* Sliding indicator bar (created by JS) */
-.nav-indicator{
+/* Sliding indicator bar */
+.nav-indicator {
   position: absolute;
   bottom: 6px;
   height: 3px;
@@ -20,24 +20,18 @@
   opacity: 0.65;
 
   background: linear-gradient(90deg,
-    rgba(255,0,150,.85),
-    rgba(0,200,255,.85),
-    rgba(120,255,0,.75),
-    rgba(255,200,0,.75),
-    rgba(255,0,150,.85)
-  );
+      rgba(255, 0, 150, .85),
+      rgba(0, 200, 255, .85),
+      rgba(120, 255, 0, .75),
+      rgba(255, 200, 0, .75),
+      rgba(255, 0, 150, .85));
   filter: blur(6px);
   pointer-events: none;
 }
 
-/* Ensure nav is a positioning context for the indicator */
-.navbar nav{
-  position: relative;
-}
-
 /* Hero state (page load) */
 .navbar {
-  position: absolute;
+  position: fixed;
   top: 30%;
   left: 6%;
   transform: translateY(-50%);
@@ -48,7 +42,7 @@
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border: 1px solid var(--glass-border);
-  border-radius: 22px;
+  border-radius: 20px;
   padding: 14px 18px;
 
   display: grid;
@@ -62,32 +56,60 @@
   top: 0;
   left: 0;
   transform: none;
+  padding: 0px 10px;
 
   width: 100vw;
   z-index: 9999;
-}
 
-/* Make the glass container full-width and edge-to-edge */
-.navbar.is-sticky {
-  width: 100%;
   border: none;
   border-radius: 0;
 
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--glass-border);
 }
 
 /* Navbar */
-.brand {
-  text-decoration: none;
-  color: inherit;
-  font-weight: 600;
-}
-
 .navbar-center {
   display: flex;
   gap: 18px;
   justify-content: center;
+}
+
+.navbar-right {
+  /* Ensure the container has a fixed width or handles overflow */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  overflow: hidden;
+  /* Hide text that hasn't "scrolled" in yet if you align left */
+  min-width: 300px;
+  /* Reserve space so navbar doesn't jitter */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+/* Sticky state: show ticker area */
+.navbar.is-sticky .navbar-right {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.navbar-miniText {
+  font-family: 'Courier New', Courier, monospace;
+  /* Monospace looks best for tickers */
+  font-size: 0.8rem;
+  white-space: pre;
+  /* IMPORTANT: Preserves spaces so text doesn't collapse */
+  color: #666;
+  /* Subtle color */
+  text-transform: uppercase;
+
+  /* Optional: fade out the left side to make it look like it's emerging */
+  /*mask-image: linear-gradient(to right, transparent, black 20%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%);*/
 }
