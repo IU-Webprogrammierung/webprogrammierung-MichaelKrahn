@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/hero.css">
     <link rel="stylesheet" href="css/about.css">
     <link rel="stylesheet" href="css/timeline.css">
+    <link rel="stylesheet" href="css/projects.css">
     <link rel="stylesheet" href="css/globe.css">
     <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/footer.css">
@@ -23,6 +24,12 @@
 </head>
 
 <body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+
+
     <!-- Layer 0 (Background, not snapping) -->
     <div id="globe" aria-hidden="true">
         <canvas id="globeCanvas"></canvas>
@@ -40,7 +47,7 @@
 
             <nav class="navbar-center" aria-label="Hauptnavigation">
                 <a href="#about">About</a>
-                <!--<a href="#projects">Projects</a>-->
+                <a href="#projects">Projects</a>
                 <a href="#globe-1">Globe</a>
                 <a href="#cv">CV</a>
                 <a href="#contact">Contact</a>
@@ -138,42 +145,52 @@
         </section>
 
 
-        <!-- Timeline & CV -->
-        <section id="cv">
-            <div class="cv-head">
-                <h2>Lebenslauf</h2>
 
-                <a class="btn" href="data/Michael Krahn Resume.pdf" download
-                    aria-label="Lebenslauf als PDF herunterladen">
-                    PDF herunterladen
-                </a>
+        <!-- CV & TIMELINE -->
+        <section id="cv" class="cv-section">
+
+            <div class="cv-header">
+                <div class="header-top">
+                    <h2>Lebenslauf</h2>
+                    <a class="btn" href="data/Michael Krahn Resume.pdf" download aria-label="Lebenslauf PDF">
+                        PDF herunterladen
+                    </a>
+                </div>
+
+                <div class="cv-facts">
+                    <div class="fact">
+                        <span class="fact-k">Fokus</span>
+                        <span class="fact-v">Frontend • Motion • WebGL</span>
+                    </div>
+                    <div class="fact">
+                        <span class="fact-k">Tools</span>
+                        <span class="fact-v">GSAP • Three.js • Git</span>
+                    </div>
+                    <div class="fact">
+                        <span class="fact-k">Interessen</span>
+                        <span class="fact-v">Interaction • Visual Computing</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="timeline" id="timeline">
-                <div class="timeline-window-label window-left">
-                    <span id="windowStart">—</span>
-                </div>
-                <div class="timeline-window-label window-right">
-                    <span id="windowEnd">—</span>
+
+            <div class="timeline-area">
+                <div class="timeline-static" aria-hidden="true">
+                    <div class="timeline-window-label window-left"><span id="windowStart">...</span></div>
+                    <div class="timeline-window-label window-right"><span id="windowEnd">...</span></div>
+                    <div class="track-line"></div>
+                    <div class="rainbow-beam"></div>
                 </div>
 
-                <div class="timeline-track" id="timelineTrack" aria-label="Timeline">
+                <div id="timeline" class="timeline-scroll">
+                    <div id="timelineTrack" class="timeline-track"></div>
                 </div>
 
-                <div class="timeline-tooltip" id="timelineTooltip" role="tooltip" aria-hidden="true">
+                <div class="timeline-tooltip" id="timelineTooltip">
                     <div class="tt-title" id="ttTitle"></div>
                     <div class="tt-range" id="ttRange"></div>
                     <div class="tt-desc" id="ttDesc"></div>
                 </div>
-            </div>
-
-            <div class="cv-facts">
-                <div class="fact"><span class="fact-k">Fokus</span><span class="fact-v">Frontend • Motion • WebGL</span>
-                </div>
-                <div class="fact"><span class="fact-k">Tools</span><span class="fact-v">GSAP • Three.js • Git</span>
-                </div>
-                <div class="fact"><span class="fact-k">Interessen</span><span class="fact-v">Interaction • Visual
-                        Computing • Accessibility</span></div>
             </div>
         </section>
 
@@ -181,27 +198,87 @@
 
         <!-- Projects -->
         <section id="projects">
-            <h2>Projekte</h2>
+            <div class="projects-wrapper">
+                <h2>Projekte</h2>
 
-            <div class="projects-container">
-                <article class="project-card" id="project1">
-                    <div class="project-content">
-                        <h2>Kinderuni-koblenz</h2>
-                        <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"
-                            referrerpolicy="no-referrer"></iframe>
-                    </div>
-                </article>
+                <div class="stack-container">
 
-                <article class="project-card" id="project2">
-                    <div class="project-content">
-                        <h2>RiE 2024</h2>
-                        <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"
-                            referrerpolicy="no-referrer"></iframe>
-                    </div>
-                </article>
+                    <article class="project-card glass" id="project1" data-url="http://kinderuni-koblenz.de/">
+                        <div class="project-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="address-bar">
+                                <span class="typing-text"></span><span class="cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"
+                                referrerpolicy="no-referrer"></iframe>
+                            <div class="click-overlay"></div>
+                        </div>
+                    </article>
+
+                    <article class="project-card glass" id="project2" data-url="https://rie.science/2024/">
+                        <div class="project-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="address-bar">
+                                <span class="typing-text"></span><span class="cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"
+                                referrerpolicy="no-referrer"></iframe>
+                            <div class="click-overlay"></div>
+                        </div>
+                    </article>
+
+                    <article class="project-card glass" id="project3" data-url="https://www.igloo.inc/">
+                        <div class="project-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="address-bar">
+                                <span class="typing-text"></span><span class="cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <iframe title="RiE 2024" src="https://www.igloo.inc/" loading="lazy"
+                                referrerpolicy="no-referrer"></iframe>
+                            <div class="click-overlay"></div>
+                        </div>
+                    </article>
+
+                    <article class="project-card glass" id="project4" data-url="https://landonorris.com">
+                        <div class="project-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="address-bar">
+                                <span class="typing-text"></span><span class="cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <iframe title="Lando Norris"
+                                src="https://landonorris.com/?trk=public_post_main-feed-card-text" loading="lazy"
+                                referrerpolicy="no-referrer"></iframe>
+                            <div class="click-overlay"></div>
+                        </div>
+                    </article>
+
+                </div>
             </div>
         </section>
-
 
 
         <!-- Multiple animated Globe Slides -->
@@ -261,16 +338,55 @@
         </section>
 
 
+
+
         <!-- LAYER _ (no own Layer but snap scrolling is manually disabled for this part) -->
         <!-- Footer -->
-        <footer>
+        <footer class="site-footer snap-footer" id="footer">
             <div class="footer-rainbow" aria-hidden="true"></div>
 
-            <p>© 2026 – Michael Krahn</p>
-            <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="social">
+                        <a class="social-btn" href="https://github.com/USERNAME" target="_blank" rel="noopener"
+                            aria-label="GitHub">
+                            <!-- GitHub icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M12 .5C5.73.5.75 5.61.75 12c0 5.1 3.29 9.43 7.86 10.96.57.11.78-.25.78-.56v-2.1c-3.2.71-3.88-1.58-3.88-1.58-.53-1.38-1.29-1.74-1.29-1.74-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.76.4-1.28.73-1.58-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.18-3.15-.12-.3-.51-1.52.11-3.16 0 0 .97-.32 3.18 1.2.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.52 3.18-1.2 3.18-1.2.62 1.64.23 2.86.11 3.16.73.82 1.18 1.87 1.18 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.67.79.56 4.56-1.53 7.85-5.86 7.85-10.96C23.25 5.61 18.27.5 12 .5z" />
+                            </svg>
+                        </a>
+
+                        <a class="social-btn" href="https://www.linkedin.com/in/USERNAME" target="_blank" rel="noopener"
+                            aria-label="LinkedIn">
+                            <!-- LinkedIn icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.03-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z" />
+                            </svg>
+                        </a>
+
+                        <a class="social-btn" href="mailto:you@example.com" aria-label="Email">
+                            <!-- Mail icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-center">
+                    <p>© 2026 – Michael Krahn</p>
+                    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+                </div>
+
+                <div class="footer-right"></div>
+            </div>
         </footer>
 
     </main>
+
 
 
 
@@ -288,6 +404,7 @@
     <script src="js/main.js" defer></script>
     <script src="js/timeline.js" defer></script>
     <script src="js/about.js" defer></script>
+    <script src="js/projects.js" defer></script>
 
 </body>
 

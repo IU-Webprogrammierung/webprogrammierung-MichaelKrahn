@@ -6,7 +6,7 @@ const config = {
 };
 
 // --- 1. SETUP SCENE ---
-const container = document.getElementById('canvas-container');
+const container = document.getElementById('globeCanvas');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(config.bg);
 scene.fog = new THREE.Fog(config.bg, 10, 50);

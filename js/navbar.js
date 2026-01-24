@@ -1,28 +1,5 @@
 gsap.registerPlugin(ScrollTrigger);
 
-/* ========================
-   TYPING EFFECT
-======================== */
-
-const text = "Hallo, ich bin Michael";
-let index = 0;
-const typingTarget = document.getElementById("typingText");
-
-function typing() {
-    if(index <= text.length){
-        typingTarget.innerHTML = text.slice(0, index);
-        index++;
-        setTimeout(typing, 80);
-    }
-}
-typing();
-
-
-
-
-
-
-
 /* =====================================================
    NAVBAR COLLAPSE & ACTIVE INDICATOR
 ===================================================== */
@@ -95,7 +72,7 @@ typing();
         y: 0,
         scaleX: 1,
         scaleY: 1,
-        duration: 0.55,
+        duration: 0.45,
         ease: "power2.out",
         clearProps: "transform"
       }
@@ -109,11 +86,13 @@ typing();
 
   // --- Sticky trigger: when leaving the hero section
   ScrollTrigger.create({
-    scroller: "#main",
-    trigger: hero,
-    start: "bottom top+=1",
-    onLeave: () => flipSticky(true),
-    onEnterBack: () => flipSticky(false),
+      scroller: "#main", // Keep your custom scroller
+      trigger: "body",   // Use body or your main wrapper as the reference
+      start: "top top-=50", // "When Body Top is 100px above Viewport Top" (User scrolled 100px)
+      end: 99999,        // Keep it active indefinitely
+      onEnter: () => flipSticky(true),
+      onLeaveBack: () => flipSticky(false),
+      // markers: true,  // Uncomment this to see the red lines on screen!
   });
 
   // --- Active section logic (robust)
@@ -148,6 +127,22 @@ typing();
 
 
 
+/* ========================
+   TYPING EFFECT
+======================== */
+
+const text = "Hallo, ich bin Michael";
+let index = 0;
+const typingTarget = document.getElementById("typingText");
+
+function typing() {
+    if(index <= text.length){
+        typingTarget.innerHTML = text.slice(0, index);
+        index++;
+        setTimeout(typing, 80);
+    }
+}
+typing();
 
 
 /* =====================================================

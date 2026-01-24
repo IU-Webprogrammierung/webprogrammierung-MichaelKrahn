@@ -1,231 +1,407 @@
 /* =====================================================
    GLOBE + Clouds
 ===================================================== */
+gsap.registerPlugin(ScrollTrigger);
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // --- CONFIGURATION ---
-    const config = {
-        bg: 0xe0e0e0, 
-        globeColor: 0xffffff,
-        cloudColor: 0xffffff,
-    };
+const scrollerEl = document.querySelector("#main");
 
-    // --- 1. SETUP THREE.JS SCENE ---
-    const container = document.getElementById('canvas-container');
-    const scene = new THREE.Scene();
-    // Note: We don't set background color here if we want CSS to handle it, 
-    // but for Fog to work, we need to match it.
-    scene.fog = new THREE.Fog(config.bg, 10, 50);
-
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-    // Initial Camera Position (Looking at CV section state)
-    camera.position.set(0, 0, 20); 
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    container.appendChild(renderer.domElement);
-
-    // --- 2. LIGHTING ---
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(5, 10, 10);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.width = 1024;
-    dirLight.shadow.mapSize.height = 1024;
-    scene.add(dirLight);
-
-    // --- 3. OBJECTS ---
-
-    // A. The Globe
-    const globeGeo = new THREE.SphereGeometry(3.5, 64, 64);
-    const globeMat = new THREE.MeshStandardMaterial({ 
-        color: config.globeColor, 
-        roughness: 0.6 
-    });
-    const globe = new THREE.Mesh(globeGeo, globeMat);
-    globe.castShadow = true;
-    globe.receiveShadow = true;
-    
-    // INITIAL STATE (For CV Section):
-    // Pushed to the RIGHT (x: 12) and Invisible (scale: 0) initially
-    // We will fade it in when CV appears.
-    globe.position.set(12, 0, 0); 
-    globe.scale.set(0,0,0); 
-    scene.add(globe);
-
-    // B. Clouds
-    const cloudGroup = new THREE.Group();
-    // Position clouds around the globe's initial position
-    cloudGroup.position.set(6, 0, 6); 
-    
-    const cloudGeo = new THREE.SphereGeometry(1.0, 32, 32);
-    const cloudMat = new THREE.MeshStandardMaterial({ 
-        color: config.cloudColor, 
-        roughness: 0.9,
-        transparent: true,
-        opacity: 0.0 // Start invisible
-    });
-
-    const clouds = [];
-    for (let i = 0; i < 12; i++) {
-        const cloud = new THREE.Mesh(cloudGeo, cloudMat);
-        
-        // Initial "Cluster/Curtain" Formation
-        cloud.position.set(
-            (Math.random() - 0.5) * 6,
-            (Math.random() - 0.5) * 4,
-            (Math.random() * 4) // Varied depth
-        );
-
-        // Store target "Orbit" data for later
-        cloud.userData = {
-            angle: Math.random() * Math.PI * 2,
-            radius: 7 + Math.random() * 2,
-            yOff: (Math.random() - 0.5) * 2,
-            speed: 0.002 + Math.random() * 0.002
-        };
-
-        clouds.push(cloud);
-        cloudGroup.add(cloud);
-    }
-    scene.add(cloudGroup);
-
-
-    // --- 4. GSAP SCROLL TRIGGERS ---
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Helper to control orbit spread
-    const orbitCtrl = { spread: 0 }; // 0 = Cluster, 1 = Orbit Ring
-
-    // --- PHASE 1: ENTERING CV SECTION ---
-    // Action: Fade in Globe on the RIGHT side.
-    ScrollTrigger.create({
-        trigger: "#cv",
-        start: "top center", 
-        end: "bottom center",
-        onEnter: () => {
-            gsap.to(globe.scale, { x: 1, y: 1, z: 1, duration: 1.5, ease: "power2.out" });
-            gsap.to(cloudMat, { opacity: 0.9, duration: 1.5 });
-            // Ensure position is Right
-            gsap.to(globe.position, { x: 12, y: 0, duration: 2 });
-            gsap.to(cloudGroup.position, { x: 12, duration: 2 });
-        },
-        onLeaveBack: () => {
-            // If we scroll back up to Projects, hide globe
-            gsap.to(globe.scale, { x: 0, y: 0, z: 0, duration: 1 });
-            gsap.to(cloudMat, { opacity: 0, duration: 1 });
-        }
-    });
-
-    // --- PHASE 2: CV -> GLOBE SECTION (The Reveal) ---
-    // Action: Move Globe to CENTER, "Explode" Clouds.
-    // We attach this to the #globe section entering.
-    
-    // We use a Timeline scrubbed by the transition space between CV and Globe
-    // OR simply trigger it when #globe hits center.
-    // Given Snap Scroll, a "scrub" might feel jerky. Let's use a smooth animation trigger.
-    
-    ScrollTrigger.create({
-        trigger: "#globe",
-        start: "top 60%", // Starts slightly before section hits top
-        onEnter: () => {
-            // 1. Move everything to Center
-            gsap.to(globe.position, { x: 0, duration: 2, ease: "power3.inOut" });
-            gsap.to(cloudGroup.position, { x: 0, z: 0, duration: 2, ease: "power3.inOut" });
-            
-            // 2. Explode Clouds (Cluster -> Orbit)
-            gsap.to(orbitCtrl, { spread: 1, duration: 2.5, ease: "power2.out" });
-
-            // 3. Camera Zoom effect
-            gsap.to(camera.position, { z: 16, duration: 2 });
-        },
-        onLeaveBack: () => {
-            // Go back to CV state (Right side, Clustered)
-            gsap.to(globe.position, { x: 6, duration: 2, ease: "power3.inOut" });
-            gsap.to(cloudGroup.position, { x: 6, z: 6, duration: 2, ease: "power3.inOut" });
-            gsap.to(orbitCtrl, { spread: 0, duration: 2 });
-            gsap.to(camera.position, { z: 20, duration: 2 });
-        }
-    });
-
-    // --- PHASE 3: GLOBE -> CONTACT SECTION ---
-    // Action: Move Globe to LEFT, maybe dim it.
-    ScrollTrigger.create({
-        trigger: "#contact",
-        start: "top 60%",
-        onEnter: () => {
-            // Move Left
-            gsap.to(globe.position, { x: -12, duration: 1.5, ease: "power2.inOut" });
-            gsap.to(cloudGroup.position, { x: -12, duration: 1.5, ease: "power2.inOut" });
-            // Optional: Dim slightly so form is readable
-            gsap.to(cloudMat, { opacity: 0.4, duration: 1 });
-        },
-        onLeaveBack: () => {
-            // Go back to Center
-            gsap.to(globe.position, { x: 0, duration: 1.5, ease: "power2.inOut" });
-            gsap.to(cloudGroup.position, { x: 0, duration: 1.5, ease: "power2.inOut" });
-            gsap.to(cloudMat, { opacity: 0.9, duration: 1 });
-        }
-    });
-
-
-    // --- 5. RENDER LOOP ---
-    function animate() {
-        requestAnimationFrame(animate);
-
-        // Constant Rotation
-        globe.rotation.y += 0.001;
-        cloudGroup.rotation.y += 0.0005;
-
-        // Dynamic Cloud Positioning based on 'orbitCtrl.spread'
-        // 0 = Cluster (Random pos), 1 = Orbit (Ring)
-        clouds.forEach((c, i) => {
-            // Current "Cluster" position (we just use the initial random positions logic vaguely here)
-            // Ideally, we stored initial positions. For simplicity, let's just lerp to Orbit.
-            
-            const u = c.userData;
-            const time = Date.now() * 0.0001;
-            
-            if(orbitCtrl.spread > 0.01) {
-                // Calculate Orbit Position
-                const angle = u.angle + time; // Moving orbit
-                const r = u.radius;
-                
-                const targetX = Math.cos(angle) * r;
-                const targetZ = Math.sin(angle) * r;
-                const targetY = u.yOff;
-
-                // We technically need to LERP from their "Cluster" position to this "Orbit" position
-                // But since the group moves and we didn't save exact cluster coords in a retrievable way for lerp in loop,
-                // we can rely on GSAP animating the `spread` value to transition logic.
-                
-                // Hacky but effective: 
-                // When spread is 0, they are at (0,0,0) relative to group + noise? 
-                // Let's just Apply Orbit Logic scaled by Spread.
-                
-                c.position.x = THREE.MathUtils.lerp(c.position.x, targetX, 0.05 * orbitCtrl.spread);
-                c.position.z = THREE.MathUtils.lerp(c.position.z, targetZ, 0.05 * orbitCtrl.spread);
-                c.position.y = THREE.MathUtils.lerp(c.position.y, targetY, 0.05 * orbitCtrl.spread);
-                
-                // Face Camera-ish
-                c.lookAt(camera.position);
-            }
-        });
-
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    // Resize
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
+ScrollTrigger.defaults({
+  scroller: scrollerEl
 });
+
+// OPTIONAL (recommended): refresh after layout / images load
+window.addEventListener("load", () => ScrollTrigger.refresh());
+
+
+
+// --- CONFIG ---
+const config = {
+    bg: 0xe0e0e0,
+    globeColor: 0xffffff,
+    cloudColor: 0xffffff
+};
+
+// --- 1. SETUP SCENE ---
+const canvas = document.getElementById("globeCanvas");
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(config.bg);
+scene.fog = new THREE.Fog(config.bg, 10, 50);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 20);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+// Better modern color / contrast
+renderer.outputEncoding = THREE.sRGBEncoding; 
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+// Softer physically plausible lighting
+renderer.physicallyCorrectLights = true;
+
+// Shadows (soft)
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+
+// --- 2. LIGHTS ---
+// Ambient (very soft)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+scene.add(ambientLight);
+
+// Hemisphere (adds subtle sky/ground tint = modern look)
+const hemi = new THREE.HemisphereLight(0xcfe8ff, 0xf2efe9, 0.85);
+scene.add(hemi);
+
+// Key light (soft)
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
+dirLight.position.set(6, 10, 12);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(1024, 1024);
+dirLight.shadow.radius = 4;
+dirLight.shadow.bias = -0.0002;
+scene.add(dirLight);
+
+// --- 3. OBJECTS ---
+
+// A. THE GLOBE
+
+// --- A. THE GLOBE (use a wrapper group) ---
+const globeGroup = new THREE.Group();
+scene.add(globeGroup);
+
+const globe = new ThreeGlobe()
+    .showAtmosphere(true)
+    .atmosphereColor("#9ad1ff")
+    .atmosphereAltitude(0.12);
+
+// Make the globe visible even without an image texture:
+if (typeof globe.globeMaterial === "function") {
+    const m = globe.globeMaterial();
+    if (m?.color) m.color.set(0xffffff);
+    // optional: helps in flat lighting
+    if (m?.emissive) m.emissive.set(0x111111);
+}
+// Make globe surface feel like "water + glassy highlights"
+if (typeof globe.globeMaterial === "function") {
+    const m = globe.globeMaterial();
+
+    // Base (water) tint
+    if (m?.color) m.color.set("#f6f7fb");
+
+    // Specular highlights (modern)
+    if ("roughness" in m) m.roughness = 0.55;
+    if ("metalness" in m) m.metalness = 0.08;
+
+    // Optional subtle translucency (do not overdo, can look weird if too transparent)
+    m.transparent = true;
+    m.opacity = 0.92;
+
+    // Slight emissive lift so it doesn't look dead in shadows
+    if (m?.emissive) m.emissive.set("#0b0d12");
+    if ("emissiveIntensity" in m) m.emissiveIntensity = 0.08;
+}
+
+globeGroup.add(globe);
+
+
+// Set a stable visible size
+globeGroup.scale.set(0.005, 0.005, 0.005);
+
+(async function loadGlobeData() {
+    // Countries topology
+    const world = await fetch("https://unpkg.com/world-atlas@2/countries-110m.json").then(r => r.json());
+    const countries = topojson.feature(world, world.objects.countries).features;
+
+    globe
+        .polygonsData(countries)
+        .polygonAltitude(0.012)
+        .polygonCapColor(() => "rgba(15,15,18,0.10)")      // subtle land tint
+        .polygonSideColor(() => "rgba(15,15,18,0.04)")
+        .polygonStrokeColor(() => "rgba(20,20,25,0.18)")   // cleaner borders
+        .polygonsTransitionDuration(250)
+        .showAtmosphere(true)
+        .atmosphereColor("#bfe3ff")
+        .atmosphereAltitude(0.09);
+
+    // Load city markers
+    const cities = await loadVisitedCities();
+    console.log("Loaded cities:", cities);
+
+    globe
+        .pointsData(cities)
+        .pointLat(d => d.lat)
+        .pointLng(d => d.lng)
+        .pointAltitude(0.045)
+        .pointRadius(0.18)
+        .pointColor(() => "rgba(215, 176, 90, 0.95)") // muted gold
+
+
+    // Optional labels (only if supported by your build/version)
+    if (typeof globe.pointLabel === "function") {
+        globe.pointLabel(d => d.name);
+    }
+
+})();
+
+async function loadVisitedCities() {
+    const res = await fetch("./data/cities.json", { cache: "no-store" });
+    if (!res.ok) throw new Error(`Failed to load cities JSON: ${res.status} ${res.statusText}`);
+    return await res.json();
+}
+
+
+
+// B. CLOUDS
+const cloudGroup = new THREE.Group();
+scene.add(cloudGroup);
+
+// Material first (must exist before meshes)
+const cloudMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff,
+    roughness: 1.0,
+    metalness: 0.0,
+    transparent: true,
+    opacity: 0.9,
+    depthWrite: false
+});
+
+const cloudGeo = new THREE.SphereGeometry(1.0, 24, 24);
+
+// Create clouds with ORBIT params
+const clouds = [];
+for (let i = 0; i < 12; i++) {
+    const cloud = new THREE.Mesh(cloudGeo, cloudMat);
+
+    // random scale for variety
+    const s = 0.7 + Math.random() * 0.9;
+    cloud.scale.set(s, s , s);
+
+    // Orbit parameters
+    const radius = 7 + Math.random() * 2.0;
+    const angle = Math.random() * Math.PI * 2;
+    const yOff = (Math.random() - 0.5) * 2.2;
+    const zFlat = 0.55 + Math.random() * 0.25;
+
+    cloud.userData.orbit = { radius, angle, yOff, zFlat };
+    cloud.userData.speed = 0.5 + Math.random();
+
+    clouds.push(cloud);
+    cloudGroup.add(cloud);
+}
+
+cloudGroup.position.set(0, 0, 6.5);
+cloudGroup.rotation.set(0.15, 0, 0);
+
+const orbitCtrl = {
+    spin: 0.0,     // how much the ring has rotated around Y overall
+    spread: 0.2,   // 0 = tight curtain, 1 = fully around globe
+    offsetZ: 6.5,   // curtain distance
+    tilt: 0.2     // ring tilt
+};
+
+// --- 4. ANIMATION SEQUENCE ---
+gsap.registerPlugin(ScrollTrigger);
+
+const tl = gsap.timeline({
+    scrollTrigger: {
+        trigger: scrollerEl,
+        scroller: scrollerEl,
+        //start: 0,
+        //end: () => scrollerEl.scrollHeight - scrollerEl.clientHeight,
+        start: "top top",
+        end: () => `+=${scrollerEl.scrollHeight - scrollerEl.clientHeight}`,
+        scrub: 0.8,
+        invalidateOnRefresh: true
+    }
+});
+
+// --- STEP 1: HERO -> SECTION 2 (The Reveal) ---
+// This happens while scrolling from Section 1 to Section 2.
+
+// 3. CLOUDS: Move OUTSIDE (The "Parting" effect)
+// We move the group closer to camera (Z) and spread them (Scale) 
+// effectively making them fly past the viewer or to the edges.
+tl.to(".hero-title", { opacity: 0, filter: "blur(20px)", duration: 1 }, 0);
+
+// Stage 1: section 1 -> section 2
+tl.to(globeGroup.scale, { x: 0.02, y: 0.02, z: 0.02, ease: "power2.out", duration: 2 }, 0);
+
+// Stage 2: section 2 -> section 3 (slight growth)
+tl.to(globeGroup.scale, { x: 0.03, y: 0.03, z: 0.03, ease: "power1.out", duration: 2 }, 2);
+
+// Optional: Stage 3: section 3 -> section 4 (another slight growth)
+tl.to(globeGroup.scale, { x: 0.035, y: 0.035, z: 0.035, ease: "power1.out", duration: 2 }, 4);
+
+
+// Pull camera slightly in (helps the “zoom-out reveal” feeling)
+tl.to(camera.position, { z: 14, duration: 2 }, 0);
+
+// Clouds: from curtain -> orbiting ring
+tl.to(orbitCtrl, { spread: 1, duration: 2, ease: "power2.out" }, 0);
+tl.to(orbitCtrl, { offsetZ: 0.0, duration: 2, ease: "power2.out" }, 0); // bring ring to globe
+
+// Add slow orbit rotation over the scroll range
+tl.to(orbitCtrl, { spin: 1.2, duration: 4, ease: "none" }, 0);
+
+// Keep clouds visible (no fade to 0). If you want slight fade:
+tl.to(cloudMat, { opacity: 0.7, duration: 2 }, 0.3);
+
+
+// --- STEP 2: SECTION 2 -> SECTION 3 (Interaction) ---
+// Rotate the globe and zoom camera
+tl.to(globe.rotation, { y: 2.5, duration: 2 }, 2);
+tl.to(camera.position, { z: 12, duration: 2 }, 2);
+tl.to(orbitCtrl, { spin: 2.4, duration: 2, ease: "none" }, 2);
+
+// --- 5. RENDER LOOP ---
+function animate() {
+
+    requestAnimationFrame(animate);
+
+    // optional idle globe rotation (keep small so scroll rotation still matters)
+    globe.rotation.y += 0.002;
+
+    // apply ring transforms
+    cloudGroup.position.z = orbitCtrl.offsetZ;
+    cloudGroup.rotation.x = orbitCtrl.tilt;
+    cloudGroup.rotation.y = orbitCtrl.spin;
+
+    // compute each cloud's orbital position
+    clouds.forEach(c => {
+        const o = c.userData.orbit;
+
+        // spread: tighten at start, widen to full orbit
+        // start radius smaller and move toward orbit radius
+        const r = THREE.MathUtils.lerp(1.8, o.radius, orbitCtrl.spread);
+
+        // angle advances a little for wobble/variation + global spin
+        // keep some per-cloud motion even when scrubbed
+        const sp = c.userData.speed ?? 1.0;
+        o.angle += 0.002 * sp;
+
+        const a = o.angle;
+
+        c.position.x = Math.cos(a) * r;
+        c.position.z = Math.sin(a) * r * o.zFlat;  // flattened ring depth
+        c.position.y = THREE.MathUtils.lerp(0, o.yOff, orbitCtrl.spread);
+
+        // subtle tumbling
+        //c.rotation.x += c.userData.speed * 0.04;
+        //c.rotation.y += c.userData.speed * 0.06;
+    });
+    renderer.render(scene, camera);
+}
+animate();
+
+
+function setGlobeVisible(on) {
+  const globeEl = document.getElementById("globe");
+  if (!globeEl) return;
+  globeEl.style.opacity = on ? "1" : "0";
+}
+
+ScrollTrigger.create({
+  trigger: "#globe-1",
+  start: "top 80%",
+  end: "bottom top",
+  onEnter: () => setGlobeVisible(true),
+  onEnterBack: () => setGlobeVisible(true)
+});
+
+ScrollTrigger.create({
+  trigger: "#globe-4",
+  start: "bottom 20%",
+  onEnter: () => setGlobeVisible(false)
+});
+
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#globe-1",
+    start: "top top",
+    end: "bottom top",
+    scrub: 0.8
+  }
+})
+.fromTo(globeGroup.scale,
+  { x: 0.010, y: 0.010, z: 0.010 },
+  { x: 0.022, y: 0.022, z: 0.022, ease: "power2.out" },
+  0
+)
+.fromTo(camera.position,
+  { z: 18 },
+  { z: 14, ease: "power2.out" },
+  0
+)
+.fromTo(orbitCtrl,
+  { spread: 0.05, offsetZ: 6.5, spin: 0.0 },
+  { spread: 0.8, offsetZ: 1.0, spin: 0.6, ease: "power2.out" },
+  0
+)
+.to(".hero-title", { autoAlpha: 0, filter: "blur(18px)", ease: "power2.out" }, 0.55);
+
+
+// Section 2: left copy enters
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#globe-2",
+    start: "top 70%",
+    end: "top 10%",
+    scrub: 0.8
+  }
+})
+.fromTo("#globe-2 .copy-block",
+  { autoAlpha: 0, y: 24, filter: "blur(10px)" },
+  { autoAlpha: 1, y: 0, filter: "blur(0px)", ease: "power2.out" },
+  0
+)
+.to(globe.rotation, { y: "+=1.2", ease: "none" }, 0)
+.to(orbitCtrl, { spin: "+=0.8", ease: "none" }, 0)
+.to(cloudMat, { opacity: 0.65, ease: "power1.out" }, 0);
+
+// Section 3: right copy enters
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#globe-3",
+    start: "top 70%",
+    end: "top 10%",
+    scrub: 0.8
+  }
+})
+.fromTo("#globe-3 .copy-block",
+  { autoAlpha: 0, y: 24, filter: "blur(10px)" },
+  { autoAlpha: 1, y: 0, filter: "blur(0px)", ease: "power2.out" },
+  0
+)
+.to(globe.rotation, { y: "+=1.2", ease: "none" }, 0)
+.to(orbitCtrl, { spin: "+=0.8", ease: "none" }, 0);
+
+
+gsap.timeline({
+  scrollTrigger: {
+    trigger: "#globe-4",
+    start: "top 60%",
+    end: "bottom top",
+    scrub: 0.8
+  }
+})
+.to("#globe-4", { autoAlpha: 1 }, 0)
+.to(globeGroup.scale, { x: 0.018, y: 0.018, z: 0.018, ease: "power2.inOut" }, 0)
+.to(camera.position, { z: 16, ease: "power2.inOut" }, 0)
+.to(orbitCtrl, { spread: 0.25, offsetZ: 5.0, ease: "power2.inOut" }, 0)
+.to(cloudMat, { opacity: 0.25, ease: "power2.inOut" }, 0.1);
+
+
+
+
+// Handle Resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+requestAnimationFrame(() => ScrollTrigger.refresh());

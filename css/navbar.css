@@ -100,7 +100,7 @@
 }
 
 .navbar-miniText {
-  font-family: 'Courier New', Courier, monospace;
+  /*font-family: 'Courier New', Courier, monospace;*/
   /* Monospace looks best for tickers */
   font-size: 0.8rem;
   white-space: pre;

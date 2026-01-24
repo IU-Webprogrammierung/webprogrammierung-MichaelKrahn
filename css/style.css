@@ -22,7 +22,40 @@ html, body {
   background-color: var(--bg);
   color: var(--text);
 }
-body{ overflow: hidden; }
+
+body {
+  overflow: hidden;
+  cursor: none;
+}
+
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background-color: white;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference; /* Inverts colors */
+}
+
+.cursor-outline {
+    width: 35px;
+    height: 35px;
+    border: 1px solid white;
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference; /* THE MAGIC */
+    transition: transform 0.10s ease-out; /* Smooth lag effect */
+}
 
 #main{
   position: relative;
@@ -33,7 +66,7 @@ body{ overflow: hidden; }
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
 
-  /*scroll-padding-top: 90px;*/
+  scroll-padding-top: 75px;
 }
 
 
@@ -82,7 +115,7 @@ body::before{
 /* --- SECTIONS --- */
 section {
     height: 100vh;
-    display: flex;
+    display: grid;
     justify-content: center;
     align-items: center;
     padding: 0px 10%;
@@ -185,6 +218,7 @@ a:active::before{
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 
@@ -336,14 +370,13 @@ a:active::before{
 
 
 
-
 /* =========================================
    RESPONSIVE
 ========================================= */
 
 @media (max-width: 900px) {
   section {
-    padding: 90px 6%;
+    padding: 0px 6%;
   }
 
   .hero-portrait {

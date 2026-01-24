@@ -1,58 +1,34 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* =====================================================
-   PROJECT SECTION
-===================================================== */
-const cards = [...document.querySelectorAll(".project-card")];
-
-cards.forEach((card) => {
-  card.addEventListener("mouseenter", () => {
-    const isLeft = cards.indexOf(card) === 0;
-    const other = cards.find(c => c !== card);
-
-    gsap.to(card, {
-      x: isLeft ? 160 : -160,
-      scale: 1.2,
-      zIndex: 10,
-      duration: 0.6,
-      ease: "power3.out",
-      overwrite: "auto"
-    });
-
-    gsap.to(other, {
-      x: isLeft ? -260 : 260,
-      scale: 0.88,
-      filter: "brightness(0.6) blur(2px)",
-      zIndex: 1,
-      duration: 0.6,
-      ease: "power3.out",
-      overwrite: "auto"
-    });
-  });
-
-  card.addEventListener("mouseleave", () => {
-    gsap.to(cards, {
-      x: 0,
-      scale: 1,
-      filter: "brightness(1) blur(0px)",
-      zIndex: 1,
-      duration: 0.6,
-      ease: "power3.out",
-      overwrite: "auto"
-    });
-  });
-});
-
-
-
-
-/* =====================================================
    SCROLL TO TOP ON RELOAD
 ===================================================== */
 if ("scrollRestoration" in history) {
   history.scrollRestoration = "manual";
 }
 window.scrollTo(0, 0);
+
+
+/* =====================================================
+   CUSTOM CURSOR
+===================================================== */
+const dot = document.querySelector('.cursor-dot');
+const outline = document.querySelector('.cursor-outline');
+
+window.addEventListener('mousemove', (e) => {
+    const posX = e.clientX;
+    const posY = e.clientY;
+
+    // Dot moves instantly
+    dot.style.left = `${posX}px`;
+    dot.style.top = `${posY}px`;
+
+    // Outline moves with a slight delay (animation logic)
+    outline.animate({
+        left: `${posX}px`,
+        top: `${posY}px`
+    }, { duration: 500, fill: "forwards" });
+});
 
 
 

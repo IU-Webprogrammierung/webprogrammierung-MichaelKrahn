@@ -2,45 +2,153 @@
 /* =========================================
    PROJECTS
 ========================================= */
-
-#projects {
-  display: grid;
-  place-items: center;
+:root {
+    --card-width: 800px;
+    --card-height: 500px;
+    
+    /* Config for the stack */
+    --peek-right: 30px;  /* How much to peek right */
+    --peek-top: 35px;    /* How much to peek top */
+    --scale-factor: 0.034; /* How much they shrink */
 }
 
-.projects-container {
-  width: min(1200px, 92vw);
-  height: min(70vh, 720px);
-  display: flex;
-  gap: 2rem;
+/* =========================
+   LAYOUT
+========================= */
+.projects-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 50px; /* Make enough room for shadows
+    overflow: hidden; /* Hide elements flying out during sort */
 }
 
+.stack-container {
+    position: relative;
+    width: var(--card-width);
+    height: var(--card-height);
+    margin-top: 80px; /* More space for top peeking */
+    perspective: 1300px; /* 3D depth */
+}
+
+/* =========================
+   PROJECT CARD
+========================= */
 .project-card {
-  flex: 1;
-  border-radius: 20px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    
+    /* ANIMATION SMOOTHNESS MAGIC */
+    transition: transform 1.0s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                opacity 1.0s ease,
+                filter 1.0s ease;
+                
+    /* Default State (Will be overridden by index logic) */
+    transform-origin: center center;
+    background: #1a1a1a; /* Fallback */
+    
+    /* Use the --i variable (index) to calculate position dynamically */
+    /* If --i is 0, we are at 0,0. If --i is 1, we move Right and Up. */
+    transform: 
+        translateX(calc(var(--i) * var(--peek-right))) 
+        translateY(calc(var(--i) * -1 * var(--peek-top))) 
+        scale(calc(1 - (var(--i) * var(--scale-factor))))
+        translateZ(calc(var(--i) * -50px)); /* Real Z depth */
+    
+    /* Lower brightness for back items */
+    filter: brightness(calc(1 - (var(--i) * 0.15)));
+    
+    /* Lower z-index for back items (handled by JS, but visual fallback here) */
+    z-index: calc(10 - var(--i));
+    
+    cursor: pointer;
 }
+
+/* HOVER EFFECT */
+/* We only lift it slightly (-15px) relative to its calculated position */
+.project-card:hover {
+    transform: 
+        translateX(calc(var(--i) * var(--peek-right))) 
+        translateY(calc((var(--i) * -1 * var(--peek-top)) - 15px)) 
+        scale(calc(1 - (var(--i) * var(--scale-factor))))
+        translateZ(calc(var(--i) * -50px));
+    
+    filter: brightness(1); /* Light up on hover */
+}
+
+/* Active Card (Front) Override */
+.project-card[data-index="0"]:hover {
+    transform: scale(1); /* Don't move the front card on hover, just stay put */
+}
+
+/* =========================
+   INTERNAL ELEMENTS
+========================= */
+.project-header {
+    height: 40px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.dots { display: flex; gap: 6px; margin-right: 15px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.red { background: #ff5f56; }
+.yellow { background: #ffbd2e; }
+.green { background: #27c93f; }
+
+.address-bar {
+    flex-grow: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 4px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: rgba(255,255,255,0.9);
+}
+
+/* Blinking Cursor */
+.cursor {
+    animation: blink 1s infinite;
+    margin-left: 2px;
+    opacity: 0.7;
+}
+@keyframes blink { 50% { opacity: 0; } }
 
 .project-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+    flex-grow: 1;
+    position: relative;
+    background: #fff; 
 }
 
-.project-content h2 {
-  padding: 14px 16px;
-  font-size: 1.1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
-.project-content iframe {
-  flex: 1;
-  border: 0;
+.click-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+/* Hide overlay ONLY for the front card so we can interact */
+.project-card[data-index="0"] .click-overlay {
+    display: none;
 }

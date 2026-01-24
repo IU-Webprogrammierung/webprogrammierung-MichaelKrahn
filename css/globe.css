@@ -1,34 +1,113 @@
-#globe {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
+/* =========================================
+   GLOBE SCENE
+========================================= */
+
+#globe{
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;                 /* start hidden; JS fades in/out */
+  transition: opacity 600ms ease;
 }
 
-.copy-block {
-    position: absolute;
-    max-width: 520px;
-    padding: 18px 22px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.42);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
+/* If you use a WebGLRenderer canvas, make sure it fills the viewport */
+#globe canvas,
+#globeCanvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
-.copy-left {
-    left: 8%;
-    bottom: 16%;
-    text-align: left;
+/* Everything that scrolls must be above the fixed globe */
+main, .scroller{
+  position: relative;
+  z-index: 1;
 }
 
-.copy-right {
-    right: 8%;
-    top: 22%;
-    text-align: right;
+/* Apply to globe-1..4 */
+#globe-1, #globe-2, #globe-3, #globe-4{
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  align-items: center;
+  padding: clamp(72px, 10vh, 120px) clamp(20px, 6vw, 80px);
+}
+
+/* Optional: subtle contrast veil per slide (keeps text readable on a bright globe) */
+#globe-1::before, #globe-2::before, #globe-3::before, #globe-4::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  /* gentle vignette + top/bottom depth */
+  background:
+    radial-gradient(1000px 700px at 50% 45%, rgba(0,0,0,0.16), rgba(0,0,0,0.55) 70%),
+    linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.38));
+  opacity: 0.55;
+}
+
+/* All slide content sits above the veil */
+#globe-1 > *, #globe-2 > *, #globe-3 > *, #globe-4 > *{
+  position: relative;
+  z-index: 1;
+}
+
+.copy-block{
+  max-width: 560px;
+  padding: 20px 24px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.42);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,0.35);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+
+  transform: translateZ(0);
+}
+
+/* Place left/right blocks without absolute positioning */
+#globe-2 .copy-left{
+  justify-self: start;
+  align-self: end;
+  margin-bottom: 8vh;
+  text-align: left;
+}
+
+#globe-3 .copy-right{
+  justify-self: end;
+  align-self: start;
+  margin-top: 10vh;
+  text-align: right;
+}
+
+/* Title styling */
+.hero-title{
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 20px 60px rgba(0,0,0,0.35);
 }
 
 .hero-title {
     text-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+#globe-2 h2, #globe-3 h2{
+  background: linear-gradient(90deg,
+    rgba(255,0,150,0.92),
+    rgba(0,200,255,0.92),
+    rgba(120,255,0,0.82),
+    rgba(255,200,0,0.82)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

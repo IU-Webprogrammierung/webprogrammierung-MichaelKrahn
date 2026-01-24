@@ -1,224 +1,204 @@
-// =============================
-// CV SECTION
-// =============================
-
-
 document.addEventListener("DOMContentLoaded", () => {
-    // =============================
-    // 1. CONFIGURATION & SETUP
-    // =============================
-    const track = document.getElementById('timelineTrack');
-    const viewport = document.getElementById("timeline");
-    const startEl = document.getElementById("windowStart");
-    const endEl = document.getElementById("windowEnd");
-    
-    // Tooltip Elements
-    const tooltip = document.getElementById("timelineTooltip");
-    const ttTitle = document.getElementById("ttTitle");
-    const ttRange = document.getElementById("ttRange");
-    const ttDesc = document.getElementById("ttDesc");
+  // =============================
+  // 1) ELEMENTS
+  // =============================
 
-    // Define the boundaries of the timeline (Synchronize this!)
-    // These control 0% and 100% positions
-    const TIMELINE_START = new Date('1997-01-28');
-    const TIMELINE_END = new Date();
-    TIMELINE_END.setMonth(TIMELINE_END.getMonth() + 3);
-    const TOTAL_DURATION = TIMELINE_END.getTime() - TIMELINE_START.getTime();
+  const wrapper = document.getElementById("cv");        // was #timelineWrapper
+  const viewport = document.getElementById("timeline"); // keep (mechanics)
+  const track = document.getElementById("timelineTrack");
+  if (!wrapper || !viewport || !track) return;
 
-    // formatting helpers
-    const fmt = (d) => d.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
-    const lerpDate = (a, b, t) => new Date(a.getTime() + (b.getTime() - a.getTime()) * t);
-    
-    const niceDate = (dateString) => {
-        if (!dateString) return "";
-        const [y, m] = dateString.split("-").map(Number);
-        const d = new Date(y, m - 1, 1);
-        return fmt(d);
-    };
+  const windowStartEl = document.getElementById("windowStart");
+  const windowEndEl = document.getElementById("windowEnd");
 
-    // Global tween variable to control pause/play later
-    let timelineTween; 
+  const tooltip = document.getElementById("timelineTooltip");
+  const ttTitle = document.getElementById("ttTitle");
+  const ttRange = document.getElementById("ttRange");
+  const ttDesc = document.getElementById("ttDesc");
 
-    // =============================
-    // 2. FETCH & GENERATE
-    // =============================
-    fetch('data/milestones.json')
-        .then(response => response.json())
-        .then(data => {
-            generateMilestones(data);
-            // Only start animation AFTER elements exist
-            initTimelineAnimation(); 
-        })
-        .catch(error => console.error('Error loading timeline:', error));
+  // =============================
+  // 2) CONFIG & HELPERS
+  // =============================
+  const START_DATE = new Date("1997-01-01");
+  const END_DATE = new Date();
+  END_DATE.setMonth(END_DATE.getMonth() + 6);
+  const TOTAL_MS = END_DATE.getTime() - START_DATE.getTime();
 
-    function generateMilestones(milestones) {
-        milestones.forEach((item, index) => {
-            // A. Calculate Position
-            const itemDate = new Date(item.start).getTime();
-            let percentage = ((itemDate - TIMELINE_START.getTime()) / TOTAL_DURATION) * 100;
-            percentage = Math.max(0, Math.min(100, percentage));
+  const VIRTUAL_WIDTH = 3000;
+  track.style.width = `${VIRTUAL_WIDTH}px`;
 
-            // B. Create Container
-            const milestoneDiv = document.createElement('div');
-            milestoneDiv.classList.add('milestone', `milestone--${item.category}`);
-            // Add up/down class based on index (even/odd)
-            milestoneDiv.classList.add(index % 2 === 0 ? "up" : "down"); 
-            milestoneDiv.style.setProperty('--pos', percentage.toFixed(2));
+  const monthYearFmt = new Intl.DateTimeFormat("de-DE", { month: "long", year: "numeric" });
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+  const lerpDate = (a, b, t) => new Date(a.getTime() + (b.getTime() - a.getTime()) * t);
+  const nice = (s) => {
+    if (!s) return "";
+    const [y, m] = String(s).split("-").map(Number);
+    return monthYearFmt.format(new Date(y, m - 1, 1));
+  };
 
-            // C. Create Button
-            const btn = document.createElement('button');
-            btn.classList.add('milestone-dot');
-            btn.type = 'button';
-            // Store data for tooltip
-            btn.dataset.title = item.title;
-            btn.dataset.start = item.start;
-            btn.dataset.end = item.end;
-            btn.dataset.desc = item.desc;
+  // =============================
+  // 3) MILESTONES & SCROLL LOGIC
+  // =============================
+  fetch("data/milestones.json")
+    .then((r) => r.json())
+    .then((items) => {
+      generateMilestones(items);
+      updateTimelineState(); // Initial calculation
+    });
 
-            // Accessibility
-            const srSpan = document.createElement('span');
-            srSpan.classList.add('sr-only');
-            srSpan.textContent = `${item.title} (${item.start})`;
-            btn.appendChild(srSpan);
+  function generateMilestones(items) {
+    track.innerHTML = "";
+    items.forEach((item, index) => {
+      const itemTime = new Date(item.start).getTime();
+      const pct = (itemTime - START_DATE.getTime()) / TOTAL_MS;
+      const pxPos = pct * VIRTUAL_WIDTH;
 
-            // D. Create Label
-            const labelSpan = document.createElement('span');
-            labelSpan.classList.add('milestone-label');
-            labelSpan.textContent = `${niceDate(item.start)} • ${item.label}`;
+      const div = document.createElement("div");
+      div.className = `milestone ${index % 2 ? "down" : "up"}`;
+      div.style.left = `${pxPos}px`;
 
-            // E. Attach Events (Tooltip & Pause)
-            btn.addEventListener("mouseenter", () => {
-                pauseAnimation();
-                showTooltip(btn);
-            });
-            btn.addEventListener("mouseleave", hideTooltip);
-            btn.addEventListener("focus", () => {
-                pauseAnimation();
-                showTooltip(btn);
-            });
-            btn.addEventListener("blur", () => {
-                hideTooltip();
-                resumeAnimation();
-            });
+      div.innerHTML = `
+        <button class="milestone-dot" type="button"
+          data-title="${item.title}" data-start="${item.start}" 
+          data-end="${item.end}" data-desc="${item.desc}">
+        </button>
+        <span class="milestone-label">${nice(item.start)} • ${item.title}</span>
+      `;
+      track.appendChild(div);
 
-            // F. Append to DOM
-            milestoneDiv.appendChild(btn);
-            milestoneDiv.appendChild(labelSpan);
-            track.appendChild(milestoneDiv);
-        });
-    }
+      // Events
+      const dot = div.querySelector(".milestone-dot");
+      dot.addEventListener("mouseenter", () => showTooltip(dot));
+      dot.addEventListener("mouseleave", hideTooltip);
+    });
+  }
 
-    // =============================
-    // 3. ANIMATION & INTERACTION
-    // =============================
-    function initTimelineAnimation() {
-        if (!viewport || !track) return;
+  // =============================
+  // 4) SCROLL HANDLER (Updates Labels & Rainbow)
+  // =============================
+  function updateTimelineState() {
+    const maxShift = viewport.scrollWidth - viewport.clientWidth;
+    const scrollLeft = viewport.scrollLeft;
 
-        // Track movement logic
-        const updateBounds = () => {
-            const vw = viewport.clientWidth;
-            const tw = track.scrollWidth;
-            // Only scroll if content is wider than viewport
-            const maxShift = Math.max(0, tw - vw); 
-            return { maxShift };
-        };
+    // 1. Calculate Progress (0 to 1)
+    const progress = maxShift > 0 ? clamp01(scrollLeft / maxShift) : 0;
 
-        let { maxShift } = updateBounds();
+    // 2. Update CSS Variable for Rainbow Color Shift
+    wrapper.style.setProperty('--progress', progress);
 
-        // GSAP Infinite Scroll
-        timelineTween = gsap.to(track, {
-            x: -maxShift,
-            duration: 40, 
-            ease: "none",
-            repeat: -1,
-            modifiers: {
-                x: (x) => {
-                    // Wrap x smoothly to loop
-                    const value = parseFloat(x);
-                    // Avoid division by zero if maxShift is 0
-                    if (maxShift <= 0) return "0px";
-                    const wrapped = value % -maxShift;
-                    return `${wrapped}px`;
-                }
-            }
-        });
+    // 3. Update Window Labels (Start/End dates)
+    const windowSpan = 0.22; // How much time fits on screen roughly
+    const t0 = progress;
+    const t1 = clamp01(progress + windowSpan);
 
-        // Update Labels (Year Range)
-        const updateWindowLabels = () => {
-            ({ maxShift } = updateBounds());
-            if (maxShift <= 0) return;
+    const dateLeft = lerpDate(START_DATE, END_DATE, t0);
+    const dateRight = lerpDate(START_DATE, END_DATE, t1);
 
-            const x = gsap.getProperty(track, "x");
-            const progress = Math.min(1, Math.max(0, (-x) / maxShift));
+    if (windowStartEl) windowStartEl.textContent = monthYearFmt.format(dateLeft);
+    if (windowEndEl) windowEndEl.textContent = monthYearFmt.format(dateRight);
+  }
 
-            // Determine visible time slice (adjust 0.22 to fit your design)
-            const windowSpan = 0.22; 
-            const t0 = progress;
-            const t1 = Math.min(1, progress + windowSpan);
+  viewport.addEventListener("scroll", () => {
+    hideTooltip();
+    updateTimelineState();
+  }, { passive: true });
 
-            const d0 = lerpDate(TIMELINE_START, TIMELINE_END, t0);
-            const d1 = lerpDate(TIMELINE_START, TIMELINE_END, t1);
+  // Tooltip Logic (Simplified for brevity)
+  function showTooltip(dot) {
+    const dotRect = dot.getBoundingClientRect();
+    const wrapRect = wrapper.getBoundingClientRect();
 
-            if(startEl) startEl.textContent = fmt(d0);
-            if(endEl) endEl.textContent = fmt(d1);
-        };
+    ttTitle.textContent = dot.dataset.title;
+    ttRange.textContent = `${nice(dot.dataset.start)} → ${nice(dot.dataset.end)}`;
+    ttDesc.textContent = dot.dataset.desc;
 
-        gsap.ticker.add(updateWindowLabels);
+    // position relative to wrapper
+    let left = dotRect.left - wrapRect.left + dotRect.width / 2;
+    let top = dotRect.top - wrapRect.top;
 
-        // Pause auto-scroll on viewport hover
-        viewport.addEventListener("mouseenter", pauseAnimation);
-        viewport.addEventListener("mouseleave", () => {
-            hideTooltip();
-            resumeAnimation();
-        });
+    // clamp horizontally so tooltip stays inside wrapper
+    const padding = 12;
+    const tooltipWidth = 320; // max-width in CSS
+    left = Math.max(padding, Math.min(wrapRect.width - padding, left));
 
-        // Recalc on resize
-        window.addEventListener("resize", () => {
-            const b = updateBounds();
-            maxShift = b.maxShift;
-            // Update tween destination if needed (advanced GSAP) or just let the modifier handle it
-        });
-    }
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top - 10}px`;
+    tooltip.classList.add("active");
+  }
 
-    // =============================
-    // 4. TOOLTIP LOGIC
-    // =============================
-    function showTooltip(dot) {
-        const rectV = viewport.getBoundingClientRect();
-        const rectD = dot.getBoundingClientRect();
-
-        const title = dot.dataset.title;
-        const start = dot.dataset.start;
-        const end = dot.dataset.end;
-        const desc = dot.dataset.desc;
-
-        ttTitle.textContent = title;
-        ttRange.textContent = `${niceDate(start)} → ${end ? niceDate(end) : 'Heute'}`;
-        ttDesc.textContent = desc;
-
-        const x = rectD.left - rectV.left + rectD.width / 2;
-        const y = rectD.top - rectV.top;
-
-        // Position logic
-        const placeBelow = y < 110; 
-        tooltip.style.left = `${x}px`;
-        tooltip.style.top = placeBelow ? `${y + 22}px` : `${y}px`;
-        tooltip.style.transform = placeBelow ? "translate(-50%, 10%)" : "translate(-50%, -110%)";
-
-        tooltip.setAttribute("aria-hidden", "false");
-        gsap.to(tooltip, { autoAlpha: 1, duration: 0.18, ease: "power2.out" });
-    }
-
-    function hideTooltip() {
-        tooltip.setAttribute("aria-hidden", "true");
-        gsap.to(tooltip, { autoAlpha: 0, duration: 0.12, ease: "power2.out" });
-    }
-
-    function pauseAnimation() {
-        if (timelineTween) timelineTween.pause();
-    }
-
-    function resumeAnimation() {
-        if (timelineTween) timelineTween.resume();
-    }
+  function hideTooltip() { tooltip.classList.remove("active"); }
 });
+
+// =====================================================
+// 5) ELASTIC WHEEL HANDOFF (The Feedback Mechanism)
+// =====================================================
+(function initElasticHandoff() {
+  const main = document.querySelector("#main");
+  const section = document.querySelector("#cv");
+  const viewport = document.querySelector("#timeline");
+  if (!main || !section || !viewport) return;
+
+  const getSnapSections = () => [...main.querySelectorAll("section")];
+  const getSectionIndex = () => getSnapSections().indexOf(section);
+  const snapToIndex = (idx) => getSnapSections()[idx]?.scrollIntoView({ behavior: "smooth" });
+
+  const WHEEL_SPEED = 1.0;
+  const RESISTANCE = 30; // How much edgeAccumulator is needed to jump
+
+  let edgeAccumulator = 0;
+  let bounceTimeout;
+
+  const onWheel = (e) => {
+    // Only active if CV section is in view
+    const r = section.getBoundingClientRect();
+    if (r.top > window.innerHeight * 0.35 || r.bottom < window.innerHeight * 0.65) return;
+
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    const max = viewport.scrollWidth - viewport.clientWidth;
+    const atStart = viewport.scrollLeft <= 2;
+    const atEnd = viewport.scrollLeft >= max - 2;
+
+    const goingForward = delta > 0;
+    const goingBack = delta < 0;
+
+    // Normal Horizontal Scroll
+    if ((goingForward && !atEnd) || (goingBack && !atStart)) {
+      e.preventDefault();
+      viewport.scrollLeft += delta * WHEEL_SPEED;
+      edgeAccumulator = 0;
+      viewport.style.transform = `translateX(0px)`; // Reset bounce
+      return;
+    }
+
+    // EDGE LOGIC: Elastic Bounce Feedback
+    e.preventDefault(); // Stop vertical scroll while building tension
+    edgeAccumulator += delta;
+
+    // Apply Visual "Stretch" (The Feedback)
+    // We cap the visual stretch at 50px so it doesn't look broken
+    const visualStretch = Math.max(-50, Math.min(50, edgeAccumulator * -0.5));
+    viewport.style.transform = `translateX(${visualStretch}px)`;
+
+    // Clear previous release timer
+    if (bounceTimeout) clearTimeout(bounceTimeout);
+
+    // Check if we pushed hard enough to jump
+    if (Math.abs(edgeAccumulator) > RESISTANCE) {
+      const idx = getSectionIndex();
+      if (goingForward && atEnd) snapToIndex(idx + 1);
+      else if (goingBack && atStart) snapToIndex(idx - 1);
+
+      // Reset
+      edgeAccumulator = 0;
+      viewport.style.transform = `translateX(0px)`;
+    } else {
+      // If user stops scrolling before breaking resistance, bounce back
+      bounceTimeout = setTimeout(() => {
+        edgeAccumulator = 0;
+        viewport.style.transform = `translateX(0px)`;
+      }, 150);
+    }
+  };
+
+  main.addEventListener("wheel", onWheel, { passive: false });
+})();
