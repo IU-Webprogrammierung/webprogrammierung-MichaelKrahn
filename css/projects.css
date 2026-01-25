@@ -5,11 +5,9 @@
 :root {
     --card-width: 800px;
     --card-height: 500px;
-    
-    /* Config for the stack */
-    --peek-right: 30px;  /* How much to peek right */
-    --peek-top: 35px;    /* How much to peek top */
-    --scale-factor: 0.034; /* How much they shrink */
+    --peek-right: 30px; 
+    --peek-top: 35px;  
+    --scale-factor: 0.034; 
 }
 
 /* =========================
@@ -19,8 +17,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px 50px; /* Make enough room for shadows
-    overflow: hidden; /* Hide elements flying out during sort */
+    padding: 50px 50px; /* Make enough room for shadows*/
 }
 
 .stack-container {
@@ -52,7 +49,7 @@
                 
     /* Default State (Will be overridden by index logic) */
     transform-origin: center center;
-    background: #1a1a1a; /* Fallback */
+    background: var(--text); /* Fallback */
     
     /* Use the --i variable (index) to calculate position dynamically */
     /* If --i is 0, we are at 0,0. If --i is 1, we move Right and Up. */

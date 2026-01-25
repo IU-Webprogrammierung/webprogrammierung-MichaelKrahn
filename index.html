@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/about.css">
     <link rel="stylesheet" href="css/timeline.css">
     <link rel="stylesheet" href="css/projects.css">
-    <link rel="stylesheet" href="css/globe.css">
+    <!--<link rel="stylesheet" href="css/globe.css">-->
     <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/footer.css">
 
@@ -35,6 +35,7 @@
         <canvas id="globeCanvas"></canvas>
         <div id="globeScene"></div>
     </div>
+
 
 
     <!-- Layer 1 (UI, not snapping) -->
@@ -86,8 +87,10 @@
         </section>
 
 
+
         <!-- About -->
-        <section id="about">
+        <canvas id="skills-overlay" aria-hidden="true"></canvas>
+        <section id="about-skills" class="about-skills">
             <div class="about-wrapper glass">
                 <header class="about-head">
                     <h2>Über mich</h2>
@@ -118,28 +121,41 @@
                     </div>
 
                     <aside class="about-aside">
-                        <div class="about-card">
-                            <h3>Schwerpunkte</h3>
-                            <ul class="about-list">
-                                <li>Frontend Engineering (HTML/CSS/JS)</li>
-                                <li>GSAP Motion & Scroll Experience</li>
-                                <li>UI/UX & Design Systems</li>
-                                <li>Performance & Accessibility</li>
-                            </ul>
-                        </div>
+                        <div class="skills-grid skills-grid--towers">
+                            <article class="skill-tower" data-tower="web">
+                                <div class="tower-label">
+                                    <span class="name">Web Development</span>
+                                    <span class="lvl">HTML • CSS • JS</span>
+                                </div>
+                                <canvas class="tower-canvas" aria-label="Web Development tower"></canvas>
+                            </article>
 
-                        <div class="about-card">
-                            <h3>Tech Stack</h3>
-                            <div class="skill-chips">
-                                <span class="chip">HTML</span>
-                                <span class="chip">CSS</span>
-                                <span class="chip">JavaScript</span>
-                                <span class="chip">GSAP</span>
-                                <span class="chip">Git</span>
-                                <span class="chip">Three.js (Basics)</span>
-                            </div>
+                            <article class="skill-tower" data-tower="embedded">
+                                <div class="tower-label">
+                                    <span class="name">Embedded Systems</span>
+                                    <span class="lvl">Arduino • C++ • MCU</span>
+                                </div>
+                                <canvas class="tower-canvas" aria-label="Embedded Systems tower"></canvas>
+                            </article>
+
+                            <article class="skill-tower" data-tower="visual">
+                                <div class="tower-label">
+                                    <span class="name">Visual Design</span>
+                                    <span class="lvl">Blender • PS • UI</span>
+                                </div>
+                                <canvas class="tower-canvas" aria-label="Visual Design tower"></canvas>
+                            </article>
+
+                            <article class="skill-tower" data-tower="proto">
+                                <div class="tower-label">
+                                    <span class="name">Prototyping</span>
+                                    <span class="lvl">3D Print • Metal • Wood</span>
+                                </div>
+                                <canvas class="tower-canvas" aria-label="Prototyping tower"></canvas>
+                            </article>
                         </div>
                     </aside>
+
                 </div>
             </div>
         </section>
@@ -199,9 +215,27 @@
         <!-- Projects -->
         <section id="projects">
             <div class="projects-wrapper">
-                <h2>Projekte</h2>
+                <h2>OWN PROJECTS & INSPIRATION</h2>
 
                 <div class="stack-container">
+
+                    <article class="project-card glass" id="project1" data-url="https://synchronized.studio/">
+                        <div class="project-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <div class="address-bar">
+                                <span class="typing-text"></span><span class="cursor">|</span>
+                            </div>
+                        </div>
+                        <div class="project-content">
+                            <iframe title="kinderuni-koblenz" src="https://synchronized.studio/" loading="lazy"
+                                referrerpolicy="no-referrer"></iframe>
+                            <div class="click-overlay"></div>
+                        </div>
+                    </article>
 
                     <article class="project-card glass" id="project1" data-url="http://kinderuni-koblenz.de/">
                         <div class="project-header">
@@ -239,7 +273,7 @@
                         </div>
                     </article>
 
-                    <article class="project-card glass" id="project3" data-url="https://www.igloo.inc/">
+                    <article class="project-card glass" id="project3" data-url="https://theothersideoftruth.com/">
                         <div class="project-header">
                             <div class="dots">
                                 <span class="dot red"></span>
@@ -251,7 +285,7 @@
                             </div>
                         </div>
                         <div class="project-content">
-                            <iframe title="RiE 2024" src="https://www.igloo.inc/" loading="lazy"
+                            <iframe title="RiE 2024" src="https://theothersideoftruth.com/" loading="lazy"
                                 referrerpolicy="no-referrer"></iframe>
                             <div class="click-overlay"></div>
                         </div>
@@ -399,7 +433,7 @@
     <script src="https://unpkg.com/three-globe@2.45.0/dist/three-globe.min.js"></script>
     <script src="https://unpkg.com/topojson-client@3"></script>
 
-    <script src="js/globe.js" defer></script>
+    <!--<script src="js/globe.js" defer></script>-->
     <script src="js/navbar.js" defer></script>
     <script src="js/main.js" defer></script>
     <script src="js/timeline.js" defer></script>

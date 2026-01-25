@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
   // 2) CONFIG & HELPERS
   // =============================
-  const START_DATE = new Date("1997-01-01");
+  const START_DATE = new Date("1996-06-28");
   const END_DATE = new Date();
   END_DATE.setMonth(END_DATE.getMonth() + 6);
   const TOTAL_MS = END_DATE.getTime() - START_DATE.getTime();
@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
     wrapper.style.setProperty('--progress', progress);
 
     // 3. Update Window Labels (Start/End dates)
-    const windowSpan = 0.22; // How much time fits on screen roughly
+    const windowSpan = 0.08; // How much time fits on screen roughly
     const t0 = progress;
     const t1 = clamp01(progress + windowSpan);
 
@@ -106,20 +106,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Tooltip Logic (Simplified for brevity)
   function showTooltip(dot) {
     const dotRect = dot.getBoundingClientRect();
-    const wrapRect = wrapper.getBoundingClientRect();
+
+    // IMPORTANT: use the tooltip's containing block
+    const area = dot.closest(".timeline-area");
+    const areaRect = area.getBoundingClientRect();
 
     ttTitle.textContent = dot.dataset.title;
     ttRange.textContent = `${nice(dot.dataset.start)} → ${nice(dot.dataset.end)}`;
     ttDesc.textContent = dot.dataset.desc;
 
-    // position relative to wrapper
-    let left = dotRect.left - wrapRect.left + dotRect.width / 2;
-    let top = dotRect.top - wrapRect.top;
+    // position relative to timeline-area (not #cv)
+    let left = dotRect.left - areaRect.left + dotRect.width / 2;
+    let top = dotRect.top - areaRect.top;
 
-    // clamp horizontally so tooltip stays inside wrapper
+    // clamp horizontally to stay inside timeline-area
     const padding = 12;
-    const tooltipWidth = 320; // max-width in CSS
-    left = Math.max(padding, Math.min(wrapRect.width - padding, left));
+    left = Math.max(padding, Math.min(areaRect.width - padding, left));
 
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top - 10}px`;
@@ -143,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const snapToIndex = (idx) => getSnapSections()[idx]?.scrollIntoView({ behavior: "smooth" });
 
   const WHEEL_SPEED = 1.0;
-  const RESISTANCE = 30; // How much edgeAccumulator is needed to jump
+  const RESISTANCE = 300; // How much edgeAccumulator is needed to jump
 
   let edgeAccumulator = 0;
   let bounceTimeout;
