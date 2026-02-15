@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       generateMilestones(items);
       updateTimelineState(); // Initial calculation
       updateMediaScale();
+      startAmbient();
     });
 
   function generateMilestones(items) {
@@ -68,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const isDown = !!(index % 2);
       div.className = `milestone ${isDown ? "down" : "up"}`;
       div.style.left = `${pxPos}px`;
+      div.dataset.images = JSON.stringify(item.images || []);
 
       div.innerHTML = `
       <button class="milestone-dot" type="button"
@@ -115,6 +117,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       // --- Optional media images ---
+
+      /*
       if (Array.isArray(item.images) && item.images.length) {
         const media = document.createElement("div");
         media.className = "timeline-media";
@@ -144,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         div.appendChild(media);
       }
+      */
 
 
       // Tooltip events 
@@ -152,6 +157,162 @@ document.addEventListener("DOMContentLoaded", () => {
       dot.addEventListener("mouseleave", hideTooltip);
     });
   }
+
+  const activeCards = new Set();
+
+  function animationLoop(t) {
+    const now = t * 0.001;
+    const dt = animationLoop.last ? now - animationLoop.last : 0;
+    animationLoop.last = now;
+
+    activeCards.forEach(card => updateCard(card, dt, now));
+
+    requestAnimationFrame(animationLoop);
+  }
+  requestAnimationFrame(animationLoop);
+
+  const ambient = document.getElementById("timelineAmbient");
+
+  // 5 Slots um die Mitte (in % der timeline-area)
+  const SLOTS = [
+    { x: 35, y: 32 },
+    { x: 50, y: 26 },
+    { x: 65, y: 32 },
+    { x: 40, y: 68 },
+    { x: 60, y: 68 },
+  ];
+
+  const slotBusy = new Array(SLOTS.length).fill(false);
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  function getClosestMilestones(k = 3) {
+    const milestones = [...track.querySelectorAll(".milestone")];
+    const vRect = viewport.getBoundingClientRect();
+    const centerX = vRect.left + vRect.width / 2;
+
+    const scored = milestones.map(m => {
+      const r = m.getBoundingClientRect();
+      const mx = r.left + r.width / 2;
+      return { m, d: Math.abs(mx - centerX) };
+    });
+
+    scored.sort((a, b) => a.d - b.d);
+    return scored.slice(0, k).map(s => s.m);
+  }
+
+  function gatherCandidateImages() {
+    // 2–3 Milestones rund um Mitte
+    const closest = getClosestMilestones(3);
+
+    const imgs = [];
+    for (const m of closest) {
+      try {
+        const arr = JSON.parse(m.dataset.images || "[]");
+        for (const im of arr) {
+          if (im && im.src) imgs.push(im);
+        }
+      } catch (_) { }
+    }
+    return imgs;
+  }
+
+  function findFreeSlot() {
+    const free = [];
+    for (let i = 0; i < SLOTS.length; i++) {
+      if (!slotBusy[i]) free.push(i);
+    }
+    if (!free.length) return -1;
+    return pick(free);
+  }
+
+  function spawnAmbientCard() {
+    if (!ambient) return;
+
+    // Nur wenn CV Section sichtbar ist (optional, aber sinnvoll)
+    const secRect = wrapper.getBoundingClientRect();
+    const inView = secRect.top < window.innerHeight * 0.75 && secRect.bottom > window.innerHeight * 0.25;
+    if (!inView) return;
+
+    const candidates = gatherCandidateImages();
+    if (!candidates.length) return;
+
+    const slotIndex = findFreeSlot();
+    if (slotIndex === -1) return;
+
+    const im = pick(candidates);
+    slotBusy[slotIndex] = true;
+
+    const card = document.createElement("div");
+    card.className = "ambient-card";
+
+    // slot position
+    const s = SLOTS[slotIndex];
+    card.style.left = `${s.x}%`;
+    card.style.top = `${s.y}%`;
+    card.slotIndex = slotIndex;
+
+    // size: take from json or fallback, slight random
+    const w = (im.w || 220) + rand(-14, 18);
+    const h = (im.h || 150) + rand(-10, 14);
+    card.style.setProperty("--w", `${Math.max(180, w)}px`);
+    card.style.setProperty("--h", `${Math.max(120, h)}px`);
+
+    // drift offsets 
+    // old css based drift. to monoton. Switched random js motion
+    /*
+    card.style.setProperty("--dx", `${rand(-14, 14).toFixed(1)}px`);
+    card.style.setProperty("--dy", `${rand(-10, 10).toFixed(1)}px`);
+    card.style.setProperty("--mx", `${rand(8, 18).toFixed(1)}px`);
+    card.style.setProperty("--my", `${rand(-16, -6).toFixed(1)}px`);
+    card.style.setProperty("--dx2", `${rand(-10, 10).toFixed(1)}px`);
+    card.style.setProperty("--dy2", `${rand(-14, 14).toFixed(1)}px`);
+    */
+
+    const img = document.createElement("img");
+    img.src = im.src;
+    img.alt = "";
+    img.loading = "lazy";
+
+    card.motion = createMotion();
+    card.age = 0;
+    card.life = 6 + Math.random() * 4;
+
+    card.px = 0;
+    card.py = 0;
+    card.appendChild(img);
+
+    ambient.appendChild(card);
+
+    activeCards.add(card);
+
+    // fade in next frame
+    requestAnimationFrame(() => card.classList.add("is-in"));
+  }
+
+  // spawn loop
+  let ambientTimer = null;
+  function startAmbient() {
+    if (ambientTimer) return;
+    // initial small delay, then random cadence
+    ambientTimer = setInterval(() => {
+      // 40% chance to spawn each tick -> wirkt weniger „metronomisch“
+      if (Math.random() < 0.40) spawnAmbientCard();
+    }, 2000);
+  }
+
+  function stopAmbient() {
+    if (!ambientTimer) return;
+    clearInterval(ambientTimer);
+    ambientTimer = null;
+  }
+
+  // Optional: beim Scrollen „sanfter“ refresh (kein hard reset)
+  viewport.addEventListener("scroll", () => {
+    // du kannst hier bewusst NICHT spawnen,
+    // damit es nicht hektisch wird.
+  }, { passive: true });
 
   function updateMediaScale() {
     const centerX = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
@@ -178,6 +339,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
       card.style.setProperty("--s", s.toFixed(3));
     });
+  }
+
+  function createMotion() {
+    const dir = Math.random() * Math.PI * 2;
+
+    return {
+      phase: Math.random() * Math.PI * 2,
+      freq: 0.12 + Math.random() * 0.28,
+
+      ampX: 8 + Math.random() * 22,
+      ampY: 10 + Math.random() * 26,
+
+      // directional drift
+      driftX: Math.cos(dir) * (4 + Math.random() * 10),
+      driftY: Math.sin(dir) * (2 + Math.random() * 8),
+
+      rotSpeed: (Math.random() - 0.5) * 0.12,
+    };
+  }
+
+  function updateCard(card, dt, time) {
+
+    card.age += dt;
+    const m = card.motion;
+    const t = time + m.phase;
+
+    // organic motion
+    const swayX = Math.sin(t * m.freq) * m.ampX;
+    const swayY = Math.cos(t * m.freq * 0.85) * m.ampY;
+    const flutter = Math.sin(t * 2.1) * 1.2;
+
+    // drift
+    card.px += m.driftX * dt;
+    card.py += m.driftY * dt;
+
+    const x = card.px + swayX + flutter;
+    const y = card.py + swayY;
+
+    // lifetime visual envelope
+    const lifeT = card.age / card.life;
+
+    // life phases
+    const fadeInDur = 0.12;
+    const fadeOutStart = 0.78;
+
+    let opacity;
+    if (lifeT < fadeInDur) opacity = lifeT / fadeInDur;
+    else if (lifeT > fadeOutStart) opacity = 1 - (lifeT - fadeOutStart) / (1 - fadeOutStart);
+    else opacity = 1;
+
+    opacity = Math.max(0, Math.min(1, opacity));
+
+    const scale = 0.94 + 0.06 * opacity;
+
+    card.style.opacity = opacity;
+    card.style.transform =
+      `translate(${x}px, ${y}px) rotate(${m.rotSpeed * card.age}deg) scale(${scale})`;
+
+    // natural removal
+    if (card.age >= card.life) {
+      activeCards.delete(card);
+      card.remove();
+      slotBusy[card.slotIndex] = false;
+    }
   }
 
 

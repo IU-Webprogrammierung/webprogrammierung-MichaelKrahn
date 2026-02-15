@@ -31,7 +31,7 @@
 
 
     <!-- Layer 0 (Background, not snapping) -->
- <!--   <div id="globe" aria-hidden="true">
+    <!--   <div id="globe" aria-hidden="true">
         <canvas id="globeCanvas"></canvas>
         <div id="globeScene"></div>
     </div>
@@ -190,22 +190,34 @@
 
 
             <div class="timeline-area">
-                <div class="timeline-static" aria-hidden="true">
-                    <div class="timeline-window-label window-left"><span id="windowStart">...</span></div>
-                    <div class="timeline-window-label window-right"><span id="windowEnd">...</span></div>
+
+                <!-- UNDERLAY: Line + Beam unter allem -->
+                <div class="timeline-underlay" aria-hidden="true">
                     <div class="track-line"></div>
                     <div class="rainbow-beam"></div>
                 </div>
 
+                <!-- AMBIENT (für neue Bilder, siehe unten) -->
+                <div class="timeline-ambient" id="timelineAmbient" aria-hidden="true"></div>
+
+                <!-- SCROLL: Milestones/Dots -->
                 <div id="timeline" class="timeline-scroll">
                     <div id="timelineTrack" class="timeline-track"></div>
                 </div>
 
+                <!-- OVERLAY: Window Labels über allem -->
+                <div class="timeline-overlay" aria-hidden="true">
+                    <div class="timeline-window-label window-left"><span id="windowStart">...</span></div>
+                    <div class="timeline-window-label window-right"><span id="windowEnd">...</span></div>
+                </div>
+
+                <!-- Tooltip -->
                 <div class="timeline-tooltip" id="timelineTooltip">
                     <div class="tt-title" id="ttTitle"></div>
                     <div class="tt-range" id="ttRange"></div>
                     <div class="tt-desc" id="ttDesc"></div>
                 </div>
+
             </div>
         </section>
 
@@ -384,8 +396,9 @@
             <div class="footer-inner">
                 <div class="footer-left">
                     <div class="social">
-                        <a class="social-btn" href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn" target="_blank" rel="noopener"
-                            aria-label="GitHub">
+                        <a class="social-btn"
+                            href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn"
+                            target="_blank" rel="noopener" aria-label="GitHub">
                             <!-- GitHub icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -393,8 +406,8 @@
                             </svg>
                         </a>
 
-                        <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank" rel="noopener"
-                            aria-label="LinkedIn">
+                        <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank"
+                            rel="noopener" aria-label="LinkedIn">
                             <!-- LinkedIn icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
