@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>KitchenAid Restorations</title>
+    <link rel="stylesheet" href="css/shop.css">
+
+
+</head>
+
+<body>
+    <!-- Main 3D viewer (fixed background layer) -->
+    <div id="stage" aria-hidden="true">
+        <canvas id="main3d"></canvas>
+        <div id="vignette"></div>
+    </div>
+
+    <!-- Scroll container -->
+    <main id="scroller">
+        <!-- SECTION 1 -->
+        <section class="snap-section" data-model="./assets/models/mixer-01.glb"
+            data-accessory="./assets/models/knob-01.glb" data-title="Custom Pearl White + Brass Knob" data-price="€ 449"
+            data-desc="Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass knob set. Includes test run video and service log.">
+            <div class="content">
+                <div class="media">
+                    <img class="photo" src="./assets/img/ka-01.jpg" alt="KitchenAid restoration #1" loading="lazy" />
+                </div>
+
+                <div class="copy">
+                    <div class="kicker">KitchenAid Restoration 01</div>
+                    <h2>Showcase Piece</h2>
+
+                    <!-- Overlay appears after 50% rotation -->
+                    <div class="overlay">
+                        <div class="overlay-inner">
+                            <div class="price" data-bind="price">€ 449</div>
+                            <div class="title" data-bind="title">Custom Pearl White + Brass Knob</div>
+                            <p class="desc" data-bind="desc">
+                                Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass knob
+                                set. Includes test run video and service log.
+                            </p>
+
+                            <div class="accessory">
+                                <div class="accessory-label">Accessory Preview</div>
+                                <canvas class="acc-canvas" width="220" height="220"></canvas>
+                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                            </div>
+
+                            <a class="cta" href="#contact">Request to buy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="snap-section" data-model="./assets/models/mixer-02.glb"
+            data-accessory="./assets/models/knob-02.glb" data-title="Matte Black + Minimal Knob" data-price="€ 399"
+            data-desc="Matte powder-coat style finish, mechanical refresh, and a minimal knob variant. Clean, modern look.">
+            <div class="content">
+                <div class="media">
+                    <img class="photo" src="./assets/img/ka-02.jpg" alt="KitchenAid restoration #2" loading="lazy" />
+                </div>
+                <div class="copy">
+                    <div class="kicker">KitchenAid Restoration 02</div>
+                    <h2>Matte Edition</h2>
+                    <div class="overlay">
+                        <div class="overlay-inner">
+                            <div class="price">€ 399</div>
+                            <div class="title">Matte Black + Minimal Knob</div>
+                            <p class="desc">Matte powder-coat style finish, mechanical refresh, and a minimal knob
+                                variant. Clean, modern look.</p>
+                            <div class="accessory">
+                                <div class="accessory-label">Accessory Preview</div>
+                                <canvas class="acc-canvas" width="220" height="220"></canvas>
+                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                            </div>
+                            <a class="cta" href="#contact">Request to buy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="snap-section" data-model="./assets/models/mixer-03.glb"
+            data-accessory="./assets/models/knob-03.glb" data-title="Candy Red + Custom Badge" data-price="€ 479"
+            data-desc="High-gloss candy finish, polished trim, optional badge customization. Tuned for visual impact under warm light.">
+            <div class="content">
+                <div class="media">
+                    <img class="photo" src="./assets/img/ka-03.jpg" alt="KitchenAid restoration #3" loading="lazy" />
+                </div>
+                <div class="copy">
+                    <div class="kicker">KitchenAid Restoration 03</div>
+                    <h2>Candy Gloss</h2>
+                    <div class="overlay">
+                        <div class="overlay-inner">
+                            <div class="price">€ 479</div>
+                            <div class="title">Candy Red + Custom Badge</div>
+                            <p class="desc">High-gloss candy finish, polished trim, optional badge customization. Tuned
+                                for visual impact under warm light.</p>
+                            <div class="accessory">
+                                <div class="accessory-label">Accessory Preview</div>
+                                <canvas class="acc-canvas" width="220" height="220"></canvas>
+                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                            </div>
+                            <a class="cta" href="#contact">Request to buy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="snap-section" data-model="./assets/models/mixer-04.glb"
+            data-accessory="./assets/models/knob-04.glb" data-title="Pastel Blue + Satin Accents" data-price="€ 429"
+            data-desc="Soft pastel paint job with satin accents. Smooth operation, calibrated speed control, and upgraded grease.">
+            <div class="content">
+                <div class="media">
+                    <img class="photo" src="./assets/img/ka-04.jpg" alt="KitchenAid restoration #4" loading="lazy" />
+                </div>
+                <div class="copy">
+                    <div class="kicker">KitchenAid Restoration 04</div>
+                    <h2>Pastel Series</h2>
+                    <div class="overlay">
+                        <div class="overlay-inner">
+                            <div class="price">€ 429</div>
+                            <div class="title">Pastel Blue + Satin Accents</div>
+                            <p class="desc">Soft pastel paint job with satin accents. Smooth operation, calibrated speed
+                                control, and upgraded grease.</p>
+                            <div class="accessory">
+                                <div class="accessory-label">Accessory Preview</div>
+                                <canvas class="acc-canvas" width="220" height="220"></canvas>
+                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                            </div>
+                            <a class="cta" href="#contact">Request to buy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="snap-section" data-model="./assets/models/mixer-05.glb"
+            data-accessory="./assets/models/knob-05.glb" data-title="Industrial Grey + Performance Refresh"
+            data-price="€ 389"
+            data-desc="Durable industrial finish and a full mechanical service. Ideal daily driver with a clean, neutral aesthetic.">
+            <div class="content">
+                <div class="media">
+                    <img class="photo" src="./assets/img/ka-05.jpg" alt="KitchenAid restoration #5" loading="lazy" />
+                </div>
+                <div class="copy">
+                    <div class="kicker">KitchenAid Restoration 05</div>
+                    <h2>Daily Driver</h2>
+                    <div class="overlay">
+                        <div class="overlay-inner">
+                            <div class="price">€ 389</div>
+                            <div class="title">Industrial Grey + Performance Refresh</div>
+                            <p class="desc">Durable industrial finish and a full mechanical service. Ideal daily driver
+                                with a clean, neutral aesthetic.</p>
+                            <div class="accessory">
+                                <div class="accessory-label">Accessory Preview</div>
+                                <canvas class="acc-canvas" width="220" height="220"></canvas>
+                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                            </div>
+                            <a class="cta" href="#contact">Request to buy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact anchor -->
+        <section id="contact" class="contact snap-section">
+            <div class="contact-inner">
+                <h2>Contact</h2>
+                <p>
+                    Add your preferred contact method here (mail link, marketplace profile, etc.).
+                    For GitHub Pages, a simple <code>mailto:</code> CTA is typical.
+                </p>
+                <a class="cta" href="mailto:you@example.com?subject=KitchenAid%20Request">Email me</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- <script type="module" src="./shop.js"></script> -->
+    <script type="module" src="js/shop.js"></script>
+</body>
+
+</html>

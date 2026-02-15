@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
   const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
 
-  // --- Build section map (ignore broken links)
+  // --- Build section map
   const items = links
     .map(a => {
       const sel = a.getAttribute("href");
@@ -88,11 +88,10 @@ gsap.registerPlugin(ScrollTrigger);
   ScrollTrigger.create({
       scroller: "#main", // Keep your custom scroller
       trigger: "body",   // Use body or your main wrapper as the reference
-      start: "top top-=50", // "When Body Top is 100px above Viewport Top" (User scrolled 100px)
+      start: "top top-=100", // "When Body Top is 100px above Viewport Top" (User scrolled 100px)
       end: 99999,        // Keep it active indefinitely
       onEnter: () => flipSticky(true),
       onLeaveBack: () => flipSticky(false),
-      // markers: true,  // Uncomment this to see the red lines on screen!
   });
 
   // --- Active section logic (robust)
@@ -113,7 +112,7 @@ gsap.registerPlugin(ScrollTrigger);
 
   ScrollTrigger.create({
     scroller: "#main",
-    trigger: section,
+    trigger: hero,     // normally should trigger on every section. but there error seo debug set hero
     start: "top center",
     end: "bottom center",
     onToggle: self => { if (self.isActive) moveIndicatorTo(a); },

@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TOWERS = {
     web: { baseColor: 0x2ea8ff, blocks: ["HTML", "CSS", "JavaScript"] },
     embedded: { baseColor: 0xff7a2e, blocks: ["Arduino", "C++", "Sensors", "Control"] },
-    visual: { baseColor: 0x7c5cff, blocks: ["Blender", "Photoshop", "UI/UX"] },
+    visual: { baseColor: 0x7c5cff, blocks: ["Blender", "Photoshop"] },
     proto: { baseColor: 0x33d18f, blocks: ["3D Printing", "Electronics", "Prototyping"] }
   };
 
@@ -33,6 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.sortObjects = true;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // relatively cheap
+
 
   const scene = new THREE.Scene();
   let camera = null;
@@ -42,16 +45,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const key = new THREE.DirectionalLight(0xffffff, 1.2);
   key.position.set(300, -400, 900);
+  key.castShadow = true;
+
+  // Keep shadow map small-ish for performance
+  key.shadow.mapSize.set(512, 512);
+
+  // Tune shadow camera to cover your scene region (pixel space around towers)
+  key.shadow.camera.near = 100;
+  key.shadow.camera.far = 2500;
+
+  // Orthographic shadow frustum (DirectionalLight uses this)
+  key.shadow.camera.left = -900;
+  key.shadow.camera.right = 900;
+  key.shadow.camera.top = 900;
+  key.shadow.camera.bottom = -900;
+
+  // Reduce acne; if you see Peter Panning, adjust bias slightly
+  key.shadow.bias = -0.0006;
+
   scene.add(key);
+
 
   const fill = new THREE.DirectionalLight(0xffffff, 0.55);
   fill.position.set(-500, 200, 700);
   scene.add(fill);
 
   // Pixel-world constants
-  const blockSizePx = 48;
-  const gapPx = 49;     // slightly larger than 49 to reduce visual edge intersections
-  const dropG = 1200;
+  const blockSizePx = 44;
+  const gapPx = 45;     // slightly larger than 49 to reduce visual edge intersections
+  const dropG = 1300;
   const damp = 0.07;
   const maxVy = 1500;
 
@@ -76,6 +98,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const camZ = (h / 2) / Math.tan(fovRad / 2);
 
     camera = new THREE.PerspectiveCamera(FOV, w / h, 0.1, 5000);
+
+    // Center the light + its shadow frustum on the viewport center (pixel-space world)
+    key.target.position.set(w / 2, h / 2, 0);
+    scene.add(key.target);
+
+    // Keep the light position relative to the viewport (so direction stays stable)
+    key.position.set(w / 2 + 300, h / 2 - 400, camZ + 900);
+
+    // Make shadow camera cover the visible pixel-space region
+    const cover = 0.75; // lower = tighter + sharper, higher = safer coverage
+    key.shadow.camera.left = -(w * cover);
+    key.shadow.camera.right = (w * cover);
+    key.shadow.camera.top = (h * cover);
+    key.shadow.camera.bottom = -(h * cover);
+    key.shadow.camera.updateProjectionMatrix();
+
+    key.shadow.camera.near = 1;
+    key.shadow.camera.far = camZ + 3000;
+    key.shadow.camera.updateProjectionMatrix();
 
     // Use "pixel space" coordinates directly: (0..w, 0..h), y down
     camera.up.set(0, -1, 0);
@@ -112,7 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function buildBlockMesh(mat) {
     const geo = new THREE.BoxGeometry(blockSizePx, blockSizePx, blockSizePx);
-    return new THREE.Mesh(geo, mat);
+    const m = new THREE.Mesh(geo, mat);
+    m.castShadow = true;
+    return m;
   }
 
   // Build towers
@@ -128,7 +171,63 @@ document.addEventListener("DOMContentLoaded", () => {
       const cfg = TOWERS[towerKey];
       if (!cfg) continue;
 
+      // --- set CSS accent vars for this tower card ---
+      const accent = new THREE.Color(cfg.baseColor);
+      const accentSoft = accent.clone().lerp(new THREE.Color(0xffffff), 0.28); // slightly brighter
+
+      el.style.setProperty("--tower-accent", `#${accent.getHexString()}`);
+      el.style.setProperty("--tower-accent-soft", `#${accentSoft.getHexString()}`);
+
       const group = new THREE.Group();
+
+      // -- FLOOR (per tower) --
+
+      // 1) Tilt container for the "table"
+      const floorTilt = new THREE.Group();
+      floorTilt.rotation.x = TILT_X;
+      //floorTilt.rotation.y = TILT_Y;
+
+      // 2) Geometry: make it an XZ plane (horizontal table)
+      const floorGeo = new THREE.PlaneGeometry(240, 600);
+      floorGeo.rotateX(-Math.PI / 2);
+
+      // 3) Shadow catcher (invisible except shadow)
+      const floorMat = new THREE.ShadowMaterial({ opacity: 0.20 });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.receiveShadow = true;
+
+      // Put it just under the bottom cube bottom face.
+      // Bottom cube center is at y=0. Half size is 24. Under it is a tiny bit more.
+      floor.position.set(0, blockSizePx * 0.5 + 1.5, -150);
+
+      // IMPORTANT: avoid being culled / wrong side due to tilt
+      floor.frustumCulled = false;
+      floor.material.side = THREE.DoubleSide;
+
+      floorTilt.add(floor);
+
+      // 4) Optional faint visible base plane (helps you SEE the table)
+      const baseMat = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: 0.02,
+        depthWrite: false
+      });
+      const basePlane = new THREE.Mesh(floorGeo.clone(), baseMat);
+      basePlane.position.copy(floor.position);
+
+      // Same safety flags
+      basePlane.frustumCulled = false;
+      basePlane.material.side = THREE.DoubleSide;
+
+      // Nudge slightly to prevent z-fighting with the shadow receiver
+      basePlane.position.y += 0.2;
+
+      floorTilt.add(basePlane);
+
+      // 5) Add to group BEFORE scene.add(group)
+      group.add(floorTilt);
+
       scene.add(group);
 
       const blocks = [];
@@ -138,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const mat = plasticMaterial(cfg.baseColor, i, count);
         const mesh = buildBlockMesh(mat);
 
-        // --- NEW HIERARCHY ---
+        // --- HIERARCHY ---
 
         // 1. Yaw: Rotates the block around its own center (Vertical Axis)
         // This is the "Human Rotation"
@@ -146,20 +245,17 @@ document.addEventListener("DOMContentLoaded", () => {
         yaw.add(mesh);
 
         // 2. Offset: Moves the block on the "Floor Plane" (X and Z)
-        // Since this is inside Tilt, Z is depth into the scene, not screen Y
         const offset = new THREE.Group();
         offset.add(yaw);
 
         // 3. Tilt: The fixed "Presentation View"
-        // This tips the imaginary table so we can see the top faces
         const tilt = new THREE.Group();
         tilt.add(offset);
 
         // 4. Wrap: The Physics Container
-        // Moves the whole assembly down the Screen Y (Gravity)
         const wrap = new THREE.Group();
         wrap.add(tilt);
-        
+
         group.add(wrap);
 
         // --- APPLY TRANSFORMS ---
@@ -169,13 +265,13 @@ document.addEventListener("DOMContentLoaded", () => {
         tilt.rotation.y = TILT_Y;
 
         // 2. Random Placement on the table
-        const xJ = (Math.random() * 2 - 1) * 15; 
-        const zJ = (Math.random() * 2 - 1) * 15; 
+        const xJ = (Math.random() * 2 - 1) * 13;
+        const zJ = (Math.random() * 2 - 1) * 13;
         offset.position.set(xJ, 0, zJ);
 
         // 3. Random Yaw (0..360)
         // Now rotates around the vertical axis perpendicular to the tilted table
-        const rY = Math.random() * Math.PI * 2; 
+        const rY = Math.random() * Math.PI * 2;
 
         const startDelay = Math.random() * 0.9 + i * 0.7;
 
@@ -203,18 +299,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // hover
           offX: 0, vX: 0,
-          offR: 0, vR: 0
+          offR: 0, vR: 0,
+
+          // idle wobble
+          wobPhase: Math.random() * Math.PI * 2,
+          wobFreq: 1.2 + Math.random() * 0.8,   // slow, organic
+          wobKick: 0                            // decays (fade-out)
         });
       }
 
       const tower = { el, cfg, group, blocks };
       towers.push(tower);
 
-      // Hover push (kept, but we do NOT apply offR to yaw yet — later)
+      // Hover push
       el.addEventListener("mouseenter", () => {
-        for (const b of tower.blocks) {
-          b.vX += (Math.random() * 2 - 1) * 70;
-          b.vR += (Math.random() * 2 - 1) * 0.45;
+        const n = tower.blocks.length || 1;
+        for (let i = 0; i < n; i++) {
+          const b = tower.blocks[i];
+          const t = n <= 1 ? 1 : i / (n - 1);              // 0 bottom .. 1 top
+          const topBias = Math.pow(t, 1.6);                // top gets more
+
+          // softer, less "jerky"
+          b.vX += (Math.random() * 2 - 1) * (28 + 28 * topBias);
+          b.vX += (Math.random() * 2 - 1) * (28 + 28 * topBias);
+          b.vR += (Math.random() * 2 - 1) * (0.10 + 0.10 * topBias);
+
+          // adds a wobble kick that fades out
+          b.wobKick += (0.12 + 0.25 * topBias);
         }
       }, { passive: true });
     }
@@ -225,15 +336,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // Map DOM -> world targets
   // With our calibrated perspective camera (no camera tilt), x/y in world = pixels at z=0.
   function updateTargetsFromDOM() {
+    const canvasRect = overlay.getBoundingClientRect();
+    const canvasW = canvasRect.width;
+
     for (const t of towers) {
       const stageEl = t.el.querySelector(".tower-canvas");
       if (!stageEl) continue;
 
       const r = stageEl.getBoundingClientRect();
 
-      // Anchor near the bottom of the stage so the stack grows upward
-      const baseX = r.right - 750;
-      const baseY = r.bottom - 150;
+      // tower center in canvas-local pixels
+      const cx = (r.left - canvasRect.left) + (r.width * 0.5);
+
+      // MIRROR X to fix left/right swap
+      const baseX = canvasW - cx;
+
+      // keep your bottom anchoring (canvas-local)
+      const baseY = (r.bottom - canvasRect.top) - 40;
+
 
       t.group.position.set(baseX, baseY, 0);
 
@@ -244,8 +364,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Important: keep targetX clean; random x/z lives in b.offset.position
         b.targetX = 0;
 
-        // Stack upward: bottom block at 0, next above at gapPx, etc.
-        b.targetY = (n - 1 - i) * gapPx;
+        // Bottom block is fixed at 0; blocks above stack upward (negative Y because Y points down)
+        b.targetY = -i * gapPx;
       }
     }
   }
@@ -264,7 +384,7 @@ document.addEventListener("DOMContentLoaded", () => {
         b.active = false;
 
         // Start above the top edge in screen-space; higher blocks start higher
-        b.startY = -groupY - (blockSizePx * 2) - Math.random() * 260 - b.targetY;
+        b.startY = -groupY - (blockSizePx * 2) - Math.random() * 300 + b.targetY;
         b.y = b.startY;
 
         b.startScale = startScale;
@@ -306,7 +426,9 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTargetsFromDOM();
 
     for (const t of towers) {
-      for (const b of t.blocks) {
+      const n = t.blocks.length || 1;
+      for (let i = 0; i < n; i++) {
+        const b = t.blocks[i];
         if (!b.active && time >= b.startDelay) {
           b.active = true;
           b.wrap.visible = true;
@@ -347,9 +469,25 @@ document.addEventListener("DOMContentLoaded", () => {
         b.vR *= Math.exp(-rotDrag * dt);
         b.offR += b.vR * dt;
 
+
+        // --- idle wobble (always-on, but subtle) ---
+        // base wobble: top moves more; kick adds “life” and fades out
+        const t01 = n <= 1 ? 1 : i / (n - 1);
+        const topBias = Math.pow(t01, 1.6);
+
+        // decay the kick (fade-out)
+        b.wobKick *= Math.exp(-1.25 * dt);
+
+        const baseEnergy = 0.35 + 0.65 * topBias;  // tiny baseline
+        const energy = baseEnergy + b.wobKick;
+
+        const wobX = Math.sin(time * b.wobFreq + b.wobPhase) * (blockSizePx * 0.020) * energy;
+        const wobR = Math.sin(time * (b.wobFreq * 1.35) + b.wobPhase * 1.7) * (0.05) * energy;
+
+
         // Clamp values
-        const maxOffX = blockSizePx * 0.28;
-        const maxOffR = 0.38;
+        const maxOffX = blockSizePx * 0.32;
+        const maxOffR = 0.42;
         b.offX = clamp(b.offX, -maxOffX, maxOffX);
         b.offR = clamp(b.offR, -maxOffR, maxOffR);
 
@@ -357,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // We move the 'wrap' because that is our Screen-Space container
         // We add b.offX here because that's "Screen Drift"
         b.wrap.position.set(
-          b.targetX + b.offX,
+          b.targetX + b.offX + wobX,
           b.y,
           0
         );
@@ -365,7 +503,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 2. Rotation (Yaw):
         // We add b.offR (hover rotation) to the random base rotation
         // This spins the block on the "Tilted Table" axis
-        b.yaw.rotation.y = b.rY + b.offR;
+        b.yaw.rotation.y = b.rY + b.offR + wobR;
       }
     }
 
@@ -388,7 +526,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!e.isIntersecting || e.intersectionRatio <= 0.05) {
         hasPlayed = false;
-        replayDrop();
+        //replayDrop();
       }
     }
   }, { root: snapRoot, threshold: [0.05, 0.65] });
@@ -396,14 +534,14 @@ document.addEventListener("DOMContentLoaded", () => {
   io.observe(section);
 
   // Initial trigger if already visible
-  requestAnimationFrame(() => {
-    const r = section.getBoundingClientRect();
-    const visible = (r.top < window.innerHeight * 0.35 && r.bottom > window.innerHeight * 0.65);
-
-    if (visible && !hasPlayed) {
-      hasPlayed = true;
-      time = 0;
-      replayDrop();
-    }
-  });
+  //requestAnimationFrame(() => {
+   // const r = section.getBoundingClientRect();
+    //const visible = (r.top < window.innerHeight * 0.10 && r.bottom > window.innerHeight * 0.90);
+//
+  //  if (visible && !hasPlayed) {
+    //  hasPlayed = true;
+     // time = 0;
+      //replayDrop();
+    //}
+  //});
 });

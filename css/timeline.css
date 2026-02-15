@@ -6,7 +6,7 @@
 .timeline-area{
   position: relative;
   width: 100vw;
-  height: 300px;        /* single source of truth */
+  height: 500px;  
   margin-top: 18px;
 }
 
@@ -196,13 +196,9 @@
     height: 14px;
     border-radius: 50%;
 
-    background: var(--bg);
-    border: 3px solid var(--text);
-    cursor: pointer;
+    background: var(--text);
 
     transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-    z-index: 4;
-    /* above static line visually */
 }
 
 .milestone-dot:hover {
@@ -220,11 +216,11 @@
     background: var(--text);
 }
 
-/* Labels above/below line */
+
 .milestone-label {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0%;
+    transform: translate(-50%,var(--y, 0px));
     white-space: nowrap;
 
     padding: 6px 10px;
@@ -239,7 +235,7 @@
 
 .milestone:hover .milestone-label {
     opacity: 1;
-    transform: translateX(-50%) translateY(-2px);
+    transform: translateX(-50%) translateY(-3px);
 }
 
 .milestone.up .milestone-label {
@@ -293,4 +289,73 @@
     font-size: 13px;
     line-height: 1.35;
     opacity: 0.9;
+}
+
+
+
+/* ================================
+   TIMELINE IMAGES
+================================ */
+
+.timeline-media {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 18%;
+  z-index: 2;  
+  pointer-events: none;
+}
+
+.milestone.down .timeline-media {
+  top: auto;
+  bottom: 18%;
+}
+
+.timeline-media-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+
+  /* “hero” vibe: glass + soft border + shadow */
+  border-radius: 16px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.30);
+
+  /* subtle inner highlight */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+
+  /* scaling effect base */
+  transform: translateZ(0) scale(var(--s, 1));
+  transition: transform 120ms linear;
+}
+
+.timeline-media-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  /* soft edge light like in modern hero cards */
+  background: radial-gradient(600px 260px at 30% 20%,
+    rgba(255, 255, 255, 0.14),
+    transparent 60%);
+  opacity: 0.7;
+}
+
+.timeline-media-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  /* match hero softness a bit */
+  /*filter: saturate(1.05) contrast(1.02);*/
+}
+
+/* optional: slight “depth” separation from line */
+.timeline-media {
+ /* filter: drop-shadow(0 8px 20px rgba(0,0,0,0.30));*/
 }

@@ -43,7 +43,6 @@ function initHeroCollapse() {
   if (!header || !nav) return;
 
   // Reset
-  document.body.classList.remove("dark-mode");
   nav.classList.remove("is-sticky");
   gsap.set(nav, { y: 0, scale: 1 });
   gsap.set(".hero-center", { autoAlpha: 1, y: 0 });
