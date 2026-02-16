@@ -147,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
       opacity: 1.0,
       depthWrite: true,
       depthTest: true
-      // If you still see rare z-fighting on some GPUs, we can add polygonOffset here.
     });
   }
 
@@ -210,7 +209,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const baseMat = new THREE.MeshBasicMaterial({
         color: 0x000000,
         transparent: true,
-        opacity: 0.02,
+        //opacity: 0.02,
+        opacity: 0.00,
         depthWrite: false
       });
       const basePlane = new THREE.Mesh(floorGeo.clone(), baseMat);

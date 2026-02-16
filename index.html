@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/about.css">
     <link rel="stylesheet" href="css/timeline.css">
     <link rel="stylesheet" href="css/projects.css">
-    <!--<link rel="stylesheet" href="css/globe.css">-->
+    <link rel="stylesheet" href="css/globe.css">
     <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/footer.css">
 
@@ -24,437 +24,437 @@
 </head>
 
 <body>
-    <!-- Custom Cursor -->
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+
+        <!-- Custom Cursor -->
+        <div class="cursor-dot"></div>
+        <div class="cursor-outline"></div>
 
 
 
-    <!-- Layer 0 (Background, not snapping) -->
-    <!--   <div id="globe" aria-hidden="true">
-        <canvas id="globeCanvas"></canvas>
-        <div id="globeScene"></div>
-    </div>
--->
-
-
-    <!-- Layer 1 (UI, not snapping) -->
-    <!-- NAVBAR -->
-    <header id="nav">
-        <div class="navbar">
-            <div class="navbar-left">
-                <img src="assets/Logo.png" alt="logo" width="90" height="66">
-            </div>
-
-            <nav class="navbar-center" aria-label="Hauptnavigation">
-                <a href="#about">About</a>
-                <a href="#cv">CV</a>
-                <a href="#projects">Projects</a>
-                <a href="#globe-1">Globe</a>
-                <a href="#contact">Contact</a>
-            </nav>
-
-            <div class="navbar-right">
-                <span class="navbar-miniText" id="navbarText"></span>
-            </div>
+        <!-- Layer 0 (Background, not snapping) -->
+        <div id="globe" aria-hidden="true">
+            <canvas id="globeCanvas"></canvas>
+            <div class="space-fade"></div>
         </div>
-    </header>
 
 
-    <main id="main">
-
-        <!-- HERO -->
-        <section id="hero">
-
-            <!-- Blurred background portrait (behind glass) -->
-            <div class="hero-bg" aria-hidden="true">
-                <img src="assets/images/michael-hero.png" alt="Blurred Background">
-            </div>
-
-            <!-- Foreground portrait (right) -->
-            <div class="hero-portrait" aria-hidden="true">
-                <img src="assets/images/michael-hero.png" alt="Michael Portrait">
-            </div>
-
-            <!-- Center typing headline -->
-            <div class="hero-center">
-                <div class="typing-block">
-                    <span id="typingText"></span>
-                    <span class="cursor">|</span>
+        <!-- Layer 1 (UI, not snapping) -->
+        <!-- NAVBAR -->
+        <header id="nav">
+            <div class="navbar">
+                <div class="navbar-left">
+                    <img src="assets/Logo.png" alt="logo" width="90" height="66">
                 </div>
-                <p class="hero-subline">Web Designer • UI/UX Enthusiast • Problem Solver</p>
+
+                <nav class="navbar-center" aria-label="Hauptnavigation">
+                    <a href="#about">About</a>
+                    <a href="#cv">CV</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#globe-1">Globe</a>
+                    <a href="#contact">Contact</a>
+                </nav>
+
+                <div class="navbar-right">
+                    <span class="navbar-miniText" id="navbarText"></span>
+                </div>
             </div>
-        </section>
+        </header>
 
 
-        <!-- About -->
-        <canvas id="skills-overlay" aria-hidden="true"></canvas>
-        <section id="about-skills" class="about-skills">
-            <div class="about-wrapper glass">
-                <header class="about-head">
-                    <h2>Über mich</h2>
-                    <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
-                    <div class="about-accent" aria-hidden="true"></div>
-                </header>
+        <main id="main">
 
-                <div class="about-grid">
-                    <div class="about-text">
-                        <p>
-                            Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
-                            Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
-                            und visuellen Web-Erlebnissen.
-                        </p>
+            <!-- HERO -->
+            <section id="hero">
 
-                        <p>
-                            Mein Fokus liegt auf der Verbindung von technischem Verständnis und
-                            gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
-                            JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
-                            performanter und zugänglicher Webanwendungen.
-                        </p>
+                <!-- Blurred background portrait (behind glass) -->
+                <div class="hero-bg" aria-hidden="true">
+                    <img src="assets/images/michael-hero.png" alt="Blurred Background">
+                </div>
 
-                        <p>
-                            Diese Website dient als persönliches Portfolio und Experimentierfläche.
-                            Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
-                            die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
-                        </p>
+                <!-- Foreground portrait (right) -->
+                <div class="hero-portrait" aria-hidden="true">
+                    <img src="assets/images/michael-hero.png" alt="Michael Portrait">
+                </div>
+
+                <!-- Center typing headline -->
+                <div class="hero-center">
+                    <div class="typing-block">
+                        <span id="typingText"></span>
+                        <span class="cursor">|</span>
                     </div>
+                    <p class="hero-subline">Web Designer • UI/UX Enthusiast • Problem Solver</p>
+                </div>
+            </section>
 
-                    <aside class="about-aside">
-                        <div class="skills-grid skills-grid--towers">
-                            <article class="skill-tower" data-tower="web">
-                                <div class="tower-label">
-                                    <span class="name">Web Development</span>
-                                    <span class="lvl">HTML • CSS • JS</span>
-                                </div>
-                                <canvas class="tower-canvas" aria-label="Web Development tower"></canvas>
-                            </article>
 
-                            <article class="skill-tower" data-tower="embedded">
-                                <div class="tower-label">
-                                    <span class="name">Embedded Systems</span>
-                                    <span class="lvl">Arduino • Smart Home • MCU</span>
-                                </div>
-                                <canvas class="tower-canvas" aria-label="Embedded Systems tower"></canvas>
-                            </article>
+            <!-- About -->
+            <canvas id="skills-overlay" aria-hidden="true"></canvas>
+            <section id="about-skills" class="about-skills">
+                <div class="about-wrapper glass">
+                    <header class="about-head">
+                        <h2>Über mich</h2>
+                        <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
+                        <div class="about-accent" aria-hidden="true"></div>
+                    </header>
 
-                            <article class="skill-tower" data-tower="visual">
-                                <div class="tower-label">
-                                    <span class="name">Visual Design</span>
-                                    <span class="lvl">Blender • PS • UI</span>
-                                </div>
-                                <canvas class="tower-canvas" aria-label="Visual Design tower"></canvas>
-                            </article>
+                    <div class="about-grid">
+                        <div class="about-text">
+                            <p>
+                                Ich bin Michael Krahn, angehender Web- und Creative Developer mit besonderem
+                                Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen
+                                und visuellen Web-Erlebnissen.
+                            </p>
 
-                            <article class="skill-tower" data-tower="proto">
-                                <div class="tower-label">
-                                    <span class="name">Prototyping</span>
-                                    <span class="lvl">3D Print • Metal • Wood</span>
-                                </div>
-                                <canvas class="tower-canvas" aria-label="Prototyping tower"></canvas>
-                            </article>
+                            <p>
+                                Mein Fokus liegt auf der Verbindung von technischem Verständnis und
+                                gestalterischem Anspruch. Dabei beschäftige ich mich intensiv mit
+                                JavaScript-basierten Animationen, responsivem Design sowie der Entwicklung
+                                performanter und zugänglicher Webanwendungen.
+                            </p>
+
+                            <p>
+                                Diese Website dient als persönliches Portfolio und Experimentierfläche.
+                                Sie zeigt ausgewählte Projekte, Designideen und technische Konzepte,
+                                die im Rahmen meines Studiums sowie aus eigenem Interesse entstanden sind.
+                            </p>
                         </div>
-                    </aside>
 
-                </div>
-            </div>
-        </section>
+                        <aside class="about-aside">
+                            <div class="skills-grid skills-grid--towers">
+                                <article class="skill-tower" data-tower="web">
+                                    <div class="tower-label">
+                                        <span class="name">Web Development</span>
+                                        <span class="lvl">HTML • CSS • JS</span>
+                                    </div>
+                                    <canvas class="tower-canvas" aria-label="Web Development tower"></canvas>
+                                </article>
 
+                                <article class="skill-tower" data-tower="embedded">
+                                    <div class="tower-label">
+                                        <span class="name">Embedded Systems</span>
+                                        <span class="lvl">Arduino • Smart Home • MCU</span>
+                                    </div>
+                                    <canvas class="tower-canvas" aria-label="Embedded Systems tower"></canvas>
+                                </article>
 
+                                <article class="skill-tower" data-tower="visual">
+                                    <div class="tower-label">
+                                        <span class="name">Visual Design</span>
+                                        <span class="lvl">Blender • PS • UI</span>
+                                    </div>
+                                    <canvas class="tower-canvas" aria-label="Visual Design tower"></canvas>
+                                </article>
 
-        <!-- CV & TIMELINE -->
-        <section id="cv" class="cv-section">
+                                <article class="skill-tower" data-tower="proto">
+                                    <div class="tower-label">
+                                        <span class="name">Prototyping</span>
+                                        <span class="lvl">3D Print • Metal • Wood</span>
+                                    </div>
+                                    <canvas class="tower-canvas" aria-label="Prototyping tower"></canvas>
+                                </article>
+                            </div>
+                        </aside>
 
-            <div class="cv-header">
-                <div class="header-top">
-                    <h2>Lebenslauf</h2>
-                    <a class="btn" href="data/Michael Krahn Resume.pdf" download aria-label="Lebenslauf PDF">
-                        PDF herunterladen
-                    </a>
-                </div>
-
-                <div class="cv-facts">
-                    <div class="fact">
-                        <span class="fact-k">Fokus</span>
-                        <span class="fact-v">Frontend • Motion • Entwicklung</span>
-                    </div>
-                    <div class="fact">
-                        <span class="fact-k">Tools</span>
-                        <span class="fact-v">own Hands • Three.js • Git • Home Assistant</span>
-                    </div>
-                    <div class="fact">
-                        <span class="fact-k">Interessen</span>
-                        <span class="fact-v">Interaction • Smart Home • Prototyping</span>
                     </div>
                 </div>
-            </div>
-
-
-            <div class="timeline-area">
-
-                <!-- UNDERLAY: Line + Beam unter allem -->
-                <div class="timeline-underlay" aria-hidden="true">
-                    <div class="track-line"></div>
-                    <div class="rainbow-beam"></div>
-                </div>
-
-                <!-- AMBIENT (für neue Bilder, siehe unten) -->
-                <div class="timeline-ambient" id="timelineAmbient" aria-hidden="true"></div>
-
-                <!-- SCROLL: Milestones/Dots -->
-                <div id="timeline" class="timeline-scroll">
-                    <div id="timelineTrack" class="timeline-track"></div>
-                </div>
-
-                <!-- OVERLAY: Window Labels über allem -->
-                <div class="timeline-overlay" aria-hidden="true">
-                    <div class="timeline-window-label window-left"><span id="windowStart">...</span></div>
-                    <div class="timeline-window-label window-right"><span id="windowEnd">...</span></div>
-                </div>
-
-                <!-- Tooltip -->
-                <div class="timeline-tooltip" id="timelineTooltip">
-                    <div class="tt-title" id="ttTitle"></div>
-                    <div class="tt-range" id="ttRange"></div>
-                    <div class="tt-desc" id="ttDesc"></div>
-                </div>
-
-            </div>
-        </section>
+            </section>
 
 
 
-        <!-- Projects -->
-        <section id="projects">
-            <div class="projects-wrapper">
-                <h2>OWN PROJECTS & INSPIRATION</h2>
+            <!-- CV & TIMELINE -->
+            <section id="cv" class="cv-section">
 
-                <div class="stack-container">
-
-                    <article class="project-card glass" id="project1" data-url="https://synchronized.studio/">
-                        <div class="project-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                <span class="typing-text"></span><span class="cursor">|</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <iframe title="kinderuni-koblenz" src="https://synchronized.studio/" loading="lazy"
-                                referrerpolicy="no-referrer"></iframe>
-                            <div class="click-overlay"></div>
-                        </div>
-                    </article>
-
-                    <article class="project-card glass" id="project1" data-url="http://kinderuni-koblenz.de/">
-                        <div class="project-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                <span class="typing-text"></span><span class="cursor">|</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"
-                                referrerpolicy="no-referrer"></iframe>
-                            <div class="click-overlay"></div>
-                        </div>
-                    </article>
-
-                    <article class="project-card glass" id="project2" data-url="https://rie.science/2024/">
-                        <div class="project-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                <span class="typing-text"></span><span class="cursor">|</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"
-                                referrerpolicy="no-referrer"></iframe>
-                            <div class="click-overlay"></div>
-                        </div>
-                    </article>
-
-                    <article class="project-card glass" id="project3" data-url="https://theothersideoftruth.com/">
-                        <div class="project-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                <span class="typing-text"></span><span class="cursor">|</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <iframe title="RiE 2024" src="https://theothersideoftruth.com/" loading="lazy"
-                                referrerpolicy="no-referrer"></iframe>
-                            <div class="click-overlay"></div>
-                        </div>
-                    </article>
-
-                    <article class="project-card glass" id="project4" data-url="https://landonorris.com">
-                        <div class="project-header">
-                            <div class="dots">
-                                <span class="dot red"></span>
-                                <span class="dot yellow"></span>
-                                <span class="dot green"></span>
-                            </div>
-                            <div class="address-bar">
-                                <span class="typing-text"></span><span class="cursor">|</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <iframe title="Lando Norris"
-                                src="https://landonorris.com/?trk=public_post_main-feed-card-text" loading="lazy"
-                                referrerpolicy="no-referrer"></iframe>
-                            <div class="click-overlay"></div>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </section>
-
-
-
-
-        <!-- Multiple animated Globe Slides -->
-        <section id="globe-1">
-            <h1 class="hero-title">Michael Krahn</h1>
-        </section>
-
-        <section id="globe-2">
-            <div class="copy-block copy-left">
-                <h2>The World</h2>
-                <p>As i travelled our great planet...</p>
-            </div>
-        </section>
-
-        <section id="globe-3">
-            <div class="copy-block copy-right">
-                <h2>Footprint</h2>
-                <p>... this is my natural footprint & places i wish are yet to come.</p>
-            </div>
-        </section>
-
-        <section id="globe-4">
-            <h2>Interesse geweckt?</h2>
-            <h3>Dann hinterlass mir doch gerne eine Nachricht.</h3>
-        </section>
-
-
-
-        <!-- Contact -->
-        <section id="contact">
-            <div class="contact-wrapper glass">
-
-                <header class="contact-header">
-                    <h2>Kontakt</h2>
-                    <p>Interesse an Austausch, Feedback oder Zusammenarbeit? Schreib mir gern eine Nachricht.</p>
-                </header>
-
-                <form class="contact-form" autocomplete="off">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" type="text" placeholder="Dein Name" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input id="email" type="email" placeholder="deine@email.de" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Nachricht</label>
-                        <textarea id="message" rows="5" placeholder="Deine Nachricht..." required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn">Nachricht senden</button>
-                </form>
-
-            </div>
-        </section>
-
-
-
-
-        <!-- LAYER _ (no own Layer but snap scrolling is manually disabled for this part) -->
-        <!-- Footer -->
-        <footer class="site-footer snap-footer" id="footer">
-            <div class="footer-rainbow" aria-hidden="true"></div>
-
-            <div class="footer-inner">
-                <div class="footer-left">
-                    <div class="social">
-                        <a class="social-btn"
-                            href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn"
-                            target="_blank" rel="noopener" aria-label="GitHub">
-                            <!-- GitHub icon -->
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path
-                                    d="M12 .5C5.73.5.75 5.61.75 12c0 5.1 3.29 9.43 7.86 10.96.57.11.78-.25.78-.56v-2.1c-3.2.71-3.88-1.58-3.88-1.58-.53-1.38-1.29-1.74-1.29-1.74-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.76.4-1.28.73-1.58-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.18-3.15-.12-.3-.51-1.52.11-3.16 0 0 .97-.32 3.18 1.2.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.52 3.18-1.2 3.18-1.2.62 1.64.23 2.86.11 3.16.73.82 1.18 1.87 1.18 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.67.79.56 4.56-1.53 7.85-5.86 7.85-10.96C23.25 5.61 18.27.5 12 .5z" />
-                            </svg>
-                        </a>
-
-                        <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank"
-                            rel="noopener" aria-label="LinkedIn">
-                            <!-- LinkedIn icon -->
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path
-                                    d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.03-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z" />
-                            </svg>
-                        </a>
-
-                        <a class="social-btn" href="mailto:michael.penner97@web.de" aria-label="Email">
-                            <!-- Mail icon -->
-                            <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path
-                                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
-                            </svg>
+                <div class="cv-header">
+                    <div class="header-top">
+                        <h2>Lebenslauf</h2>
+                        <a class="btn" href="data/Michael Krahn Resume.pdf" download aria-label="Lebenslauf PDF">
+                            PDF herunterladen
                         </a>
                     </div>
+
+                    <div class="cv-facts">
+                        <div class="fact">
+                            <span class="fact-k">Fokus</span>
+                            <span class="fact-v">Frontend • Motion • Entwicklung</span>
+                        </div>
+                        <div class="fact">
+                            <span class="fact-k">Tools</span>
+                            <span class="fact-v">own Hands • Three.js • Git • Home Assistant</span>
+                        </div>
+                        <div class="fact">
+                            <span class="fact-k">Interessen</span>
+                            <span class="fact-v">Interaction • Smart Home • Prototyping</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="footer-center">
-                    <p>© 2026 – Michael Krahn</p>
-                    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+
+                <div class="timeline-area">
+
+                    <!-- UNDERLAY: Line + Beam unter allem -->
+                    <div class="timeline-underlay" aria-hidden="true">
+                        <div class="track-line"></div>
+                        <div class="rainbow-beam"></div>
+                    </div>
+
+                    <!-- AMBIENT (für neue Bilder, siehe unten) -->
+                    <div class="timeline-ambient" id="timelineAmbient" aria-hidden="true"></div>
+
+                    <!-- SCROLL: Milestones/Dots -->
+                    <div id="timeline" class="timeline-scroll">
+                        <div id="timelineTrack" class="timeline-track"></div>
+                    </div>
+
+                    <!-- OVERLAY: Window Labels über allem -->
+                    <div class="timeline-overlay" aria-hidden="true">
+                        <div class="timeline-window-label window-left"><span id="windowStart">...</span></div>
+                        <div class="timeline-window-label window-right"><span id="windowEnd">...</span></div>
+                    </div>
+
+                    <!-- Tooltip -->
+                    <div class="timeline-tooltip" id="timelineTooltip">
+                        <div class="tt-title" id="ttTitle"></div>
+                        <div class="tt-range" id="ttRange"></div>
+                        <div class="tt-desc" id="ttDesc"></div>
+                    </div>
+
                 </div>
-
-                <div class="footer-right"></div>
-            </div>
-        </footer>
-
-    </main>
+            </section>
 
 
 
+            <!-- Projects -->
+            <section id="projects">
+                <div class="projects-wrapper">
+                    <h2>OWN PROJECTS & INSPIRATION</h2>
+
+                    <div class="stack-container">
+
+                        <article class="project-card glass" id="project1" data-url="https://synchronized.studio/">
+                            <div class="project-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    <span class="typing-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <iframe title="kinderuni-koblenz" src="https://synchronized.studio/" loading="lazy"
+                                    referrerpolicy="no-referrer"></iframe>
+                                <div class="click-overlay"></div>
+                            </div>
+                        </article>
+
+                        <article class="project-card glass" id="project1" data-url="http://kinderuni-koblenz.de/">
+                            <div class="project-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    <span class="typing-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"
+                                    referrerpolicy="no-referrer"></iframe>
+                                <div class="click-overlay"></div>
+                            </div>
+                        </article>
+
+                        <article class="project-card glass" id="project2" data-url="https://rie.science/2024/">
+                            <div class="project-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    <span class="typing-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <iframe title="RiE 2024" src="https://rie.science/2024/index.html" loading="lazy"
+                                    referrerpolicy="no-referrer"></iframe>
+                                <div class="click-overlay"></div>
+                            </div>
+                        </article>
+
+                        <article class="project-card glass" id="project3" data-url="https://theothersideoftruth.com/">
+                            <div class="project-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    <span class="typing-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <iframe title="RiE 2024" src="https://theothersideoftruth.com/" loading="lazy"
+                                    referrerpolicy="no-referrer"></iframe>
+                                <div class="click-overlay"></div>
+                            </div>
+                        </article>
+
+                        <article class="project-card glass" id="project4" data-url="https://landonorris.com">
+                            <div class="project-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <div class="address-bar">
+                                    <span class="typing-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <div class="project-content">
+                                <iframe title="Lando Norris"
+                                    src="https://landonorris.com/?trk=public_post_main-feed-card-text" loading="lazy"
+                                    referrerpolicy="no-referrer"></iframe>
+                                <div class="click-overlay"></div>
+                            </div>
+                        </article>
+
+                    </div>
+                </div>
+            </section>
 
 
 
-    <!-- PLUGINS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://unpkg.com/three-globe@2.45.0/dist/three-globe.min.js"></script>
-    <script src="https://unpkg.com/topojson-client@3"></script>
 
-    <!--<script src="js/globe.js" defer></script>-->
-    <script src="js/navbar.js" defer></script>
-    <script src="js/main.js" defer></script>
-    <script src="js/timeline.js" defer></script>
-    <script src="js/about.js" defer></script>
-    <script src="js/projects.js" defer></script>
+            <!--      Globe & Clouds     -->
+            <section id="globe-1" class="globe-section">
+                <h1 class="hero-title">Michael Krahn</h1>
+            </section>
 
+            <section id="globe-2" class="globe-section">
+                <div class="copy-block copy-left">
+                    <h2>The World</h2>
+                    <p>As I travelled our great planet...</p>
+                </div>
+            </section>
+
+            <section id="globe-3" class="globe-section">
+                <div class="copy-block copy-right">
+                    <h2>Footprint</h2>
+                    <p>... this is my natural footprint & places I wish are yet to come.</p>
+                </div>
+            </section>
+
+            <section id="globe-4" class="globe-section">
+                <h2>Interesse geweckt?</h2>
+                <h3>Dann hinterlass mir doch gerne eine Nachricht.</h3>
+            </section>
+
+
+
+
+            <!-- Contact -->
+            <section id="contact">
+                <div class="contact-wrapper glass">
+
+                    <header class="contact-header">
+                        <h2>Kontakt</h2>
+                        <p>Interesse an Austausch, Feedback oder Zusammenarbeit? Schreib mir gern eine Nachricht.</p>
+                    </header>
+
+                    <form class="contact-form" autocomplete="off">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input id="name" type="text" placeholder="Dein Name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-Mail</label>
+                            <input id="email" type="email" placeholder="deine@email.de" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Nachricht</label>
+                            <textarea id="message" rows="5" placeholder="Deine Nachricht..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn">Nachricht senden</button>
+                    </form>
+
+                </div>
+            </section>
+
+
+
+
+            <!-- LAYER _ (no own Layer but snap scrolling is manually disabled for this part) -->
+            <!-- Footer -->
+            <footer class="site-footer snap-footer" id="footer">
+                <div class="footer-rainbow" aria-hidden="true"></div>
+
+                <div class="footer-inner">
+                    <div class="footer-left">
+                        <div class="social">
+                            <a class="social-btn"
+                                href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn"
+                                target="_blank" rel="noopener" aria-label="GitHub">
+                                <!-- GitHub icon -->
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M12 .5C5.73.5.75 5.61.75 12c0 5.1 3.29 9.43 7.86 10.96.57.11.78-.25.78-.56v-2.1c-3.2.71-3.88-1.58-3.88-1.58-.53-1.38-1.29-1.74-1.29-1.74-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.76.4-1.28.73-1.58-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.18-3.15-.12-.3-.51-1.52.11-3.16 0 0 .97-.32 3.18 1.2.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.52 3.18-1.2 3.18-1.2.62 1.64.23 2.86.11 3.16.73.82 1.18 1.87 1.18 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.67.79.56 4.56-1.53 7.85-5.86 7.85-10.96C23.25 5.61 18.27.5 12 .5z" />
+                                </svg>
+                            </a>
+
+                            <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank"
+                                rel="noopener" aria-label="LinkedIn">
+                                <!-- LinkedIn icon -->
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.03-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z" />
+                                </svg>
+                            </a>
+
+                            <a class="social-btn" href="mailto:michael.penner97@web.de" aria-label="Email">
+                                <!-- Mail icon -->
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path
+                                        d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-center">
+                        <p>© 2026 – Michael Krahn</p>
+                        <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+                    </div>
+
+                    <div class="footer-right"></div>
+                </div>
+            </footer>
+
+        </main>
+
+
+
+
+
+
+        <!-- PLUGINS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script src="https://unpkg.com/three-globe@2.45.0/dist/three-globe.min.js"></script>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+
+        <script src="js/globe.js" defer></script>
+        <script src="js/navbar.js" defer></script>
+        <script src="js/main.js" defer></script>
+        <script src="js/timeline.js" defer></script>
+        <script src="js/about.js" defer></script>
+        <script src="js/projects.js" defer></script>
 </body>
 
 </html>

@@ -1,5 +1,27 @@
 {
-  "visited": ["DEU", "FRA", "ESP", "USA", "JPN", "CHN", "AUS"],
-  "wishlist": ["KAMBODIA", "LAOS"],
-  "activeRegions": ["USA"]
+  "visited": [
+    276,
+    250,
+    724,
+    840,
+    392,
+    156,
+    36,
+    756,
+    764,
+    360,
+    380,
+    784,
+    826,
+    578,
+    616,
+    100,
+    442,
+    380
+  ],
+  "wishlist": [
+    188,
+    418,
+    144
+  ]
 }

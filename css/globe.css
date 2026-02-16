@@ -11,6 +11,13 @@
   transition: opacity 600ms ease;
 }
 
+.globe-section{
+  position: relative;
+  z-index: 2;
+  align-items: center;
+  /*padding: clamp(72px,10vh,120px) clamp(20px,6vw,80px);*/
+}
+
 /* If you use a WebGLRenderer canvas, make sure it fills the viewport */
 #globe canvas,
 #globeCanvas{
@@ -27,40 +34,12 @@ main, .scroller{
   z-index: 1;
 }
 
-/* Apply to globe-1..4 */
-#globe-1, #globe-2, #globe-3, #globe-4{
-  position: relative;
-  min-height: 100vh;
-  display: grid;
-  align-items: center;
-  padding: clamp(72px, 10vh, 120px) clamp(20px, 6vw, 80px);
-}
-
-/* Optional: subtle contrast veil per slide (keeps text readable on a bright globe) */
-#globe-1::before, #globe-2::before, #globe-3::before, #globe-4::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-
-  /* gentle vignette + top/bottom depth */
-  background:
-    radial-gradient(1000px 700px at 50% 45%, rgba(0,0,0,0.16), rgba(0,0,0,0.55) 70%),
-    linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.38));
-  opacity: 0.55;
-}
-
-/* All slide content sits above the veil */
-#globe-1 > *, #globe-2 > *, #globe-3 > *, #globe-4 > *{
-  position: relative;
-  z-index: 1;
-}
-
 .copy-block{
   max-width: 560px;
   padding: 20px 24px;
   border-radius: 18px;
+
+  position: relative;
 
   background: rgba(255,255,255,0.42);
   -webkit-backdrop-filter: blur(14px);
@@ -78,6 +57,7 @@ main, .scroller{
   align-self: end;
   margin-bottom: 8vh;
   text-align: left;
+  right: 180%;
 }
 
 #globe-3 .copy-right{
@@ -85,6 +65,7 @@ main, .scroller{
   align-self: start;
   margin-top: 10vh;
   text-align: right;
+  left: 90%;
 }
 
 /* Title styling */
@@ -100,14 +81,41 @@ main, .scroller{
     text-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
-#globe-2 h2, #globe-3 h2{
-  background: linear-gradient(90deg,
-    rgba(255,0,150,0.92),
-    rgba(0,200,255,0.92),
-    rgba(120,255,0,0.82),
-    rgba(255,200,0,0.82)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/*
+.space-fade{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:0;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(0,0,0,0.64) 0%,
+      rgba(0,0,0,0.32) 30%,
+      rgba(0,0,0,0.16) 55%,
+      rgba(0,0,0,0.08) 70%,
+      rgba(0,0,0,0.0) 82%
+    );
+
+  transition: opacity .3s ease;
+  will-change: opacity;
+}
+
+#globe-1::before, #globe-2::before, #globe-3::before, #globe-4::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background:
+    radial-gradient(1000px 700px at 50% 45%, rgba(0,0,0,0.16), rgba(0,0,0,0.55) 70%),
+    linear-gradient(to bottom, rgba(0,0,0,0.30), rgba(0,0,0,0.10) 45%, rgba(0,0,0,0.38));
+  opacity: 0.55;
+}
+
+#globe-1 > *, #globe-2 > *, #globe-3 > *, #globe-4 > *{
+  position: relative;
+  z-index: 1;
 }
