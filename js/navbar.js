@@ -125,7 +125,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 
-
 /* ========================
    TYPING EFFECT
 ======================== */

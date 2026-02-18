@@ -5,12 +5,6 @@
   opacity: 1;
 }
 
-/* Keep your rainbow underline visible when active */
-.navbar a.active::after {
-  opacity: 0.75;
-  transform: scaleX(1);
-}
-
 /* Sliding indicator bar */
 .nav-indicator {
   /*position: absolute;
@@ -41,8 +35,8 @@
   z-index: 10;
 
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 14px 18px;

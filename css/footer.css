@@ -54,19 +54,14 @@ footer{
 
 
 
-/* Footer links: subtle */
+/* Footer links*/
 .site-footer a{
-  color: inherit;
   opacity: 0.85;
-  text-decoration: none;
-  position: relative;
 }
 
 .site-footer a:hover{
   opacity: 1;
 }
-
-
 
 
 .footer-inner{
@@ -75,10 +70,6 @@ footer{
   align-items: center;
   gap: 18px;
 }
-
-.footer-left{ justify-self: start; }
-.footer-center{ text-align: center; }
-.footer-right{ justify-self: end; }
 
 .social{
   display: flex;
@@ -93,14 +84,11 @@ footer{
   display: grid;
   place-items: center;
 
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.16);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  border: 1px solid var(--bg);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  position: relative;
-  overflow: visible;
 }
 
 .social-btn svg{
@@ -111,12 +99,10 @@ footer{
 }
 
 .social-btn::after{
-  content:"";
-  position: absolute;
   inset: -10px;
   border-radius: 999px;
   opacity: 0;
-  filter: blur(14px);
+  filter: blur(8px);
   background: linear-gradient(90deg,
     rgba(255,0,150,.85),
     rgba(0,200,255,.85),
@@ -125,12 +111,11 @@ footer{
     rgba(255,0,150,.85)
   );
   transition: opacity .25s ease;
-  z-index: -1;
 }
 
 .social-btn:hover{
   transform: translateY(-3px);
-  border-color: rgba(255,255,255,0.28);
+  border-color: var(--bg);
   box-shadow: 0 14px 32px rgba(0,0,0,0.18);
 }
 

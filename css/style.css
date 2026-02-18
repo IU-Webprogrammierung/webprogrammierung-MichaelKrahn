@@ -31,7 +31,7 @@ body {
 .cursor-dot {
     width: 6px;
     height: 6px;
-    background-color: white;
+    background-color: var(--bg);
     border-radius: 50%;
     position: fixed;
     top: 0;
@@ -39,13 +39,13 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 9999;
-    mix-blend-mode: difference; /* Inverts colors */
+    mix-blend-mode: difference;
 }
 
 .cursor-outline {
     width: 35px;
     height: 35px;
-    border: 1px solid white;
+    border: 1px solid var(--bg);
     border-radius: 50%;
     position: fixed;
     top: 0;
@@ -53,8 +53,8 @@ body {
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 9999;
-    mix-blend-mode: difference; /* THE MAGIC */
-    transition: transform 0.10s ease-out; /* Smooth lag effect */
+    mix-blend-mode: difference;
+    transition: transform 0.25s ease-out;
 }
 
 #main{
@@ -112,6 +112,8 @@ body::before{
   display: none;                  /* Chrome / Safari */
 }
 
+
+
 /* --- SECTIONS --- */
 section {
     height: 100vh;
@@ -121,8 +123,9 @@ section {
     padding: 0px 10%;
     scroll-snap-align: start;
     overflow-x: hidden;
-    /*border: 1px solid red; /* Uncomment to debug trigger positions */
+    /*border: 1px solid red; /* Debug to see trigger positions */
 }
+
 
 /* Typography */
 h1,
@@ -144,16 +147,11 @@ h1 {
 ========================= */
 a{
   position: relative;
-  display: inline-block;
 
-  color: rgba(17, 17, 17, 0.92);
-  font-weight: 600;
   text-decoration: none;
 
-  isolation: isolate;
-  z-index: 0;
-
-  transition: color 0.25s ease;
+  color: var(--text);
+  font-weight: 600;
 
   cursor: none;
 }
@@ -173,35 +171,24 @@ a::before{
     rgba(180, 120, 255, 0.50),
     rgba(255, 90, 90, 0.70)
   );
-  background-size: 200% 200%;
+  background-size: 250% 250%;
   background-position: 40% 50%;
 
-  filter: blur(10px);
+  filter: blur(8px);
   opacity: 0;
-  transform: translate(4px, 6px);
 
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    opacity 1.25s ease;
 
   z-index: -1;
   pointer-events: none;
 }
 
 a:hover::before,
+a:active::before,
 a:focus-visible::before{
-  opacity: 0.40;
-  transform: translate(2px, 4px);
+  opacity: 0.70;
   animation: glowShift 12s ease-in-out infinite;
-}
-
-a:focus-visible{
-  outline: none;
-}
-
-a:active::before{
-  opacity: 0.32;
-  transform: translate(3px, 5px);
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -236,25 +223,17 @@ a:active::before{
   padding: 14px 28px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.28);
-  cursor: pointer;
 
-  color: rgba(17, 17, 17, 0.92);
   font-weight: 600;
   font-size: 1rem;
-  text-decoration: none;
 
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 
   background: var(--glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-
-  position: relative;
-  z-index: 0;          /* button is the stacking reference */
-  isolation: isolate;  /* prevents ::before from painting above in odd cases */
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);        
 
   box-shadow:
     0 10px 26px rgba(0, 0, 0, 0.12),
@@ -269,11 +248,8 @@ a:active::before{
 }
 
 .btn::before{
-  content: "";
-  position: absolute;
 
   inset: -4px -8px -12px -4px;
-  border-radius: inherit;
 
   background: linear-gradient(
     120deg,
@@ -288,20 +264,16 @@ a:active::before{
   background-size: 200% 200%;
   background-position: 40% 50%;
 
-  filter: blur(12px);
+  filter: blur(8px);
   opacity: 0;
-  transform: translate(8px, 10px);
+  transform: translate(6px, 12px);
 
   transition: opacity 0.35s ease, transform 0.35s ease;
-  z-index: -1;
   pointer-events: none;
 }
 
 .btn::after{
-  content: "";
-  position: absolute;
   inset: 0;
-  border-radius: inherit;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.36),
@@ -310,12 +282,6 @@ a:active::before{
   );
   opacity: 0.6;
   pointer-events: none;
-  z-index: 0;
-}
-
-.btn > *{
-  position: relative;
-  z-index: 1;
 }
 
 .btn:hover{
@@ -326,7 +292,9 @@ a:active::before{
     0 1px 0 rgba(255, 255, 255, 0.40) inset;
 }
 
-.btn:hover::before{
+.btn:hover::before,
+.btn:focus-visible::before
+{
   opacity: 0.42;            
   transform: translate(6px, 8px);
   animation: glowShift 16s ease-in-out infinite;
@@ -339,16 +307,6 @@ a:active::before{
     0 0 0 3px rgba(90, 185, 255, 0.22),
     0 18px 42px rgba(0, 0, 0, 0.16),
     0 1px 0 rgba(255, 255, 255, 0.40) inset;
-}
-
-.btn:focus-visible::before{
-  opacity: 0.42;
-  transform: translate(6px, 8px);
-  animation: glowShift 16s ease-in-out infinite;
-}
-
-.btn:active{
-  transform: translateY(-1px);
 }
 
 .btn:active::before{

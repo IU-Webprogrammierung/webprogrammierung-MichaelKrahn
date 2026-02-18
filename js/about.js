@@ -2,13 +2,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const section = document.querySelector("#about-skills");
   if (!section) return;
 
-  const snapRoot = document.querySelector(".main") || null;
-
-  // Ensure you have <canvas id="skills-overlay"></canvas> in the DOM
   const overlay = document.querySelector("#skills-overlay");
   if (!overlay) return;
 
-  let hasPlayed = false;
+  gsap.registerPlugin(ScrollTrigger);
+
+  let sectionState = "outside";
+  let towersVisible = false;
+  // outside → entering → inside → leaving
+
 
   // 4 towers with different counts
   const TOWERS = {
@@ -25,10 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const renderer = new THREE.WebGLRenderer({
     canvas: overlay,
     alpha: true,
-    antialias: true,
+    antialias: false,
     powerPreference: "high-performance"
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
@@ -48,23 +50,16 @@ document.addEventListener("DOMContentLoaded", () => {
   key.castShadow = true;
 
   // Keep shadow map small-ish for performance
-  key.shadow.mapSize.set(512, 512);
+  key.shadow.mapSize.set(256, 256);
 
   // Tune shadow camera to cover your scene region (pixel space around towers)
   key.shadow.camera.near = 100;
   key.shadow.camera.far = 2500;
 
-  // Orthographic shadow frustum (DirectionalLight uses this)
-  key.shadow.camera.left = -900;
-  key.shadow.camera.right = 900;
-  key.shadow.camera.top = 900;
-  key.shadow.camera.bottom = -900;
-
-  // Reduce acne; if you see Peter Panning, adjust bias slightly
+  // Reduce acne;
   key.shadow.bias = -0.0006;
 
   scene.add(key);
-
 
   const fill = new THREE.DirectionalLight(0xffffff, 0.55);
   fill.position.set(-500, 200, 700);
@@ -78,7 +73,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const maxVy = 1500;
 
   // Presentation tilt (gives "top view" without breaking your DOM anchoring)
-  // IMPORTANT: this tilt is isolated in a dedicated group so yaw remains clean.
   const TILT_X = -0.15;
   const TILT_Y = 0.35;
 
@@ -157,7 +151,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return m;
   }
 
+  // ----------------------
   // Build towers
+  // ----------------------
   const towerEls = [...section.querySelectorAll(".skill-tower")];
   const towers = [];
 
@@ -170,7 +166,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const cfg = TOWERS[towerKey];
       if (!cfg) continue;
 
-      // --- set CSS accent vars for this tower card ---
       const accent = new THREE.Color(cfg.baseColor);
       const accentSoft = accent.clone().lerp(new THREE.Color(0xffffff), 0.28); // slightly brighter
 
@@ -187,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //floorTilt.rotation.y = TILT_Y;
 
       // 2) Geometry: make it an XZ plane (horizontal table)
-      const floorGeo = new THREE.PlaneGeometry(240, 600);
+      const floorGeo = new THREE.PlaneGeometry(300, 720);
       floorGeo.rotateX(-Math.PI / 2);
 
       // 3) Shadow catcher (invisible except shadow)
@@ -196,10 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
       floor.receiveShadow = true;
 
       // Put it just under the bottom cube bottom face.
-      // Bottom cube center is at y=0. Half size is 24. Under it is a tiny bit more.
-      floor.position.set(0, blockSizePx * 0.5 + 1.5, -150);
+      floor.position.set(0, blockSizePx * 0.5, -230);
 
-      // IMPORTANT: avoid being culled / wrong side due to tilt
       floor.frustumCulled = false;
       floor.material.side = THREE.DoubleSide;
 
@@ -209,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const baseMat = new THREE.MeshBasicMaterial({
         color: 0x000000,
         transparent: true,
-        //opacity: 0.02,
+        //opacity: 0.04,
         opacity: 0.00,
         depthWrite: false
       });
@@ -221,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
       basePlane.material.side = THREE.DoubleSide;
 
       // Nudge slightly to prevent z-fighting with the shadow receiver
-      basePlane.position.y += 0.2;
+      basePlane.position.y += 0.05;
 
       floorTilt.add(basePlane);
 
@@ -238,41 +231,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const mesh = buildBlockMesh(mat);
 
         // --- HIERARCHY ---
-
         // 1. Yaw: Rotates the block around its own center (Vertical Axis)
-        // This is the "Human Rotation"
         const yaw = new THREE.Group();
         yaw.add(mesh);
-
         // 2. Offset: Moves the block on the "Floor Plane" (X and Z)
         const offset = new THREE.Group();
         offset.add(yaw);
-
         // 3. Tilt: The fixed "Presentation View"
         const tilt = new THREE.Group();
         tilt.add(offset);
-
         // 4. Wrap: The Physics Container
         const wrap = new THREE.Group();
         wrap.add(tilt);
-
         group.add(wrap);
 
         // --- APPLY TRANSFORMS ---
-
         // 1. Apply the fixed presentation tilt to the "Table"
         tilt.rotation.x = TILT_X;
         tilt.rotation.y = TILT_Y;
-
         // 2. Random Placement on the table
         const xJ = (Math.random() * 2 - 1) * 13;
         const zJ = (Math.random() * 2 - 1) * 13;
         offset.position.set(xJ, 0, zJ);
-
         // 3. Random Yaw (0..360)
         // Now rotates around the vertical axis perpendicular to the tilted table
         const rY = Math.random() * Math.PI * 2;
-
         const startDelay = Math.random() * 0.9 + i * 0.7;
 
         blocks.push({
@@ -304,11 +287,23 @@ document.addEventListener("DOMContentLoaded", () => {
           // idle wobble
           wobPhase: Math.random() * Math.PI * 2,
           wobFreq: 1.2 + Math.random() * 0.8,   // slow, organic
-          wobKick: 0                            // decays (fade-out)
+          wobKick: 0,                           // decays (fade-out)
+
+          // Leaving screen
+          exitVy: 0,
+          exitFade: 1,
+          exiting: false,
         });
       }
 
-      const tower = { el, cfg, group, blocks };
+      const tower = {
+        el,
+        cfg,
+        group,
+        blocks,
+        anchoredToDOM: true,
+        hasDropped: false
+      };
       towers.push(tower);
 
       // Hover push
@@ -320,18 +315,27 @@ document.addEventListener("DOMContentLoaded", () => {
           const topBias = Math.pow(t, 1.6);                // top gets more
 
           // softer, less "jerky"
-          b.vX += (Math.random() * 2 - 1) * (28 + 28 * topBias);
-          b.vX += (Math.random() * 2 - 1) * (28 + 28 * topBias);
-          b.vR += (Math.random() * 2 - 1) * (0.10 + 0.10 * topBias);
+          b.vX += (Math.random() * 2 - 1) * (50 + 50 * topBias);
+          b.vZ += (Math.random() * 2 - 1) * (50 + 50 * topBias);
+          b.vR += (Math.random() * 2 - 1) * (0.05 + 0.05 * topBias);
 
           // adds a wobble kick that fades out
-          b.wobKick += (0.12 + 0.25 * topBias);
+          b.wobKick += (0.2 + 0.5 * topBias);
         }
       }, { passive: true });
     }
   }
 
   buildTowers();
+
+
+
+
+
+  ////Animation
+
+
+
 
   // Map DOM -> world targets
   // With our calibrated perspective camera (no camera tilt), x/y in world = pixels at z=0.
@@ -355,7 +359,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const baseY = (r.bottom - canvasRect.top) - 40;
 
 
-      t.group.position.set(baseX, baseY, 0);
+      if (t.anchoredToDOM) {
+        t.group.position.set(baseX, baseY, 0);
+      }
 
       const n = t.blocks.length;
       for (let i = 0; i < n; i++) {
@@ -370,12 +376,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
+
+
+
   function replayDrop() {
     const startScale = 3.2;
 
-    updateTargetsFromDOM();
-
+    if (sectionState === "inside" || sectionState === "entering" || sectionState === "leaving") {
+      updateTargetsFromDOM();
+    }
     for (const t of towers) {
+      t.anchoredToDOM = true;
+      t.hasDropped = true;
+
       const groupY = t.group.position.y;
 
       for (const b of t.blocks) {
@@ -410,6 +424,76 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+
+// REPLACE your startLeaving function with this:
+function startLeaving() {
+  sectionState = "leaving";
+
+  for (const t of towers) {
+    t.blocks.forEach((b, i) => {
+      b.exiting = true;
+      
+      // Calculate normalized height in tower (0 to 1)
+      const total = t.blocks.length;
+      const hf = total > 1 ? i / (total - 1) : 1; 
+
+      // Random explosion angle
+      const angle = Math.random() * Math.PI * 2;
+      
+      // Speed: Top blocks fly faster
+      const speed = 50 + Math.random() * 75 + (hf * 100);
+
+      // Velocity X/Z (Screen space X and 'depth' drift)
+      b.vX = Math.cos(angle) * speed;
+      
+      // Velocity Y: Negative is UP. 
+      // We give a small pop up (-300) to top blocks, less to bottom blocks
+      b.vy = -75 - (hf * 200) - (Math.random() * 100);
+      
+      // Spin them
+      b.vR += (Math.random() - 0.5) * 8.0;
+
+      // Reset fade/settled states
+      b.exitFade = 1.0; 
+      b.settled = false;
+    });
+  }
+}
+
+
+
+
+
+
+  // State Machine
+  ScrollTrigger.create({
+    trigger: "#about-skills",
+    start: "top 75%",
+    end: "bottom bottom",
+    onEnter: () => {
+      time = 0;
+      sectionState = "entering";
+      towersVisible = true;
+      updateTargetsFromDOM();
+      replayDrop();
+    },
+    onLeaveBack: () => {
+      // Towers collapse / leave
+      sectionState = "leaving";
+      startLeaving();
+    },
+    onLeave: () => {
+      // Scroll down past section → collapse towers as well
+      sectionState = "leaving";
+      startLeaving();
+    },
+  });
+
+
+
+
+
+
   for (const t of towers) {
     t.el.addEventListener("click", settleNow, { passive: true });
   }
@@ -435,7 +519,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // FALL + SCALE
-        if (b.active && !b.settled) {
+        if (b.active && !b.settled && sectionState !== "leaving") {
+
           b.vy += dropG * dt;
           b.vy = clamp(b.vy, -maxVy, maxVy);
 
@@ -504,44 +589,80 @@ document.addEventListener("DOMContentLoaded", () => {
         // We add b.offR (hover rotation) to the random base rotation
         // This spins the block on the "Tilted Table" axis
         b.yaw.rotation.y = b.rY + b.offR + wobR;
+
+        // FREE PHYSICS DURING LEAVE (real falling)
+        if (sectionState === "leaving" && b.exiting) {
+
+          // gravity now pulls DOWN screen space
+          b.vy += dropG * dt;
+
+          // horizontal inertia
+          b.vX *= Math.exp(-1.8 * dt);
+
+          // rotation inertia
+          b.vR *= Math.exp(-1.4 * dt);
+
+          b.y += b.vy * dt;
+          b.offX += b.vX * dt;
+          b.offR += b.vR * dt;
+        }
+
+
+        // EXIT ANIMATION (per block)
+        if (b.exiting) {
+          const s = Math.max(0, b.wrap.scale.x - dt * 0.9);
+          b.wrap.scale.set(s, s, s);
+
+          b.exitFade -= dt * 0.8;
+          b.exitFade = Math.max(0, b.exitFade);
+        }
       }
     }
 
-    renderer.render(scene, camera);
+    // Mark as Outside
+    if (sectionState === "leaving") {
+      const allGone = towers.every(t =>
+        t.blocks.every(b => b.exitFade <= 0.01)
+      );
+
+      if (allGone) {
+        towersVisible = false;
+        sectionState = "outside";
+      }
+    }
+
+
+    if (towersVisible) {
+      renderer.render(scene, camera);
+    }
     requestAnimationFrame(tick);
   }
 
   requestAnimationFrame(tick);
-
-  // Snap trigger
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (e.isIntersecting && e.intersectionRatio >= 0.65) {
-        if (!hasPlayed) {
-          hasPlayed = true;
-          time = 0;
-          replayDrop();
-        }
-      }
-
-      if (!e.isIntersecting || e.intersectionRatio <= 0.05) {
-        hasPlayed = false;
-        //replayDrop();
-      }
-    }
-  }, { root: snapRoot, threshold: [0.05, 0.65] });
-
-  io.observe(section);
-
-  // Initial trigger if already visible
-  //requestAnimationFrame(() => {
-   // const r = section.getBoundingClientRect();
-    //const visible = (r.top < window.innerHeight * 0.10 && r.bottom > window.innerHeight * 0.90);
-//
-  //  if (visible && !hasPlayed) {
-    //  hasPlayed = true;
-     // time = 0;
-      //replayDrop();
-    //}
-  //});
 });
+
+
+
+
+
+
+
+//Text Fading
+
+gsap.fromTo(
+  "#about-skills .about-wrapper .about-grid .about-text",
+  { opacity: 0.2, y: 30, filter: "blur(4px)" },
+  {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: "#about-skills",
+      start: "top 75%",   // section enters viewport
+      end: "bottom bottom",  // section starts leaving viewport
+      toggleActions: "play reverse play reverse", // fade in/out on enter/leave
+      scrub: false,       // no smooth scrubbing; instant fade
+    },
+  }
+);

@@ -1,86 +1,66 @@
-gsap.registerPlugin(ScrollTrigger);
+// Wrap everything in this listener
+document.addEventListener("DOMContentLoaded", (event) => {
+  
+  gsap.registerPlugin(ScrollTrigger);
 
-/* =====================================================
-   SCROLL TO TOP ON RELOAD
-===================================================== */
-if ("scrollRestoration" in history) {
-  history.scrollRestoration = "manual";
-}
-window.scrollTo(0, 0);
+  /* =====================================================
+     SCROLL TO TOP
+  ===================================================== */
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+  window.scrollTo(0, 0);
 
+  /* =====================================================
+     CUSTOM CURSOR
+  ===================================================== */
+  const dot = document.querySelector('.cursor-dot');
+  const outline = document.querySelector('.cursor-outline');
 
-/* =====================================================
-   CUSTOM CURSOR
-===================================================== */
-const dot = document.querySelector('.cursor-dot');
-const outline = document.querySelector('.cursor-outline');
+  // SAFETY CHECK: Only run if cursor elements exist
+  if (dot && outline) {
+      // Use x/y for better performance instead of top/left
+      gsap.set(dot, { xPercent: -50, yPercent: -50 });
+      gsap.set(outline, { xPercent: -50, yPercent: -50 });
 
-window.addEventListener('mousemove', (e) => {
-    const posX = e.clientX;
-    const posY = e.clientY;
+      const xTo = gsap.quickTo(outline, "x", { duration: 0.4, ease: "power3" });
+      const yTo = gsap.quickTo(outline, "y", { duration: 0.4, ease: "power3" });
 
-    // Dot moves instantly
-    dot.style.left = `${posX}px`;
-    dot.style.top = `${posY}px`;
+      window.addEventListener('mousemove', (e) => {
+          gsap.set(dot, { x: e.clientX, y: e.clientY });
+          xTo(e.clientX);
+          yTo(e.clientY);
+      });
+  }
 
-    // Outline moves with a slight delay (animation logic)
-    outline.animate({
-        left: `${posX}px`,
-        top: `${posY}px`
-    }, { duration: 400, fill: "forwards" });
+  /* =====================================================
+     HERO HEADER COLLAPSE
+  ===================================================== */
+  const hero = document.querySelector("#hero");
+  
+  if (hero) {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: hero, 
+          start: "top top", 
+          end: "bottom top", 
+          scrub: true 
+        }
+      });
+
+      tl.to(".hero-center", {
+        autoAlpha: 0,
+        y: -100,
+        ease: "none"
+      }, 0);
+
+      tl.to(".hero-portrait", {
+        autoAlpha: 0,
+        x: 200,
+        ease: "none"
+      }, 0);
+  } else {
+      console.error("GSAP Error: #hero section not found.");
+  }
+
 });
-
-
-
-/* =====================================================
-   HERO HEADER COLLAPSE
-===================================================== */
-initHeroCollapse();
-
-function initHeroCollapse() {
-  const header = document.querySelector("#siteHeader");
-  const nav = document.querySelector(".navbar");
-  if (!header || !nav) return;
-
-  // Reset
-  nav.classList.remove("is-sticky");
-  gsap.set(nav, { y: 0, scale: 1 });
-  gsap.set(".hero-center", { autoAlpha: 1, y: 0 });
-  gsap.set(".hero-portrait", { autoAlpha: 1, x: 0 });
-  ScrollTrigger.create({
-    trigger: header,
-    start: "top top",
-    end: "bottom top", // hero fully scrolled away
-    scrub: true,
-
-    onUpdate: (self) => {
-      const p = self.progress;
-
-      /* ===== visual collapse ===== */
-      gsap.to(nav, {
-        y: gsap.utils.interpolate(0, -220, p),
-        scale: gsap.utils.interpolate(1, 0.92, p),
-        overwrite: true
-      });
-
-      gsap.to(".hero-center", {
-        autoAlpha: 1 - p * 1.4,
-        y: -80 * p,
-        overwrite: true
-      });
-
-      gsap.to(".hero-portrait", {
-        autoAlpha: 1 - p * 1.2,
-        x: 60 * p,
-        overwrite: true
-      });
-
-      /* ===== sticky navbar switch ===== */
-      if (p > 0.95) {
-        nav.classList.add("is-sticky");
-      } else {
-        nav.classList.remove("is-sticky");
-      }
-    }
-  });
-}
