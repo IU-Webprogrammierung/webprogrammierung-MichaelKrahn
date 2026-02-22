@@ -145,8 +145,8 @@
     top: 0;
     left: 0;
     transform: none;
-    padding: 10px 16px;
-    width: 100vw;
+    padding: 2vw;
+    width: 96vw;
     height: auto;
     min-height: 60px;
     z-index: 9999;

@@ -5,19 +5,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Scene state
 const sceneState = {
-    reveal: 0,     // 0 → 1 : clouds open + exposure rises
-    approach: 0,   // 0 → 1 : camera moves in
-    explore: 0,    // 0 → 1 : orbit & parallax
-    depart: 0      // 0 → 1 : fade away
+    reveal: 0,
+    approach: 0,
+    explore: 0,
+    depart: 0
 };
 
 const sceneParams = {
-    spin: 0.0,      // Ring rotation
-    spread: 0.2,    // Cloud spread
-    offsetZ: 6.5,   // Cloud distance
-    tilt: 0.2,      // Ring tilt
-    exposure: 1.0,  // Controls scene brightness
-    starY: 0        // Controls star movement
+    spin: 0.0,
+    spread: 0.2,
+    offsetZ: 6.5,
+    tilt: 0.2,
+    exposure: 1.0,
+    starY: 0
 };
 
 // Renderer + scene
@@ -32,12 +32,6 @@ ScrollTrigger.defaults({
 });
 window.addEventListener("load", () => ScrollTrigger.refresh());
 
-// SKY SPHERE (dark sky behind globe)
-//const skyGeo = new THREE.SphereGeometry(50, 32, 32);
-//const skyMat = new THREE.MeshBasicMaterial({ color: 0x1a1f28, side: THREE.BackSide });
-//const skyMesh = new THREE.Mesh(skyGeo, skyMat);
-//scene.add(skyMesh);
-
 // CAMERA RIG
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
 const cameraRig = new THREE.Group();
@@ -49,7 +43,6 @@ camera.position.set(0, 0, 20);
 
 // RENDERER
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
-//renderer.setClearColor(0xffffff, 0); // white background, alpha=0
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -62,13 +55,8 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
 dirLight.position.set(6, 10, 12);
 scene.add(dirLight);
 
-
-
-
-// --- 3. OBJECTS ---
-
 // STARFIELD
-const starCount = 1000; // reduced for performance
+const starCount = 1000;
 const starGeo = new THREE.BufferGeometry();
 const starPos = new Float32Array(starCount * 3);
 for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 60;
@@ -95,12 +83,10 @@ const starMat = new THREE.PointsMaterial({
 const starField = new THREE.Points(starGeo, starMat);
 scene.add(starField);
 
-// A. THE GLOBE
-
-// --- A. THE GLOBE (LAYERED)  ---
-const globeRig = new THREE.Group();     // cinematic position
-const globeOrbit = new THREE.Group();   // scroll rotation
-const globeIdle = new THREE.Group();    // constant rotation
+// THE GLOBE
+const globeRig = new THREE.Group();
+const globeOrbit = new THREE.Group();
+const globeIdle = new THREE.Group();
 
 scene.add(globeRig);
 globeRig.add(globeOrbit);
@@ -114,43 +100,23 @@ const globe = new ThreeGlobe()
 globeIdle.add(globe);
 globeRig.scale.set(0.005, 0.005, 0.005);
 
-// Make the globe visible even without an image texture:
 if (typeof globe.globeMaterial === "function") {
     const m = globe.globeMaterial();
-    if (m?.color) m.color.set(0xffffff);
-    // optional: helps in flat lighting
-    if (m?.emissive) m.emissive.set(0x111111);
-}
-// Make globe surface feel like "water + glassy highlights"
-if (typeof globe.globeMaterial === "function") {
-    const m = globe.globeMaterial();
-
-    // Base (water) tint
     if (m?.color) m.color.set("#f6f7fb");
-
-    // Specular highlights (modern)
     if ("roughness" in m) m.roughness = 0.55;
     if ("metalness" in m) m.metalness = 0.08;
-
-    // Optional subtle translucency (do not overdo, can look weird if too transparent)
     m.transparent = true;
     m.opacity = 0.92;
-
-    // Slight emissive lift so it doesn't look dead in shadows
     if (m?.emissive) m.emissive.set("#0b0d12");
     if ("emissiveIntensity" in m) m.emissiveIntensity = 0.08;
 }
-/* ============================================================
-   LOAD DATA
-============================================================ */
 
+// LOAD DATA
 (async function loadGlobeData() {
     try {
-        // 1. Load Topology
         const worldTopo = await fetch("https://unpkg.com/world-atlas@2/countries-110m.json").then(r => r.json());
         const countries = topojson.feature(worldTopo, worldTopo.objects.countries).features;
 
-        // 2. Load Visited Countries (Safe Mode)
         let visitedDataSet = new Set();
         try {
             const visitedRes = await fetch("./data/countries.json", { cache: "no-store" });
@@ -178,7 +144,6 @@ if (typeof globe.globeMaterial === "function") {
                 : "rgba(20,20,25,0.18)")
             .polygonsTransitionDuration(250);
 
-        // 3. Load Cities
         try {
             const citiesRes = await fetch("./data/cities.json", { cache: "no-store" });
             if (citiesRes.ok) {
@@ -207,7 +172,7 @@ const cloudIdle = new THREE.Group();
 scene.add(cloudRig); cloudRig.add(cloudOrbit); cloudOrbit.add(cloudIdle);
 
 const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0, transparent: true, opacity: 0.9, depthWrite: false });
-const cloudGeo = new THREE.SphereGeometry(1.0, 12, 12); // fewer segments for perf
+const cloudGeo = new THREE.SphereGeometry(1.0, 12, 12);
 
 const clouds = [];
 for (let i = 0; i < 12; i++) {
@@ -219,15 +184,10 @@ for (let i = 0; i < 12; i++) {
 }
 cloudRig.position.set(0, 0, 6.5); cloudOrbit.rotation.set(0.15, 0, 0);
 
-// Create clouds with ORBIT params
 for (let i = 0; i < 12; i++) {
     const cloud = new THREE.Mesh(cloudGeo, cloudMat);
-
-    // random scale for variety
     const s = 0.7 + Math.random() * 0.9;
     cloud.scale.set(s, s, s);
-
-    // Orbit parameters
     const radius = 7 + Math.random() * 2.0;
     const angle = Math.random() * Math.PI * 2;
     const yOff = (Math.random() - 0.5) * 2.2;
@@ -248,10 +208,13 @@ for (let i = 0; i < 12; i++) {
 cloudRig.position.set(0, 0, 6.5);
 cloudOrbit.rotation.set(0.15, 0, 0);
 
-// VEIL OVERLAY (for light-page darkening)
-const veilUniforms = { dark: { value: 0 } };
-const veilMat = new THREE.ShaderMaterial({
-    uniforms: veilUniforms,
+// VIGNETTE OVERLAY
+const vignetteUniforms = { 
+    darkness: { value: 0 },
+    radius: { value: 0.75 }
+};
+const vignetteMat = new THREE.ShaderMaterial({
+    uniforms: vignetteUniforms,
     transparent: true,
     depthWrite: false,
     depthTest: false,
@@ -262,27 +225,28 @@ const veilMat = new THREE.ShaderMaterial({
     `,
     fragmentShader: `
         varying vec2 vUv;
-        uniform float dark;
+        uniform float darkness;
+        uniform float radius;
         void main() {
-            gl_FragColor = vec4(0.0, 0.0, 0.0, dark);
+            vec2 center = vec2(0.5, 0.5);
+            float dist = distance(vUv, center);
+            float vignette = smoothstep(radius, radius - 0.4, dist);
+            float effect = (1.0 - vignette) * darkness;
+            gl_FragColor = vec4(0.0, 0.0, 0.0, effect);
         }
     `
 });
-const veilMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), veilMat);
-const veilScene = new THREE.Scene();
-const veilCamera = new THREE.Camera();
-veilScene.add(veilMesh);
+const vignetteMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), vignetteMat);
+const vignetteScene = new THREE.Scene();
+const vignetteCamera = new THREE.Camera();
+vignetteScene.add(vignetteMesh);
 
-
-
-// --- VISIBILITY TRACKING ---
-// Track if any globe section is currently visible in viewport
+// VISIBILITY TRACKING
 let isGlobeVisible = false;
 let globeAnimationId = null;
 
 const globeSections = ['#globe-1', '#globe-2', '#globe-3', '#globe-4'];
 
-// Create ScrollTrigger for each globe section to track visibility
 globeSections.forEach((sectionId, index) => {
     ScrollTrigger.create({
         trigger: sectionId,
@@ -315,7 +279,6 @@ globeSections.forEach((sectionId, index) => {
     });
 });
 
-// Helper function to check if any globe section is in viewport
 function isAnyGlobeSectionVisible() {
     return globeSections.some(selector => {
         const el = document.querySelector(selector);
@@ -325,14 +288,12 @@ function isAnyGlobeSectionVisible() {
     });
 }
 
-// Start the animation loop
 function startGlobeAnimation() {
     if (!globeAnimationId) {
         animate();
     }
 }
 
-// Stop the animation loop (but keep rendered content)
 function stopGlobeAnimation() {
     if (globeAnimationId) {
         cancelAnimationFrame(globeAnimationId);
@@ -340,26 +301,22 @@ function stopGlobeAnimation() {
     }
 }
 
-// --- ANIMATION LOOP (optimized, frame-rate independent) ---
+// ANIMATION LOOP
 const clock = new THREE.Clock();
 let lastTime = 0;
 
 function animate(currentTime) {
-    // Store the animation ID for cancellation
     globeAnimationId = requestAnimationFrame(animate);
     
-    // Skip rendering if globe is not visible
     if (!isGlobeVisible) {
         return;
     }
 
     const time = clock.getElapsedTime();
 
-    // STARFIELD
     starField.position.y = sceneParams.starY * 0.5;
     starField.rotation.y += 0.0005;
 
-    // GLOBE + CLOUDS
     globeIdle.rotation.y += 0.002;
     cloudRig.rotation.y += 0.005;
 
@@ -377,18 +334,16 @@ function animate(currentTime) {
 
     renderer.render(scene, camera);
     renderer.autoClear = false;
-    renderer.render(veilScene, veilCamera); // apply darkening
+    renderer.render(vignetteScene, vignetteCamera);
     renderer.autoClear = true;
 }
 
-// Show/hide globe container based on visibility
 function setGlobeContainerVisible(visible) {
     const globeEl = document.getElementById("globe");
     if (!globeEl) return;
     globeEl.style.opacity = visible ? "1" : "0";
 }
 
-// Set initial visibility on page load
 if (isAnyGlobeSectionVisible()) {
     isGlobeVisible = true;
     setGlobeContainerVisible(true);
@@ -396,7 +351,7 @@ if (isAnyGlobeSectionVisible()) {
 }
 
 
-// Section 1: Hero title fades
+// Section 1: Globe grows into view with vignette from start
 gsap.timeline({
     scrollTrigger: {
         trigger: "#globe-1",
@@ -406,13 +361,18 @@ gsap.timeline({
     }
 })
     .fromTo(globeRig.scale,
-        { x: 0.010, y: 0.010, z: 0.010 },
-        { x: 0.04, y: 0.04, z: 0.04, ease: "power2.out" },
+        { x: 0.015, y: 0.015, z: 0.015 },
+        { x: 0.065, y: 0.065, z: 0.065, ease: "power2.out" },
+        0
+    )
+    .fromTo(globeRig.position,
+        { y: 0 },
+        { y: -1.5, ease: "power2.out" },
         0
     )
     .fromTo(cameraRig.position,
         { z: 18 },
-        { z: 10, ease: "power2.out" },
+        { z: 9, ease: "power2.out" },
         0
     )
     .fromTo(sceneParams,
@@ -420,18 +380,17 @@ gsap.timeline({
         { spread: 0.9, offsetZ: 1.0, spin: 0.6, ease: "power2.out" },
         0
     )
+    .to(vignetteUniforms.darkness, { value: 0.85, ease: "power2.out" }, 0)
     .to(".hero-title", { y: -120, autoAlpha: 0, filter: "blur(18px)", ease: "power2.out" }, 0.55);
 
 
-// Section 2: left copy enters
+// Section 2:
 gsap.timeline({
     scrollTrigger: {
         trigger: "#globe-2",
         start: "top top",
         end: "bottom top",
-        scrub: 0.8,
-        onLeaveBack: () => gsap.to(veilUniforms.dark, { value: 0, ease:"power1.inOut" }),
-        onLeave: () => gsap.to(veilUniforms.dark, { value: 0, ease:"power1.inOut" })
+        scrub: 0.8
     }
 })
     .fromTo("#globe-2 .copy-block",
@@ -441,18 +400,15 @@ gsap.timeline({
     )
     .to(globeRig.rotation, { y: "+=1.2", ease: "none" }, 0)
     .to(cloudMat, { opacity: 0.65, ease: "power1.out" }, 0)
-
-    .to(veilUniforms.dark, { value: 0.50, ease: "power1.inOut" }) // adjust darkness
-
     .to(sceneParams, {
         spin: "+=0.8",
-        exposure: 0.3, // Lowers brightness (Dark mode)
-        starY: -10,    // Moves stars (Parallax)
+        exposure: 0.3,
+        starY: -10,
         ease: "power2.inOut",
         duration: 1,
     }, 0);
 
-// Section 3: right copy enters
+// Section 3: Top-down view - very close, bottom positioned
 gsap.timeline({
     scrollTrigger: {
         trigger: "#globe-3",
@@ -467,36 +423,34 @@ gsap.timeline({
         0
     )
     .to(globeRig.rotation, { y: "+=1.2", ease: "none" }, 0)
+    .to(cameraOrbit.rotation, { x: -1.4, ease: "power2.inOut" }, 0)
+    .to(cameraRig.position, { z: 5.5, y: -3.5, ease: "power2.inOut" }, 0)
+    .to(globeRig.position, { y: -2.5, ease: "power2.inOut" }, 0)
+    .to(globeRig.scale, { x: 0.08, y: 0.08, z: 0.08, ease: "power2.inOut" }, 0)
     .to(sceneParams, {
         spin: "+=0.8",
-        exposure: 0.3, // Lowers brightness (Dark mode)
-        starY: -10,    // Moves stars (Parallax)
+        exposure: 0.3,
+        starY: -10,
         ease: "power2.inOut",
         duration: 1
     }, 0);
 
 
+// Section 4: Contact - globe stays close
 gsap.timeline({
     scrollTrigger: {
         trigger: "#globe-4",
         start: "top top",
         end: "bottom top",
-        scrub: 0.8,
-        onLeaveBack: () => gsap.to(veilUniforms.dark, { value: 0, ease: "power1.inOut" }),
-        onLeave: () => gsap.to(veilUniforms.dark, { value: 0, ease: "power1.inOut" })
+        scrub: 0.8
     }
 })
     .to("#globe-4", { autoAlpha: 1 }, 0)
-    .to(globeRig.scale, { x: 0.018, y: 0.018, z: 0.018, ease: "power2.inOut" }, 0)
-    .to(cameraRig.position, { z: 16, ease: "power2.inOut" }, 0)
+    .to(globeRig.scale, { x: 0.055, y: 0.055, z: 0.055, ease: "power2.inOut" }, 0)
+    .to(cameraRig.position, { z: 10, y: -2, ease: "power2.inOut" }, 0)
+    .to(globeRig.position, { y: -1.8, ease: "power2.inOut" }, 0)
     .to(sceneParams, { spread: 0.25, offsetZ: 5.0, ease: "power2.inOut" }, 0)
     .to(cloudMat, { opacity: 0.25, ease: "power2.inOut" }, 0.1);
-
-
-
-
-
-
 
 
 // Handle Resize

@@ -1,0 +1,425 @@
+/* =========================================
+   404 ERROR PAGE STYLES
+========================================= */
+
+/* Reset for 404 page */
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  font-size: 1rem;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+body {
+  overflow: hidden;
+  /*cursor: none;*/
+}
+
+/* Match the cursor from main site */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--bg);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+}
+
+.cursor-outline {
+  width: 35px;
+  height: 35px;
+  border: 1px solid var(--bg);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.25s ease-out;
+}
+
+/* Noise overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
+  animation: grainMove 10s steps(10) infinite;
+}
+
+@keyframes grainMove {
+  0% { transform: translate3d(0, 0, 0); }
+  10% { transform: translate3d(-2%, -1%, 0); }
+  20% { transform: translate3d(-1%, 2%, 0); }
+  30% { transform: translate3d(2%, 1%, 0); }
+  40% { transform: translate3d(1%, -2%, 0); }
+  50% { transform: translate3d(-2%, 1%, 0); }
+  60% { transform: translate3d(2%, -1%, 0); }
+  70% { transform: translate3d(-1%, -2%, 0); }
+  80% { transform: translate3d(1%, 2%, 0); }
+  90% { transform: translate3d(2%, -2%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+/* =========================================
+   404 CONTAINER
+========================================= */
+.error-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Floating particles background */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 20s infinite ease-in-out;
+}
+
+.particle:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; animation-duration: 25s; }
+.particle:nth-child(2) { left: 20%; top: 80%; animation-delay: -5s; animation-duration: 20s; }
+.particle:nth-child(3) { left: 30%; top: 40%; animation-delay: -10s; animation-duration: 28s; }
+.particle:nth-child(4) { left: 40%; top: 60%; animation-delay: -15s; animation-duration: 22s; }
+.particle:nth-child(5) { left: 50%; top: 30%; animation-delay: -7s; animation-duration: 26s; }
+.particle:nth-child(6) { left: 60%; top: 70%; animation-delay: -12s; animation-duration: 24s; }
+.particle:nth-child(7) { left: 70%; top: 50%; animation-delay: -3s; animation-duration: 21s; }
+.particle:nth-child(8) { left: 80%; top: 25%; animation-delay: -8s; animation-duration: 27s; }
+.particle:nth-child(9) { left: 90%; top: 85%; animation-delay: -14s; animation-duration: 23s; }
+.particle:nth-child(10) { left: 15%; top: 55%; animation-delay: -6s; animation-duration: 29s; }
+.particle:nth-child(11) { left: 75%; top: 15%; animation-delay: -11s; animation-duration: 19s; }
+.particle:nth-child(12) { left: 45%; top: 90%; animation-delay: -9s; animation-duration: 30s; }
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-30px) translateX(15px);
+  }
+  50% {
+    transform: translateY(-15px) translateX(-20px);
+  }
+  75% {
+    transform: translateY(-40px) translateX(10px);
+  }
+}
+
+/* =========================================
+   404 TEXT
+========================================= */
+.error-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(6rem, 20vw, 16rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -4px;
+  color: var(--text);
+  position: relative;
+  display: inline-block;
+  animation: subtlePulse 4s ease-in-out infinite;
+}
+
+.error-number::before {
+  content: "404";
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--accent);
+  opacity: 0.3;
+  animation: strokePulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes subtlePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}
+
+@keyframes strokePulse {
+  0% {
+    opacity: 0.2;
+    transform: translateX(-5px);
+  }
+  100% {
+    opacity: 0.4;
+    transform: translateX(5px);
+  }
+}
+
+/* Floating 404 decoration */
+.error-number span {
+  display: inline-block;
+  animation: floatNumber 6s ease-in-out infinite;
+}
+
+.error-number span:nth-child(1) { animation-delay: 0s; }
+.error-number span:nth-child(2) { animation-delay: 0.2s; }
+.error-number span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes floatNumber {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* =========================================
+   MESSAGE TEXT
+========================================= */
+.error-message {
+  margin-top: 1.5rem;
+}
+
+.error-message h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.error-message p {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0.5rem 0 0;
+  max-width: 400px;
+}
+
+/* =========================================
+   CTA BUTTON
+========================================= */
+.error-cta {
+  margin-top: 2.5rem;
+}
+
+.btn-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  font-weight: 600;
+  font-size: 1rem;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12), 0 1px 0 rgba(255, 255, 255, 0.35) inset;
+  color: var(--text);
+  text-decoration: none;
+  cursor: none;
+  transition: transform 0.3s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-home::before {
+  content: "";
+  position: absolute;
+  inset: -4px -8px -12px -4px;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 90, 90, 0.75),
+    rgba(255, 200, 90, 0.55),
+    rgba(255, 245, 140, 0.40),
+    rgba(140, 255, 220, 0.45),
+    rgba(90, 185, 255, 0.65),
+    rgba(180, 120, 255, 0.55),
+    rgba(255, 90, 90, 0.75)
+  );
+  background-size: 200% 200%;
+  background-position: 40% 50%;
+  filter: blur(8px);
+  opacity: 0;
+  transform: translate(6px, 12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.btn-home::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.36),
+    rgba(255, 255, 255, 0.10) 40%,
+    rgba(255, 255, 255, 0.00) 75%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.btn-home:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.16), 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+}
+
+.btn-home:hover::before {
+  opacity: 0.42;
+  transform: translate(6px, 8px);
+  animation: glowShift 16s ease-in-out infinite;
+}
+
+@keyframes glowShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.btn-home svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.btn-home:hover svg {
+  transform: translateX(-4px);
+}
+
+/* =========================================
+   DECORATIVE ELEMENTS
+========================================= */
+.decorative-orbit {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border: 1px solid rgba(142, 208, 255, 0.15);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 60s linear infinite;
+  pointer-events: none;
+}
+
+.decorative-orbit::before {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 20px var(--accent);
+}
+
+.decorative-orbit:nth-child(2) {
+  width: 400px;
+  height: 400px;
+  animation-duration: 45s;
+  animation-direction: reverse;
+  border-color: rgba(142, 208, 255, 0.1);
+}
+
+.decorative-orbit:nth-child(3) {
+  width: 600px;
+  height: 600px;
+  animation-duration: 80s;
+  border-color: rgba(142, 208, 255, 0.08);
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+@media (max-width: 900px) {
+  body {
+    cursor: auto;
+  }
+
+  .cursor-dot,
+  .cursor-outline {
+    display: none;
+  }
+
+  .error-number {
+    letter-spacing: -2px;
+  }
+
+  .decorative-orbit {
+    width: 300px;
+    height: 300px;
+  }
+
+  .decorative-orbit:nth-child(2) {
+    width: 250px;
+    height: 250px;
+  }
+
+  .decorative-orbit:nth-child(3) {
+    width: 350px;
+    height: 350px;
+  }
+
+  .btn-home {
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-content {
+    padding: 1rem;
+  }
+
+  .error-message p {
+    font-size: 1rem;
+  }
+
+  .particle {
+    width: 3px;
+    height: 3px;
+  }
+}

@@ -1,10 +1,14 @@
 :root{
-  --bg: #070A10;
-  --fg: #EAF0FF;
-  --muted: rgba(234,240,255,0.70);
-  --card: rgba(10,14,24,0.64);
-  --stroke: rgba(234,240,255,0.14);
-  --shadow: 0 20px 70px rgba(0,0,0,0.40);
+  /* Use light background from index.html */
+  --bg: #f6f6f8;
+  --fg: #0f1115;
+  --muted: rgba(15, 17, 21, 0.70);
+  /* Glass effect from style.css */
+  --card: rgba(255, 255, 255, 0.12);
+  --glass: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --stroke: rgba(15, 17, 21, 0.14);
+  --shadow: 0 20px 70px rgba(0,0,0,0.15);
   --radius: 18px;
 }
 
@@ -16,6 +20,56 @@ body{
   background: var(--bg);
   color: var(--fg);
   overflow-x: hidden;
+}
+
+/* Navbar sticky - always sticky on shop page */
+.navbar {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  padding: 0px 10px !important;
+  width: 100vw !important;
+  height: 60px !important;
+  z-index: 9999 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: var(--glass) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid var(--glass-border) !important;
+}
+
+.navbar-center {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+}
+
+.navbar-center a {
+  color: var(--fg);
+}
+
+.navbar-right {
+  min-width: 350px;
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+.navbar-miniText {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.8rem;
+  white-space: pre;
+  color: var(--fg);
+  text-transform: uppercase;
+}
+
+/* Sticky header on scroll */
+#nav.scrolled .navbar {
+  background: var(--glass) !important;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
 }
 
 #stage{
@@ -36,7 +90,7 @@ body{
     radial-gradient(1200px 700px at 50% 40%, rgba(255,255,255,0.06), transparent 60%),
     radial-gradient(900px 700px at 20% 30%, rgba(120,160,255,0.05), transparent 55%),
     radial-gradient(900px 700px at 80% 30%, rgba(255,120,160,0.03), transparent 55%),
-    linear-gradient(to bottom, rgba(0,0,0,0.20), rgba(0,0,0,0.55));
+    linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.35));
 }
 
 #scroller{
@@ -45,6 +99,7 @@ body{
   scroll-snap-type: y mandatory;
   height: 100vh;
   overflow-y: auto;
+  padding-top: 60px; /* Account for fixed navbar */
 }
 
 .snap-section{
@@ -77,21 +132,25 @@ body{
   .content{ grid-template-columns: 1fr; }
 }
 
+/* Media container with vertical images */
 .media{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--stroke);
   border-radius: var(--radius);
   overflow:hidden;
   box-shadow: var(--shadow);
-  min-height: 360px;
+  width: 224px;
+  padding: 12px;
 }
 
 .photo{
-  width: 100%;
-  height: 100%;
-  display:block;
+  max-width: 200px;
   object-fit: cover;
-  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  display: block;
 }
 
 .copy{
@@ -101,6 +160,17 @@ body{
   flex-direction: column;
   justify-content: center;
   padding: 10px 2px;
+}
+
+/* Glass effect for text container */
+.copy .glass-container {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius);
+  padding: 24px;
 }
 
 .kicker{
@@ -115,6 +185,7 @@ h2{
   margin: 0 0 14px;
   font-size: clamp(26px, 4vw, 44px);
   line-height: 1.05;
+  font-family: 'Playfair Display', serif;
 }
 
 .overlay{
@@ -132,6 +203,12 @@ h2{
   transform: translateY(14px) scale(0.985);
   transition: opacity 520ms ease, transform 520ms ease;
   pointer-events: none;
+  
+  /* Glass effect for overlay */
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
 }
 
 .snap-section.show-overlay .overlay-inner{
@@ -202,7 +279,7 @@ h2{
   justify-content:center;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(0,0,0,0.18);
   text-decoration: none;
   color: var(--fg);
   background: rgba(255,255,255,0.06);
@@ -215,12 +292,45 @@ h2{
   opacity: 1;
   transform:none;
 }
-.contact-inner{
+.contact-wrapper {
   width: min(820px, 100%);
-  background: var(--card);
-  border: 1px solid var(--stroke);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
   padding: 22px;
 }
-.contact-inner p{ color: var(--muted); line-height: 1.6; }
+
+.contact-wrapper p{ color: var(--muted); line-height: 1.6; }
+
+/* Contact section specific styles */
+#contact {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .media {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .photo {
+    max-height: 200px;
+  }
+  
+  .content {
+    grid-template-columns: 1fr;
+  }
+  
+  .copy {
+    min-height: auto;
+  }
+}
