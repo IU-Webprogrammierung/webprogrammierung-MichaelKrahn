@@ -1,6 +1,44 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* =====================================================
+   MOBILE HAMBURGER MENU
+===================================================== */
+(function initMobileMenu() {
+  const toggle = document.querySelector('.navbar-toggle');
+  const navCenter = document.querySelector('.navbar-center');
+  
+  if (!toggle || !navCenter) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = navCenter.classList.toggle('is-open');
+    toggle.classList.toggle('is-active');
+    toggle.setAttribute('aria-expanded', isOpen);
+    toggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+  });
+
+  // Close menu when clicking on a link
+  const navLinks = navCenter.querySelectorAll('a');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navCenter.classList.remove('is-open');
+      toggle.classList.remove('is-active');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Menü öffnen');
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!toggle.contains(e.target) && !navCenter.contains(e.target)) {
+      navCenter.classList.remove('is-open');
+      toggle.classList.remove('is-active');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Menü öffnen');
+    }
+  });
+})();
+
+/* =====================================================
    NAVBAR COLLAPSE & ACTIVE INDICATOR
 ===================================================== */
 (function initNavbarStickyAndActive() {
@@ -206,3 +244,58 @@ async function initNewsTicker() {
 
 // Start the function
 initNewsTicker();
+
+/* =====================================================
+   MOBILE TICKER (Bottom Bar on Mobile)
+===================================================== */
+function initMobileTicker() {
+  // Only create on mobile
+  if (window.innerWidth > 900) return;
+  
+  // Check if already exists
+  if (document.querySelector('.mobile-ticker')) return;
+  
+  // Create the mobile ticker element
+  const ticker = document.createElement('div');
+  ticker.className = 'mobile-ticker';
+  ticker.innerHTML = `
+    <span class="mobile-ticker-label">NEWS:</span>
+    <span class="mobile-ticker-content" id="mobileTickerContent"></span>
+  `;
+  
+  document.body.appendChild(ticker);
+  
+  // Get the content from the navbar ticker
+  const mobileTickerContent = document.getElementById('mobileTickerContent');
+  
+  // Use the same news string logic
+  async function updateMobileTicker() {
+    let newsString = "Welcome to my portfolio +++ ";
+    
+    try {
+      const res = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_FEED_URL)}`);
+      const data = await res.json();
+      
+      if (data.status === 'ok') {
+        newsString = data.items
+          .map(item => item.title)
+          .join("  +++  ") + "  +++  ";
+      }
+    } catch (error) {
+      newsString = "Welcome to my portfolio +++ Current stack: HTML, CSS, JS, GSAP, Three.js +++ ";
+    }
+    
+    // Double the content for seamless scroll
+    mobileTickerContent.textContent = newsString + newsString;
+  }
+  
+  updateMobileTicker();
+}
+
+// Initialize on load
+initMobileTicker();
+
+// Re-check on resize
+window.addEventListener('resize', () => {
+  setTimeout(initMobileTicker, 100);
+});

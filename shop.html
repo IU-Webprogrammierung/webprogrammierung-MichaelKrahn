@@ -1,31 +1,94 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>KitchenAid Restorations</title>
+
+    <!-- Google Fonts (matching main portfolio) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Main portfolio styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/contact.css">
+    <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/shop.css">
-
-
 </head>
 
+<!-- Custom Cursor -->
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
+
+<!-- NAVBAR -->
+<header id="nav">
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">
+                <img src="assets/Logo.png" alt="logo" width="90" height="66">
+            </a>
+        </div>
+
+        <!-- Hamburger Menu Button -->
+        <button class="navbar-toggle" aria-label="Menü öffnen" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <nav class="navbar-center" aria-label="Hauptnavigation">
+            <a href="index.html#about">About</a>
+            <a href="index.html#cv">CV</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="shop.html" class="active">Shop</a>
+            <a href="index.html#globe-1">Globe</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+
+        <div class="navbar-right">
+            <span class="navbar-miniText" id="navbarText"></span>
+        </div>
+    </div>
+</header>
+
 <body>
+    <!-- Three.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <!-- GLTFLoader from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <!-- OrbitControls for camera movement -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="js/shop.js"></script>
+
     <!-- Main 3D viewer (fixed background layer) -->
     <div id="stage" aria-hidden="true">
         <canvas id="main3d"></canvas>
         <div id="vignette"></div>
     </div>
 
+
     <!-- Scroll container -->
     <main id="scroller">
         <!-- SECTION 1 -->
-        <section class="snap-section" data-model="./assets/models/mixer-01.glb"
-            data-accessory="./assets/models/knob-01.glb" data-title="Custom Pearl White + Brass Knob" data-price="€ 449"
+        <section class="snap-section" data-model="../assets/models/mixer-01.glb"
+            data-accessory="../assets/models/knob-01.glb" data-title="Custom Pearl White + Brass Knob"
+            data-price="€ 449"
             data-desc="Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass knob set. Includes test run video and service log.">
             <div class="content">
                 <div class="media">
-                    <img class="photo" src="./assets/img/ka-01.jpg" alt="KitchenAid restoration #1" loading="lazy" />
+                    <img class="photo" src="../assets/img/ka-01.jpg" alt="KitchenAid restoration #1" loading="lazy" />
                 </div>
 
                 <div class="copy">
@@ -56,12 +119,12 @@
         </section>
 
         <!-- SECTION 2 -->
-        <section class="snap-section" data-model="./assets/models/mixer-02.glb"
-            data-accessory="./assets/models/knob-02.glb" data-title="Matte Black + Minimal Knob" data-price="€ 399"
+        <section class="snap-section" data-model="../assets/models/mixer-02.glb"
+            data-accessory="../assets/models/knob-01.glb" data-title="Matte Black + Minimal Knob" data-price="€ 399"
             data-desc="Matte powder-coat style finish, mechanical refresh, and a minimal knob variant. Clean, modern look.">
             <div class="content">
                 <div class="media">
-                    <img class="photo" src="./assets/img/ka-02.jpg" alt="KitchenAid restoration #2" loading="lazy" />
+                    <img class="photo" src="../assets/img/ka-01.jpg" alt="KitchenAid restoration #2" loading="lazy" />
                 </div>
                 <div class="copy">
                     <div class="kicker">KitchenAid Restoration 02</div>
@@ -85,12 +148,12 @@
         </section>
 
         <!-- SECTION 3 -->
-        <section class="snap-section" data-model="./assets/models/mixer-03.glb"
-            data-accessory="./assets/models/knob-03.glb" data-title="Candy Red + Custom Badge" data-price="€ 479"
+        <section class="snap-section" data-model="../assets/models/mixer-03.glb"
+            data-accessory="../assets/models/knob-01.glb" data-title="Candy Red + Custom Badge" data-price="€ 479"
             data-desc="High-gloss candy finish, polished trim, optional badge customization. Tuned for visual impact under warm light.">
             <div class="content">
                 <div class="media">
-                    <img class="photo" src="./assets/img/ka-03.jpg" alt="KitchenAid restoration #3" loading="lazy" />
+                    <img class="photo" src="../assets/img/ka-01.jpg" alt="KitchenAid restoration #3" loading="lazy" />
                 </div>
                 <div class="copy">
                     <div class="kicker">KitchenAid Restoration 03</div>
@@ -113,80 +176,87 @@
             </div>
         </section>
 
-        <!-- SECTION 4 -->
-        <section class="snap-section" data-model="./assets/models/mixer-04.glb"
-            data-accessory="./assets/models/knob-04.glb" data-title="Pastel Blue + Satin Accents" data-price="€ 429"
-            data-desc="Soft pastel paint job with satin accents. Smooth operation, calibrated speed control, and upgraded grease.">
-            <div class="content">
-                <div class="media">
-                    <img class="photo" src="./assets/img/ka-04.jpg" alt="KitchenAid restoration #4" loading="lazy" />
-                </div>
-                <div class="copy">
-                    <div class="kicker">KitchenAid Restoration 04</div>
-                    <h2>Pastel Series</h2>
-                    <div class="overlay">
-                        <div class="overlay-inner">
-                            <div class="price">€ 429</div>
-                            <div class="title">Pastel Blue + Satin Accents</div>
-                            <p class="desc">Soft pastel paint job with satin accents. Smooth operation, calibrated speed
-                                control, and upgraded grease.</p>
-                            <div class="accessory">
-                                <div class="accessory-label">Accessory Preview</div>
-                                <canvas class="acc-canvas" width="220" height="220"></canvas>
-                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
-                            </div>
-                            <a class="cta" href="#contact">Request to buy</a>
-                        </div>
+        <!-- Contact -->
+        <section id="contact">
+            <div class="contact-wrapper glass">
+
+                <header class="contact-header">
+                    <h2>Kontakt</h2>
+                    <p>Interesse an Austausch, Feedback oder Zusammenarbeit? Schreib mir gern eine Nachricht.</p>
+                </header>
+
+                <form id="contact-form" class="contact-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input id="name" type="text" placeholder="Dein Name" required>
                     </div>
-                </div>
+
+                    <div class="form-group">
+                        <label for="email">E-Mail</label>
+                        <input id="email" type="email" placeholder="deine@email.de" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Nachricht</label>
+                        <textarea id="message" rows="5" placeholder="Deine Nachricht..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Nachricht senden</button>
+                </form>
+
             </div>
         </section>
 
-        <!-- SECTION 5 -->
-        <section class="snap-section" data-model="./assets/models/mixer-05.glb"
-            data-accessory="./assets/models/knob-05.glb" data-title="Industrial Grey + Performance Refresh"
-            data-price="€ 389"
-            data-desc="Durable industrial finish and a full mechanical service. Ideal daily driver with a clean, neutral aesthetic.">
-            <div class="content">
-                <div class="media">
-                    <img class="photo" src="./assets/img/ka-05.jpg" alt="KitchenAid restoration #5" loading="lazy" />
-                </div>
-                <div class="copy">
-                    <div class="kicker">KitchenAid Restoration 05</div>
-                    <h2>Daily Driver</h2>
-                    <div class="overlay">
-                        <div class="overlay-inner">
-                            <div class="price">€ 389</div>
-                            <div class="title">Industrial Grey + Performance Refresh</div>
-                            <p class="desc">Durable industrial finish and a full mechanical service. Ideal daily driver
-                                with a clean, neutral aesthetic.</p>
-                            <div class="accessory">
-                                <div class="accessory-label">Accessory Preview</div>
-                                <canvas class="acc-canvas" width="220" height="220"></canvas>
-                                <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
-                            </div>
-                            <a class="cta" href="#contact">Request to buy</a>
-                        </div>
+        <!-- LAYER _ (no own Layer but snap scrolling is manually disabled for this part) -->
+        <!-- Footer -->
+        <footer class="site-footer snap-footer" id="footer">
+            <div class="footer-rainbow" aria-hidden="true"></div>
+
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="social">
+                        <a class="social-btn"
+                            href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn"
+                            target="_blank" rel="noopener" aria-label="GitHub">
+                            <!-- GitHub icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M12 .5C5.73.5.75 5.61.75 12c0 5.1 3.29 9.43 7.86 10.96.57.11.78-.25.78-.56v-2.1c-3.2.71-3.88-1.58-3.88-1.58-.53-1.38-1.29-1.74-1.29-1.74-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.76.4-1.28.73-1.58-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.18-3.15-.12-.3-.51-1.52.11-3.16 0 0 .97-.32 3.18 1.2.92-.26 1.9-.39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.52 3.18-1.2 3.18-1.2.62 1.64.23 2.86.11 3.16.73.82 1.18 1.87 1.18 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.67.79.56 4.56-1.53 7.85-5.86 7.85-10.96C23.25 5.61 18.27.5 12 .5z" />
+                            </svg>
+                        </a>
+
+                        <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank"
+                            rel="noopener" aria-label="LinkedIn">
+                            <!-- LinkedIn icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.03-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z" />
+                            </svg>
+                        </a>
+
+                        <a class="social-btn" href="mailto:michael.penner97@web.de" aria-label="Email">
+                            <!-- Mail icon -->
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path
+                                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z" />
+                            </svg>
+                        </a>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Contact anchor -->
-        <section id="contact" class="contact snap-section">
-            <div class="contact-inner">
-                <h2>Contact</h2>
-                <p>
-                    Add your preferred contact method here (mail link, marketplace profile, etc.).
-                    For GitHub Pages, a simple <code>mailto:</code> CTA is typical.
-                </p>
-                <a class="cta" href="mailto:you@example.com?subject=KitchenAid%20Request">Email me</a>
+                <div class="footer-center">
+                    <p>© 2026 – Michael Krahn</p>
+                    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+                </div>
+
+                <div class="footer-right"></div>
             </div>
-        </section>
+        </footer>
     </main>
 
-    <!-- <script type="module" src="./shop.js"></script> -->
-    <script type="module" src="js/shop.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="js/navbar.js" defer></script>
+    <script src="js/contact.js" defer></script>
 </body>
 
 </html>

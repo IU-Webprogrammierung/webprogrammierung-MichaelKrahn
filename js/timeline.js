@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function gatherCandidateImages() {
     // 2–3 Milestones rund um Mitte
-    const closest = getClosestMilestones(3);
+    const closest = getClosestMilestones(2);
 
     const imgs = [];
     for (const m of closest) {
@@ -254,8 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
     card.slotIndex = slotIndex;
 
     // size: take from json or fallback, slight random
-    const w = (im.w || 220) + rand(-14, 18);
-    const h = (im.h || 150) + rand(-10, 14);
+    const w = (im.w || 220) + rand(-44, 44);
+    const h = (im.h || 150) + rand(-30, 30);
     card.style.setProperty("--w", `${Math.max(180, w)}px`);
     card.style.setProperty("--h", `${Math.max(120, h)}px`);
 

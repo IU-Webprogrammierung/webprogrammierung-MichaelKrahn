@@ -3,12 +3,15 @@
 -------------------------------- */
 
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 
 const scroller = document.getElementById("scroller");
 const sections = Array.from(document.querySelectorAll(".snap-section[data-model]"));
 const mainCanvas = document.getElementById("main3d");
+
+const loader = new GLTFLoader();
 
 const renderer = new THREE.WebGLRenderer({
     canvas: mainCanvas,
@@ -45,8 +48,6 @@ scene.add(fill);
 const rim = new THREE.DirectionalLight(0xffffff, 0.45);
 rim.position.set(0, 2.0, -3.5);
 scene.add(rim);
-
-const loader = new GLTFLoaderCtor();
 
 const modelCache = new Map();
 

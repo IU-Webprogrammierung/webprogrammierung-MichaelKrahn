@@ -374,6 +374,9 @@ a:focus-visible::before{
    RESPONSIVE
 ========================================= */
 
+/* =========================================
+   MOBILE LAYOUT
+========================================= */
 @media (max-width: 900px) {
   section {
     padding: 0px 6%;
@@ -387,7 +390,79 @@ a:focus-visible::before{
     flex-wrap: wrap;
   }
 
-  .projects-container {
-    flex-direction: column;
+  /* --- Mobile Cursor Deactivation --- */
+  body {
+    cursor: auto;
+  }
+
+  .cursor-dot,
+  .cursor-outline {
+    display: none;
+  }
+
+  /* --- Mobile Clickable Indicators --- */
+  /* Add visual indicator for clickable elements on mobile */
+  a,
+  .btn,
+  button,
+  .cta,
+  .project-card,
+  .social-btn {
+    position: relative;
+  }
+
+  /* Add a subtle background indicator for buttons/links on mobile */
+  a::after,
+  .btn::after,
+  button::after,
+  .cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  /* Show indicator on tap/active */
+  a:active::after,
+  .btn:active::after,
+  button:active::after,
+  .cta:active::after {
+    opacity: 1;
+  }
+
+  /* Add underline indicator for links on mobile */
+  a {
+    cursor: pointer;
+  }
+
+  /* Make buttons more prominent on mobile */
+  .btn {
+    cursor: pointer;
+    /* Add a visual border indicator */
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .btn:active {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Touch feedback for project cards */
+  .project-card {
+    cursor: pointer;
+  }
+
+  .project-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Social buttons touch feedback */
+  .social-btn:active {
+    transform: scale(0.92);
+    opacity: 0.7;
   }
 }
