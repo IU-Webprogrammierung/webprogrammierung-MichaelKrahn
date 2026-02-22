@@ -5,23 +5,85 @@
     "end": "",
     "title": "Geburt",
     "desc": "Born in a small village called Waldbreitbach im staying loyal to my roots.",
-    "label": "Geburt"
-  },
-  {
-    "category": "edu",
-    "start": "2005-10",
-    "end": "2017-09",
-    "title": "Grundschule",
-    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Grundschule Waldbreitbach",
+    "label": "Geburt",
     "images": [
-          { "src": "assets/images/timeline-2.jpg", "w": 160, "h": 220 }
+      {
+        "src": "assets/images/timeline-australia.jpg",
+        "w": 160,
+        "h": 220
+      },
+      {
+        "src": "assets/images/timeline-australia2.jpg",
+        "w": 160,
+        "h": 220
+      }
     ]
   },
   {
     "category": "edu",
-    "start": "2012-10",
-    "end": "2015-09",
+    "start": "2004-01",
+    "end": "2008-01",
+    "title": "Grundschule",
+    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+    "label": "Grundschule Waldbreitbach",
+    "images": [
+      {
+        "src": "assets/images/timeline-primaryshool.jpg",
+        "w": 160,
+        "h": 220
+      },
+      {
+        "src": "assets/images/timeline-primaryshool2.jpg",
+        "w": 160,
+        "h": 220
+      },
+      {
+        "src": "assets/images/timeline-primaryshool3.jpg",
+        "w": 160,
+        "h": 220
+      }
+    ]
+  },
+  {
+    "category": "edu",
+    "start": "2020",
+    "end": "",
+    "title": "Lifesafer Badge",
+    "desc": "Swimming",
+    "label": "Mannheim"
+  },
+  {
+    "category": "edu",
+    "start": "2008-01",
+    "end": "2016-01",
+    "title": "Abitur",
+    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+    "label": "Rhein-Wied-Gymnasium, Neuwied"
+  },
+  {
+    "category": "edu",
+    "start": "2016-01",
+    "end": "2017-01",
+    "title": "Work&Travel Australia",
+    "desc": "Had a year with so many expiriences while travelling through astarlia. met many friends and developed my character",
+    "label": "Work and Travel",
+    "images": [
+      {
+        "src": "assets/images/timeline-australia.jpg",
+        "w": 160,
+        "h": 220
+      },
+      {
+        "src": "assets/images/timeline-australia2.jpg",
+        "w": 160,
+        "h": 220
+      }
+    ]
+  },
+  {
+    "category": "edu",
+    "start": "2018-01",
+    "end": "2019-01",
     "title": "Maschinenbau (DHBW Mannheim)",
     "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
     "label": "Maschinenbau"
@@ -32,10 +94,7 @@
     "end": "2018-03",
     "title": "Studium Architektur (HS Koblenz)",
     "desc": "Grundlagen Entwurf, Gestaltung, technisches Verständnis.",
-    "label": "Architektur",
-    "images": [
-      { "src": "assets/images/timeline-1.jpg", "w": 300, "h": 190 }
-    ]
+    "label": "Architektur"
   },
   {
     "category": "edu",
@@ -43,7 +102,14 @@
     "end": "2019-09",
     "title": "Maschinenbau (DHBW Mannheim)",
     "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Maschinenbau"
+    "label": "Maschinenbau",
+    "images": [
+      {
+        "src": "assets/images/timeline-dhbw.jpg",
+        "w": 80,
+        "h": 150
+      }
+    ]
   },
   {
     "category": "edu",
@@ -59,11 +125,7 @@
     "end": "2020-03",
     "title": "Erstes Webprojekt",
     "desc": "HTML/CSS Basics, erste Layouts, kleine Animationen.",
-    "label": "2019",
-    "images": [
-      { "src": "assets/images/timeline-1.jpg", "w": 120, "h": 90 },
-      { "src": "assets/images/timeline-2.jpg", "w": 160, "h": 190 }
-    ]
+    "label": "2019"
   },
   {
     "category": "work",
@@ -79,9 +141,26 @@
     "end": "2026-01",
     "title": "Portfolio Webseite",
     "desc": "Scroll-Animationen, Parallax, Glass UI, Prototyping.",
-    "label": "Portfolio",
+    "label": "Portfolio"
+  },
+  {
+    "category": "proj",
+    "start": "2022-06-30",
+    "end": "",
+    "title": "Hochzeit Vivi&Micha",
+    "desc": "We had our Dream Wedding on an old Burg",
+    "label": "Wedding",
     "images": [
-      { "src": "assets/images/timeline-1.jpg", "w": 120, "h": 80 }
+      {
+        "src": "assets/images/timeline-wedding.jpg",
+        "w": 120,
+        "h": 80
+      },
+      {
+        "src": "assets/images/timeline-wedding2.jpg",
+        "w": 70,
+        "h": 120
+      }
     ]
   }
 ]

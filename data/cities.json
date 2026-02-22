@@ -1,22 +1,37 @@
 [
   { "name": "Hamburg", "lat": 53.551086, "lng": 9.993682 },
+  { "name": "Köln", "lat": 50.937531, "lng": 6.960279 },
   { "name": "München", "lat": 48.137154, "lng": 11.576124 },
   { "name": "Koblenz", "lat": 50.360023, "lng": 7.589907 },
   { "name": "Trier", "lat": 49.75, "lng": 6.633333 },
   { "name": "Frankfurt", "lat": 50.110924, "lng": 8.682127 },
 
   { "name": "Ubud (Bali)", "lat": -8.519268, "lng": 115.263298 },
+  { "name": "Krabi", "lat": 7.881656, "lng": 99.338465 },
   { "name": "Bangkok", "lat": 13.736717, "lng": 100.523186 },
+  { "name": "Kuala Lumpur", "lat": 3.139003, "lng": 101.686852 },
+
   { "name": "Thessaloniki", "lat": 40.629269, "lng": 22.947412 },
-
   { "name": "London", "lat": 51.509865, "lng": -0.118092 },
-  { "name": "Marrakech", "lat": 31.628674, "lng": -7.992047 },
+  { "name": "Amsterdam", "lat": 52.3676, "lng": 4.9041 },
   { "name": "Malta (Valletta)", "lat": 35.884445, "lng": 14.506944 },
-
+  { "name": "Alicante", "lat": 38.345996, "lng": -0.490528 },
+  { "name": "Valencia", "lat": 39.469907, "lng": -0.376288 },
+  { "name": "Barcelona", "lat": 41.3874, "lng": 2.1686 },
+  { "name": "Pula", "lat": 44.8666, "lng": 13.8496 },
   { "name": "Rom", "lat": 41.902782, "lng": 12.496366 },
-  { "name": "Tokyo", "lat": 35.68972, "lng": 139.69222 },
-
+  { "name": "Mailand", "lat": 45.464204, "lng": 9.189982 },
+  { "name": "Toblach", "lat": 46.733333, "lng": 12.133333 },
+  { "name": "Brixen", "lat": 46.716667, "lng": 11.65 },
+  { "name": "Bozen", "lat": 46.496722, "lng": 11.359324 },
+  { "name": "Meran", "lat": 46.6713, "lng": 11.1641 },
   { "name": "Dolomiten", "lat": 46.383333, "lng": 11.85 },
+  { "name": "Schwangau", "lat": 47.583333, "lng": 10.733333 },
 
-  { "name": "Peking", "lat": 39.916668, "lng": 116.383331 }
+  { "name": "Peking", "lat": 39.916668, "lng": 116.383331 },
+
+  { "name": "New York", "lat": 40.712784, "lng": -74.005941 },
+
+  { "name": "Marrakech", "lat": 31.628674, "lng": -7.992047 },
+  { "name": "Hurghada", "lat": 27.257896, "lng": 33.811607 }
 ]

@@ -9,12 +9,12 @@
 .contact-wrapper {
   width: 100%;
   max-width: 720px;
-  padding: 60px;
+  padding: 40px;
   border-radius: 32px;
 }
 
 .contact-header {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .contact-header h2 {

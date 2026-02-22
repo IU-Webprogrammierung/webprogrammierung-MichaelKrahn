@@ -3,12 +3,44 @@
 ========================================= */
 
 :root {
-  --bg: #f6f6f8;   /*   background-color: #e0e0e0; CLAY */
+  /* Colors */
+  --bg: #f6f6f8;
   --text: #0f1115;
   --accent: #8ed0ff;
 
+  /* Glass Effect */
   --glass: rgba(255, 255, 255, 0.12);
   --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-blur: 18px;
+  --glass-blur-small: 8px;
+  --glass-blur-nav: 14px;
+
+  /* Border Radius - Standardized */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-full: 999px;
+
+  /* Transitions - Standardized */
+  --transition-fast: 160ms ease;
+  --transition-normal: 250ms ease;
+  --transition-smooth: 350ms ease;
+  --transition-slow: 520ms ease;
+
+  /* Shadows - Standardized */
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 10px 26px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 18px 42px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0 22px 46px rgba(0, 0, 0, 0.32);
+
+  /* Z-index layers */
+  --z-globe: 0;
+  --z-content: 1;
+  --z-nav: 10;
+  --z-overlay: 50;
+  --z-modal: 100;
+  --z-cursor: 9999;
 }
 
 html, body {
@@ -319,6 +351,10 @@ a:focus-visible::before{
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* Shared cursor animation for hero and projects */
+.cursor { margin-left: 8px; animation: blink 0.7s infinite alternate; }
+@keyframes blink { from { opacity: 1; } to { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce){
   .btn:hover::before,

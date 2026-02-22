@@ -55,20 +55,7 @@
   white-space: normal;
 }
 
-.cursor {
-  margin-left: 8px;
-  animation: blink 0.7s infinite alternate;
-}
-
-@keyframes blink {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
+/* Cursor animation now in style.css (shared) */
 
 .hero-subline {
   margin-top: 14px;

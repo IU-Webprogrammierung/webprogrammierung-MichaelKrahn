@@ -65,7 +65,7 @@
     /* Lower z-index for back items (handled by JS, but visual fallback here) */
     z-index: calc(10 - var(--i));
     
-    cursor: pointer;
+    cursor: none;
 }
 
 /* HOVER EFFECT */
@@ -116,13 +116,11 @@
     color: rgba(255,255,255,0.9);
 }
 
-/* Blinking Cursor */
+/* Blinking Cursor - Uses shared animation from hero.css */
 .cursor {
-    animation: blink 1s infinite;
     margin-left: 2px;
     opacity: 0.7;
 }
-@keyframes blink { 50% { opacity: 0; } }
 
 .project-content {
     flex-grow: 1;

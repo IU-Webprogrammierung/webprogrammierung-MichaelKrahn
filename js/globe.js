@@ -275,9 +275,84 @@ veilScene.add(veilMesh);
 
 
 
+// --- VISIBILITY TRACKING ---
+// Track if any globe section is currently visible in viewport
+let isGlobeVisible = false;
+let globeAnimationId = null;
+
+const globeSections = ['#globe-1', '#globe-2', '#globe-3', '#globe-4'];
+
+// Create ScrollTrigger for each globe section to track visibility
+globeSections.forEach((sectionId, index) => {
+    ScrollTrigger.create({
+        trigger: sectionId,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => {
+            isGlobeVisible = true;
+            setGlobeContainerVisible(true);
+            startGlobeAnimation();
+        },
+        onLeave: () => {
+            if (!isAnyGlobeSectionVisible()) {
+                isGlobeVisible = false;
+                setGlobeContainerVisible(false);
+                stopGlobeAnimation();
+            }
+        },
+        onEnterBack: () => {
+            isGlobeVisible = true;
+            setGlobeContainerVisible(true);
+            startGlobeAnimation();
+        },
+        onLeaveBack: () => {
+            if (!isAnyGlobeSectionVisible()) {
+                isGlobeVisible = false;
+                setGlobeContainerVisible(false);
+                stopGlobeAnimation();
+            }
+        }
+    });
+});
+
+// Helper function to check if any globe section is in viewport
+function isAnyGlobeSectionVisible() {
+    return globeSections.some(selector => {
+        const el = document.querySelector(selector);
+        if (!el) return false;
+        const rect = el.getBoundingClientRect();
+        return rect.top < window.innerHeight && rect.bottom > 0;
+    });
+}
+
+// Start the animation loop
+function startGlobeAnimation() {
+    if (!globeAnimationId) {
+        animate();
+    }
+}
+
+// Stop the animation loop (but keep rendered content)
+function stopGlobeAnimation() {
+    if (globeAnimationId) {
+        cancelAnimationFrame(globeAnimationId);
+        globeAnimationId = null;
+    }
+}
+
 // --- ANIMATION LOOP (optimized, frame-rate independent) ---
 const clock = new THREE.Clock();
-function animate() {
+let lastTime = 0;
+
+function animate(currentTime) {
+    // Store the animation ID for cancellation
+    globeAnimationId = requestAnimationFrame(animate);
+    
+    // Skip rendering if globe is not visible
+    if (!isGlobeVisible) {
+        return;
+    }
+
     const time = clock.getElapsedTime();
 
     // STARFIELD
@@ -304,12 +379,21 @@ function animate() {
     renderer.autoClear = false;
     renderer.render(veilScene, veilCamera); // apply darkening
     renderer.autoClear = true;
-
-    requestAnimationFrame(animate);
 }
-animate();
 
+// Show/hide globe container based on visibility
+function setGlobeContainerVisible(visible) {
+    const globeEl = document.getElementById("globe");
+    if (!globeEl) return;
+    globeEl.style.opacity = visible ? "1" : "0";
+}
 
+// Set initial visibility on page load
+if (isAnyGlobeSectionVisible()) {
+    isGlobeVisible = true;
+    setGlobeContainerVisible(true);
+    startGlobeAnimation();
+}
 
 
 // Section 1: Hero title fades
@@ -411,24 +495,6 @@ gsap.timeline({
 
 
 
-
-
-
-
-// OLD but working....    
-function setGlobeVisible(on) {
-    const globeEl = document.getElementById("globe");
-    if (!globeEl) return;
-    globeEl.style.opacity = on ? "1" : "0";
-}
-
-ScrollTrigger.create({
-    trigger: "#globe-1",
-    start: "top 80%",
-    end: "bottom top",
-    onEnter: () => setGlobeVisible(true),
-    onEnterBack: () => setGlobeVisible(true)
-});
 
 
 
