@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" id="top">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -12,35 +12,53 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
 <body>
 
-      <!-- NAVBAR -->
-    <div class="navbar">
-        <div class="navbar-left">
-            <img src="assets/Logo.png" alt="logo" width="90" height="66">
-        </div>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-        <nav class="navbar-center" aria-label="Main navigation">
-            <a href="#about">About</a>
-            <a href="#projects">Projects</a>
-            <a href="#cloudScene">Globe</a>
-            <a href="#cv">CV</a>
-            <a href="#contact">Contact</a>
-        </nav>
+    <!-- NAVBAR -->
+    <header id="nav">
+        <div class="navbar">
+            <div class="navbar-left">
+                <a href="index.html">
+                    <img src="assets/Logo.png" alt="logo" width="90" height="66">
+                </a>
+            </div>
 
-        <div class="navbar-right">
-            <span class="navbar-miniText" id="navbarText"></span>
+            <!-- Hamburger Menu Button -->
+            <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="navbar-center" aria-label="Main navigation">
+                <a href="index.html#about">About</a>
+                <a href="index.html#cv">CV</a>
+                <a href="index.html#projects">Projects</a>
+                <a href="shop.html">Shop</a>
+                <a href="index.html#globe-1">Globe</a>
+                <a href="index.html#contact">Contact</a>
+            </nav>
+
+            <div class="navbar-right">
+                <span class="navbar-miniText" id="navbarText"></span>
+            </div>
         </div>
-    </div>
+    </header>
 
     <section id="impressum">
         <h2>Imprint</h2>
 
-        <p>
+        <h3>
             Information according to § 5 TMG
-        </p>
+        </h3>
 
         <p>
             Michael Krahn<br>
@@ -50,26 +68,26 @@
         </p>
 
         <p>
-            <strong>Contact</strong><br>
+            <strong><h3>Contact</h3></strong><br>
             Email: <a href="mailto:Michael.Penner97@web.de">michael.penner97@web.de</a>
         </p>
 
         <p>
-            <strong>Liability for Content</strong><br>
+            <strong><h3>Liability for Content</h3></strong><br>
             As a service provider, I am responsible for my own content on these pages
             in accordance with general laws. According to §§ 8 to 10 TMG, however, I am
             not obligated to monitor transmitted or stored third-party information.
         </p>
 
         <p>
-            <strong>Liability for Links</strong><br>
+            <strong><h3>Liability for Links</h3></strong><br>
             This website contains links to external websites of third parties, on whose
             content I have no influence. For the content of the linked pages, the
             respective provider or operator is always responsible.
         </p>
 
         <p>
-            <strong>Copyright</strong><br>
+            <strong><h3>Copyright</h3></strong><br>
             The content and works created by the site operator on this website are
             subject to German copyright law.
         </p>
@@ -77,7 +95,8 @@
 
 
     <script src="js/navbar.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="js/custom_cursor.js" defer></script>
+    
 </body>
 
 </html>

@@ -93,9 +93,9 @@ let desiredRotY = 0;
 // Shadow-receiving platform
 const floor = new THREE.Mesh(
     new THREE.CircleGeometry(1.4, 64),
-    new THREE.MeshStandardMaterial({ 
-        color: 0xf6f6f8, 
-        roughness: 0.8, 
+    new THREE.MeshStandardMaterial({
+        color: 0xf6f6f8,
+        roughness: 0.8,
         metalness: 0.0,
         transparent: true,
         opacity: 0.9
@@ -114,23 +114,23 @@ pmremGenerator.compileEquirectangularShader();
 // Create a simple gradient environment
 function createEnvironment() {
     const envScene = new THREE.Scene();
-    
+
     // Gradient background
     const canvas = document.createElement('canvas');
     canvas.width = 512;
     canvas.height = 512;
     const ctx = canvas.getContext('2d');
-    
+
     const gradient = ctx.createLinearGradient(0, 0, 0, 512);
     gradient.addColorStop(0, '#e8eef5');
     gradient.addColorStop(0.5, '#f6f6f8');
     gradient.addColorStop(1, '#d0d8e4');
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 512, 512);
-    
+
     const texture = new THREE.CanvasTexture(canvas);
     texture.mapping = THREE.EquirectangularReflectionMapping;
-    
+
     return texture;
 }
 
@@ -142,7 +142,7 @@ scene.environment = createEnvironment();
 
 function disposeObject3D(obj) {
     if (!obj) return;
-    
+
     obj.traverse((n) => {
         if (n.isMesh) {
             if (n.geometry) {
@@ -174,13 +174,13 @@ function disposeObject3D(obj) {
 function loadGLB(url) {
     if (modelCache.has(url)) {
         const cached = modelCache.get(url).clone(true);
-        
+
         // Enable shadows on cloned model
         cached.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
-                
+
                 // Improve material quality
                 if (child.material) {
                     child.material.envMapIntensity = 1.0;
@@ -189,7 +189,7 @@ function loadGLB(url) {
                 }
             }
         });
-        
+
         return Promise.resolve(cached);
     }
 
@@ -205,7 +205,7 @@ function loadGLB(url) {
                     if (child.isMesh) {
                         child.castShadow = true;
                         child.receiveShadow = true;
-                        
+
                         // Enhance materials
                         if (child.material) {
                             child.material.envMapIntensity = 1.0;
@@ -247,8 +247,8 @@ function fallbackModel() {
     const g = new THREE.Group();
     const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(1, 1, 1),
-        new THREE.MeshStandardMaterial({ 
-            roughness: 0.5, 
+        new THREE.MeshStandardMaterial({
+            roughness: 0.5,
             metalness: 0.2,
             envMapIntensity: 1.0
         })
@@ -305,7 +305,7 @@ let contactObserver = new IntersectionObserver((entries) => {
         } else if (!entry.isIntersecting && sections.length > 0) {
             // User left contact section - restore floor and potentially model
             floor.visible = true;
-            
+
             // Restore the current section's model
             const activeSection = sections[activeIndex];
             if (activeSection) {
@@ -394,11 +394,11 @@ class AccessoryViewer {
         this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
         const hemiLight = new THREE.HemisphereLight(0xffffff, 0x101828, 0.6);
         this.scene.add(hemiLight);
-        
+
         const dl = new THREE.DirectionalLight(0xffffff, 1.0);
         dl.position.set(1.5, 2, 2);
         this.scene.add(dl);
-        
+
         const fillLight = new THREE.DirectionalLight(0xe6f0ff, 0.4);
         fillLight.position.set(-1.5, 1, 1);
         this.scene.add(fillLight);
@@ -422,7 +422,7 @@ class AccessoryViewer {
                 if (child.isMesh) {
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    
+
                     // Improve materials
                     if (child.material) {
                         child.material.envMapIntensity = 1.0;
@@ -450,8 +450,8 @@ class AccessoryViewer {
             // fallback
             const mesh = new THREE.Mesh(
                 new THREE.TorusKnotGeometry(0.45, 0.14, 120, 16),
-                new THREE.MeshStandardMaterial({ 
-                    roughness: 0.35, 
+                new THREE.MeshStandardMaterial({
+                    roughness: 0.35,
                     metalness: 0.35,
                     envMapIntensity: 1.0
                 })
@@ -587,13 +587,13 @@ let lastScrollY = 0;
 
 function updateNav() {
     const scrollY = scroller.scrollTop;
-    
+
     if (scrollY > 50) {
         nav.classList.add('scrolled');
     } else {
         nav.classList.remove('scrolled');
     }
-    
+
     lastScrollY = scrollY;
 }
 
@@ -615,3 +615,46 @@ scroller.addEventListener('scroll', updateNav, { passive: true });
 
     animate();
 })();
+
+
+let currentLang = 'en';
+
+function toggleLanguage() {
+    currentLang = currentLang === 'en' ? 'de' : 'en';
+
+    // Update all elements with data-en and data-de attributes
+    document.querySelectorAll('[data-en][data-de]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${currentLang}`);
+    });
+
+    // Update placeholders
+    document.querySelectorAll('[data-placeholder-en][data-placeholder-de]').forEach(el => {
+        el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
+    });
+
+    // Update CTA buttons in sections
+    document.querySelectorAll('.cta').forEach(el => {
+        if (el.hasAttribute('data-en') && el.hasAttribute('data-de')) {
+            el.textContent = el.getAttribute(`data-${currentLang}`);
+        }
+    });
+
+    // Update language toggle button
+    const langToggle = document.querySelector('.lang-toggle');
+    langToggle.innerHTML = currentLang === 'en' ? '<span class="lang-flag">🇩🇪</span>' : '<span class="lang-flag">🇬🇧</span>';
+
+    // Save preference
+    localStorage.setItem('shopLang', currentLang);
+}
+
+// Load saved language preference
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('shopLang');
+    if (savedLang) {
+        currentLang = savedLang;
+        // Trigger the toggle to apply saved language
+        if (savedLang === 'de') {
+            toggleLanguage();
+        }
+    }
+});

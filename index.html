@@ -19,10 +19,10 @@
     <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/footer.css">
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
-<body>
+<body class="is-landing">
 
     <!-- Custom Cursor -->
     <div class="cursor-dot"></div>
@@ -53,7 +53,7 @@
             </button>
 
             <nav class="navbar-center" aria-label="Main navigation">
-                <a href="#about">About</a>
+                <a href="#about-skills">About</a>
                 <a href="#cv">CV</a>
                 <a href="#projects">Projects</a>
                 <a href="shop.html">Shop</a>
@@ -96,7 +96,7 @@
 
         <!-- About -->
         <canvas id="skills-overlay" aria-hidden="true"></canvas>
-        <section id="about-skills" class="about-skills">
+        <section id="about-skills">
             <div class="about-wrapper glass">
                 <header class="about-head">
                     <h2>About Me</h2>
@@ -169,7 +169,7 @@
 
 
         <!-- CV & TIMELINE -->
-        <section id="cv" class="cv-section">
+        <section id="cv">
 
             <div class="cv-header">
                 <div class="header-top">
@@ -255,7 +255,7 @@
                         </div>
                     </article>
 
-                    <article class="project-card glass" id="project1" data-url="http://kinderuni-koblenz.de/">
+                    <article class="project-card glass" id="project2" data-url="https://kinderuni-koblenz.de/">
                         <div class="project-header">
                             <div class="dots">
                                 <span class="dot red"></span>
@@ -267,13 +267,13 @@
                             </div>
                         </div>
                         <div class="project-content">
-                            <iframe title="kinderuni-koblenz" src="http://kinderuni-koblenz.de/" loading="lazy"
+                            <iframe title="kinderuni-koblenz" src="https://kinderuni-koblenz.de/" loading="lazy"
                                 referrerpolicy="no-referrer"></iframe>
                             <div class="click-overlay"></div>
                         </div>
                     </article>
 
-                    <article class="project-card glass" id="project2" data-url="https://rie.science/2024/">
+                    <article class="project-card glass" id="project3" data-url="https://rie.science/2024/">
                         <div class="project-header">
                             <div class="dots">
                                 <span class="dot red"></span>
@@ -291,7 +291,7 @@
                         </div>
                     </article>
 
-                    <article class="project-card glass" id="project3" data-url="https://theothersideoftruth.com/">
+                    <article class="project-card glass" id="project4" data-url="https://theothersideoftruth.com/">
                         <div class="project-header">
                             <div class="dots">
                                 <span class="dot red"></span>
@@ -309,7 +309,7 @@
                         </div>
                     </article>
 
-                    <article class="project-card glass" id="project4" data-url="https://landonorris.com">
+                    <article class="project-card glass" id="project5" data-url="https://landonorris.com">
                         <div class="project-header">
                             <div class="dots">
                                 <span class="dot red"></span>
@@ -425,7 +425,8 @@
                             </svg>
                         </a>
 
-                        <a class="social-btn" href="mailto:michael.penner97@web.de" aria-label="Email">
+                        <a class="social-btn" href="https://www.instagram.com/micha.krahn/" target="_blank"
+                            rel="noopener" aria-label="Instagram">
                             <!-- Instagram icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
@@ -441,7 +442,7 @@
 
                 <div class=" footer-center">
                     <p>© 2026 – Michael Krahn</p>
-                    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+                    <p><a href="imprint.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a></p>
                 </div>
 
                 <div class="footer-right"></div>
@@ -463,12 +464,14 @@
 
     <script src="js/globe.js" defer></script>
     <script src="js/navbar.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <script src="js/hero.js" defer></script>
     <script src="js/timeline.js" defer></script>
     <script src="js/about.js" defer></script>
     <script src="js/projects.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/contact.js" defer></script>
+    <script src="js/custom_cursor.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 </body>
 
 </html>

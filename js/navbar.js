@@ -46,6 +46,14 @@ gsap.registerPlugin(ScrollTrigger);
   const nav = navbar?.querySelector("nav");
   if (!navbar || !nav) return;
 
+  // Check if this is a landing page (has hero section)
+  const isLandingPage = document.querySelector("#hero") !== null;
+  
+  // For non-landing pages, apply sticky state immediately
+  if (!isLandingPage) {
+    navbar.classList.add("is-sticky");
+  }
+
   const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
 
   // --- Build section map

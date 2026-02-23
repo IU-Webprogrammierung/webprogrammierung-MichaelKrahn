@@ -61,7 +61,7 @@
 
 
 /* ---------- Section layout (adjust to your snap system) ---------- */
-.about-skills {
+#about-skills {
   min-height: 100vh;
   display: grid;
   align-content: center;

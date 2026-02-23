@@ -12,28 +12,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
   window.scrollTo(0, 0);
 
   /* =====================================================
-     CUSTOM CURSOR
-  ===================================================== */
-  const dot = document.querySelector('.cursor-dot');
-  const outline = document.querySelector('.cursor-outline');
-
-  // SAFETY CHECK: Only run if cursor elements exist
-  if (dot && outline) {
-      // Use x/y for better performance instead of top/left
-      gsap.set(dot, { xPercent: -50, yPercent: -50 });
-      gsap.set(outline, { xPercent: -50, yPercent: -50 });
-
-      const xTo = gsap.quickTo(outline, "x", { duration: 0.4, ease: "power3" });
-      const yTo = gsap.quickTo(outline, "y", { duration: 0.4, ease: "power3" });
-
-      window.addEventListener('mousemove', (e) => {
-          gsap.set(dot, { x: e.clientX, y: e.clientY });
-          xTo(e.clientX);
-          yTo(e.clientY);
-      });
-  }
-
-  /* =====================================================
      HERO HEADER COLLAPSE
   ===================================================== */
   const hero = document.querySelector("#hero");
