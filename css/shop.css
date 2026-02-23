@@ -55,6 +55,9 @@ body{
   opacity: 1;
   pointer-events: auto;
   transform: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .navbar-miniText {
@@ -333,4 +336,28 @@ h2{
   .copy {
     min-height: auto;
   }
+}
+
+/* Language Toggle Button */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 10px;
+}
+
+.lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.lang-flag {
+  font-size: 18px;
+  line-height: 1;
 }

@@ -13,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
     const isOpen = navCenter.classList.toggle('is-open');
     toggle.classList.toggle('is-active');
     toggle.setAttribute('aria-expanded', isOpen);
-    toggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
+    toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
   });
 
   // Close menu when clicking on a link
@@ -23,7 +23,7 @@ gsap.registerPlugin(ScrollTrigger);
       navCenter.classList.remove('is-open');
       toggle.classList.remove('is-active');
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Menü öffnen');
+      toggle.setAttribute('aria-label', 'Open menu');
     });
   });
 
@@ -33,7 +33,7 @@ gsap.registerPlugin(ScrollTrigger);
       navCenter.classList.remove('is-open');
       toggle.classList.remove('is-active');
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Menü öffnen');
+      toggle.setAttribute('aria-label', 'Open menu');
     }
   });
 })();
@@ -157,7 +157,7 @@ gsap.registerPlugin(ScrollTrigger);
     invalidateOnRefresh: true
   });
 
-  // One refresh after images/fonts settle helps reduce “wrong section” glitches
+  // One refresh after images/fonts settle helps reduce "wrong section" glitches
   window.addEventListener("load", () => ScrollTrigger.refresh());
 })();
 
@@ -167,7 +167,7 @@ gsap.registerPlugin(ScrollTrigger);
    TYPING EFFECT
 ======================== */
 
-const text = "Hallo, ich bin Michael";
+const text = "Hello, I'm Michael";
 let index = 0;
 const typingTarget = document.getElementById("typingText");
 

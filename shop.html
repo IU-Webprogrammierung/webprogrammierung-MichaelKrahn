@@ -33,13 +33,13 @@
         </div>
 
         <!-- Hamburger Menu Button -->
-        <button class="navbar-toggle" aria-label="Menü öffnen" aria-expanded="false">
+        <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
         </button>
 
-        <nav class="navbar-center" aria-label="Hauptnavigation">
+        <nav class="navbar-center" aria-label="Main navigation">
             <a href="index.html#about">About</a>
             <a href="index.html#cv">CV</a>
             <a href="index.html#projects">Projects</a>
@@ -50,6 +50,9 @@
 
         <div class="navbar-right">
             <span class="navbar-miniText" id="navbarText"></span>
+            <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                <span class="lang-flag">🇩🇪</span>
+            </button>
         </div>
     </div>
 </header>
@@ -114,7 +117,7 @@
                                     <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
                                 </div>
 
-                                <a class="cta" href="#contact">Request to buy</a>
+                                <a class="cta" href="#contact" data-en="Request to buy" data-de="Kaufanfrage stellen">Request to buy</a>
                             </div>
                         </div>
                     </div>
@@ -147,7 +150,7 @@
                                     <canvas class="acc-canvas" width="220" height="220"></canvas>
                                     <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
                                 </div>
-                                <a class="cta" href="#contact">Request to buy</a>
+                                <a class="cta" href="#contact" data-en="Request to buy" data-de="Kaufanfrage stellen">Request to buy</a>
                             </div>
                         </div>
                     </div>
@@ -180,7 +183,7 @@
                                     <canvas class="acc-canvas" width="220" height="220"></canvas>
                                     <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
                                 </div>
-                                <a class="cta" href="#contact">Request to buy</a>
+                                <a class="cta" href="#contact" data-en="Request to buy" data-de="Kaufanfrage stellen">Request to buy</a>
                             </div>
                         </div>
                     </div>
@@ -193,27 +196,27 @@
             <div class="contact-wrapper glass">
 
                 <header class="contact-header">
-                    <h2>Kontakt</h2>
-                    <p>Interesse an Austausch, Feedback oder Zusammenarbeit? Schreib mir gern eine Nachricht.</p>
+                    <h2 data-en="Contact" data-de="Kontakt">Contact</h2>
+                    <p data-en="Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message." data-de="Interesse an Austausch, Feedback oder Zusammenarbeit? Schreib mir gern eine Nachricht.">Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message.</p>
                 </header>
 
                 <form id="contact-form" class="contact-form" autocomplete="off">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" type="text" placeholder="Dein Name" required>
+                        <label for="name" data-en="Name" data-de="Name">Name</label>
+                        <input id="name" type="text" placeholder="Your name" data-placeholder-en="Your name" data-placeholder-de="Dein Name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input id="email" type="email" placeholder="deine@email.de" required>
+                        <label for="email" data-en="Email" data-de="E-Mail">Email</label>
+                        <input id="email" type="email" placeholder="your@email.com" data-placeholder-en="your@email.com" data-placeholder-de="deine@email.de" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="message">Nachricht</label>
-                        <textarea id="message" rows="5" placeholder="Deine Nachricht..." required></textarea>
+                        <label for="message" data-en="Message" data-de="Nachricht">Message</label>
+                        <textarea id="message" rows="5" placeholder="Your message..." data-placeholder-en="Your message..." data-placeholder-de="Deine Nachricht..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn">Nachricht senden</button>
+                    <button type="submit" class="btn" data-en="Send message" data-de="Nachricht senden">Send message</button>
                 </form>
 
             </div>
@@ -258,7 +261,7 @@
 
                 <div class="footer-center">
                     <p>© 2026 – Michael Krahn</p>
-                    <p><a href="#impressum">Impressum</a> | <a href="#datenschutz">Datenschutz</a></p>
+                    <p><a href="#impressum">Imprint</a> | <a href="#datenschutz">Privacy</a></p>
                 </div>
 
                 <div class="footer-right"></div>
@@ -269,6 +272,51 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="js/navbar.js" defer></script>
     <script src="js/contact.js" defer></script>
+
+    <!-- Language Toggle Script -->
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'de' : 'en';
+            
+            // Update all elements with data-en and data-de attributes
+            document.querySelectorAll('[data-en][data-de]').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-placeholder-en][data-placeholder-de]').forEach(el => {
+                el.placeholder = el.getAttribute(`data-placeholder-${currentLang}`);
+            });
+
+            // Update CTA buttons in sections
+            document.querySelectorAll('.cta').forEach(el => {
+                if (el.hasAttribute('data-en') && el.hasAttribute('data-de')) {
+                    el.textContent = el.getAttribute(`data-${currentLang}`);
+                }
+            });
+
+            // Update language toggle button
+            const langToggle = document.querySelector('.lang-toggle');
+            langToggle.innerHTML = currentLang === 'en' ? '<span class="lang-flag">🇩🇪</span>' : '<span class="lang-flag">🇬🇧</span>';
+            
+            // Save preference
+            localStorage.setItem('shopLang', currentLang);
+        }
+
+        // Load saved language preference
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('shopLang');
+            if (savedLang) {
+                currentLang = savedLang;
+                // Trigger the toggle to apply saved language
+                if (savedLang === 'de') {
+                    toggleLanguage();
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>

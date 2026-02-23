@@ -19,7 +19,7 @@
 
         // Disable button and show loading state
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Wird gesendet...';
+        submitBtn.textContent = 'Sending...';
 
         // Get form data
         const fromName = document.getElementById('name').value;
@@ -41,17 +41,17 @@
         emailjs.send(SERVICE_ID, TEMPLATE_ID, EmailData)
             .then(function(response) {
                 // Both emails sent successfully
-                alert('Nachricht erfolgreich gesendet! Eine Bestätigung wurde an Ihre E-Mail-Adresse gesendet.');
+                alert('Message sent successfully! A confirmation has been sent to your email address.');
                 contactForm.reset();
             })
             .catch(function(error) {
                 console.error('EmailJS Error:', error);
-                alert('Fehler beim Senden der Nachricht. Bitte versuchen Sie es erneut.');
+                alert('Error sending message. Please try again.');
             })
             .finally(function() {
                 // Re-enable button
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Nachricht senden';
+                submitBtn.textContent = 'Send message';
             });
     });
 })();
