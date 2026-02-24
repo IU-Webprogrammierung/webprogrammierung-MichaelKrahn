@@ -408,3 +408,12 @@
 .ambient-card.is-in {
     animation: ambientDrift 6.5s ease-in-out infinite alternate;
 }
+
+
+/* Media Query responsive Layout*/
+@media (max-width: 900px) {
+
+  .cv-facts {
+    display: none;
+  }
+}

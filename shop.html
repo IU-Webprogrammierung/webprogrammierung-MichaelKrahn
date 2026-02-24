@@ -37,11 +37,16 @@
             </div>
 
             <!-- Hamburger Menu Button -->
-            <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="navbar-actions">
+                <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                    <span class="lang-flag">🇩🇪</span>
+                </button>
+            </div>
 
             <nav class="navbar-center" aria-label="Main navigation">
                 <a href="index.html#about">About</a>
@@ -54,13 +59,6 @@
 
             <div class="navbar-right">
                 <span class="navbar-miniText" id="navbarText"></span>
-            </div>
-
-            <div class="navbar-right">
-                <span class="navbar-miniText" id="navbarText"></span>
-                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
-                    <span class="lang-flag">🇩🇪</span>
-                </button>
             </div>
         </div>
     </header>

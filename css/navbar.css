@@ -199,6 +199,15 @@ body:not(.is-landing) .navbar-right {
 }
 
 /* =========================================
+   NAVBAR ACTIONS CONTAINER (hamburger + lang toggle)
+========================================= */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* =========================================
    HAMBURGER MENU ICON
 ========================================= */
 .navbar-toggle {
@@ -316,6 +325,19 @@ body:not(.is-landing) .navbar-right {
 
   .navbar-right {
     display: none;
+  }
+
+  /* Navbar actions container - holds hamburger and lang toggle on mobile */
+  .navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Language toggle visible on mobile */
+  .lang-toggle {
+    display: flex;
+    margin-left: 0;
   }
 }
 

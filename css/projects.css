@@ -1,31 +1,36 @@
-
 /* =========================================
    PROJECTS
 ========================================= */
 :root {
-    --card-width: 800px;
-    --card-height: 500px;
-    --peek-right: 30px; 
-    --peek-top: 35px;  
-    --scale-factor: 0.034; 
+    --card-max-width: 1000px;
+    --peek-right: 30px;
+    --peek-top: 35px;
+    --scale-factor: 0.04;
 }
 
 /* =========================
    LAYOUT
 ========================= */
+
 .projects-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px 50px; /* Make enough room for shadows*/
+    padding: 50px 50px;
+    /* Make enough room for shadows*/
+    width: 100%;
 }
 
 .stack-container {
     position: relative;
-    width: var(--card-width);
-    height: var(--card-height);
-    margin-top: 80px; /* More space for top peeking */
-    perspective: 1300px; /* 3D depth */
+    width: 100%;
+    max-width: var(--card-max-width);
+    /* Keeps the iframe proportional without hardcoding height */
+    aspect-ratio: 16 / 10;
+    margin-top: 80px;
+    /* More space for top peeking */
+    perspective: 1300px;
+    /* 3D depth */
 }
 
 /* =========================
@@ -39,50 +44,44 @@
     height: 100%;
     border-radius: 12px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    
+
     /* ANIMATION SMOOTHNESS MAGIC */
-    transition: transform 1.0s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                opacity 1.0s ease,
-                filter 1.0s ease;
-                
+    transition: transform 1.0s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 1.0s ease,
+        filter 1.0s ease;
+
     /* Default State (Will be overridden by index logic) */
     transform-origin: center center;
-    background: var(--text); /* Fallback */
-    
+    background: var(--text);
+    /* Fallback */
+
     /* Use the --i variable (index) to calculate position dynamically */
     /* If --i is 0, we are at 0,0. If --i is 1, we move Right and Up. */
-    transform: 
-        translateX(calc(var(--i) * var(--peek-right))) 
-        translateY(calc(var(--i) * -1 * var(--peek-top))) 
-        scale(calc(1 - (var(--i) * var(--scale-factor))))
-        translateZ(calc(var(--i) * -50px)); /* Real Z depth */
-    
+    transform:
+        translateX(calc(var(--i) * var(--peek-right))) translateY(calc(var(--i) * -1 * var(--peek-top))) scale(calc(1 - (var(--i) * var(--scale-factor)))) translateZ(calc(var(--i) * -50px));
+    /* Real Z depth */
+
     /* Lower brightness for back items */
     filter: brightness(calc(1 - (var(--i) * 0.15)));
-    
+
     /* Lower z-index for back items (handled by JS, but visual fallback here) */
     z-index: calc(10 - var(--i));
-    
-    cursor: none;
 }
 
 /* HOVER EFFECT */
 /* We only lift it slightly (-15px) relative to its calculated position */
 .project-card:hover {
-    transform: 
-        translateX(calc(var(--i) * var(--peek-right))) 
-        translateY(calc((var(--i) * -1 * var(--peek-top)) - 15px)) 
-        scale(calc(1 - (var(--i) * var(--scale-factor))))
-        translateZ(calc(var(--i) * -50px));
-    
-    filter: brightness(1); /* Light up on hover */
+    transform:
+        translateX(calc(var(--i) * var(--peek-right))) translateY(calc((var(--i) * -1 * var(--peek-top)) - 15px)) scale(calc(1 - (var(--i) * var(--scale-factor)))) translateZ(calc(var(--i) * -50px));
+
+    filter: brightness(1);
+    /* Light up on hover */
 }
 
 /* Active Card (Front) Override */
 .project-card[data-index="0"]:hover {
-    transform: scale(1); /* Don't move the front card on hover, just stay put */
+    transform: scale(1);
+    /* Don't move the front card on hover, just stay put */
 }
 
 /* =========================
@@ -90,22 +89,40 @@
 ========================= */
 .project-header {
     height: 40px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     padding: 0 15px;
     border-bottom: 1px solid var(--glass-border);
 }
 
-.dots { display: flex; gap: 6px; margin-right: 15px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.red { background: #ff5f56; }
-.yellow { background: #ffbd2e; }
-.green { background: #27c93f; }
+.dots {
+    display: flex;
+    gap: 6px;
+    margin-right: 15px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.red {
+    background: #ff5f56;
+}
+
+.yellow {
+    background: #ffbd2e;
+}
+
+.green {
+    background: #27c93f;
+}
 
 .address-bar {
     flex-grow: 1;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     height: 24px;
     display: flex;
@@ -113,10 +130,9 @@
     padding: 0 10px;
     font-family: 'Courier New', monospace;
     font-size: 14px;
-    color: rgba(255,255,255,0.9);
+    color: rgba(255, 255, 255, 0.9);
 }
 
-/* Blinking Cursor - Uses shared animation from hero.css */
 .cursor {
     margin-left: 2px;
     opacity: 0.7;
@@ -125,13 +141,14 @@
 .project-content {
     flex-grow: 1;
     position: relative;
-    background: #fff; 
+    background: #fff;
 }
 
 iframe {
     width: 100%;
     height: 100%;
     border: none;
+    aspect-ratio: 16 / 10;
 }
 
 .click-overlay {
@@ -146,4 +163,32 @@ iframe {
 /* Hide overlay ONLY for the front card so we can interact */
 .project-card[data-index="0"] .click-overlay {
     display: none;
+}
+
+
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+@media (max-width: 768px) {
+    :root {
+        /* Reduce peeking offsets so background cards don't slide off screen */
+        --peek-right: 30px;
+        --peek-top: 50px;
+        --scale-factor: 0.05;
+        /* slightly more scaling to distinct cards */
+    }
+
+    .stack-container {
+        /* Make the cards taller on mobile since screens are vertical */
+        aspect-ratio: 3 / 4;
+        width: 75%;
+    }
+
+    iframe {
+        aspect-ratio: 3 / 4;
+    }
+
+    .projects-wrapper {
+        padding-bottom: 100px;
+    }
 }

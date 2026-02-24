@@ -1,23 +1,82 @@
 /* =========================================
-   PROJECTS
+   PROJECTS - Fully working iframe lazy-loading
 ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const cards = Array.from(document.querySelectorAll('.project-card'));
-    
-    // Store timeouts so we can cancel them if the user hovers quickly
-    const typingTimeouts = {}; 
 
-    // Initial Sort
+    const cards = Array.from(document.querySelectorAll('.project-card'));
+    const typingTimeouts = {};
+
+    // =====================
+    // Load iframe for front card only
+    // =====================
+    function loadFrontIframe() {
+        // Find the card with --i == 0 (front)
+        const frontCard = cards.find(card => parseInt(card.style.getPropertyValue('--i')) === 0);
+        if (!frontCard) return;
+
+        // Load iframe if not already loaded using getAttribute
+        const iframe = frontCard.querySelector('iframe');
+        if (iframe && !iframe.getAttribute('src')) {
+            iframe.setAttribute('src', iframe.dataset.src);
+        }
+
+        // Unload all other iframes using removeAttribute
+        cards.forEach(card => {
+            if (card !== frontCard) {
+                const otherIframe = card.querySelector('iframe');
+                if (otherIframe && otherIframe.hasAttribute('src')) {
+                    otherIframe.removeAttribute('src');
+                }
+            }
+        });
+    }
+    // =====================
+    // Update stack positions
+    // =====================
+    function updateStack(cardArray) {
+        cardArray.forEach((card, index) => {
+            card.style.setProperty('--i', index);
+            card.setAttribute('data-index', index);
+
+            // Clear typing text for background cards
+            if (index !== 0) {
+                const cardId = card.id;
+                if (typingTimeouts[cardId]) clearTimeout(typingTimeouts[cardId]);
+                card.querySelector('.typing-text').innerHTML = "";
+            }
+        });
+
+        // Load iframe for front card
+        loadFrontIframe();
+    }
+
+    // =====================
+    // Typing animation
+    // =====================
+    function typeUrl(cardId, targetElement, text, charIndex) {
+        if (charIndex < text.length) {
+            targetElement.innerHTML += text.charAt(charIndex);
+            typingTimeouts[cardId] = setTimeout(() => {
+                typeUrl(cardId, targetElement, text, charIndex + 1);
+            }, 50);
+        }
+    }
+
+    // =====================
+    // Initial load
+    // =====================
     updateStack(cards);
 
+    // =====================
+    // Click & Hover handlers
+    // =====================
     cards.forEach(card => {
-        // 1. CLICK: Sort Logic
-        card.addEventListener('click', function() {
+
+        // Click -> bring card to front
+        card.addEventListener('click', function () {
             const index = parseInt(this.getAttribute('data-index'));
-            
-            // Only shuffle if it's not already in front
             if (index !== 0) {
-                // Move elements in the array to bring clicked one to front
+                // Reorder array: move clicked card to front
                 for (let i = 0; i < index; i++) {
                     cards.push(cards.shift());
                 }
@@ -25,49 +84,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 2. HOVER: Typing Logic (Restart every time)
-        card.addEventListener('mouseenter', function() {
+        // Hover -> type URL
+        card.addEventListener('mouseenter', function () {
             const cardId = this.id;
             const textEl = this.querySelector('.typing-text');
             const url = this.getAttribute('data-url');
-            
-            // Clear any existing animation for this card
-            if (typingTimeouts[cardId]) {
-                clearTimeout(typingTimeouts[cardId]);
-            }
-            
-            // Reset text
+
+            if (typingTimeouts[cardId]) clearTimeout(typingTimeouts[cardId]);
             textEl.innerHTML = "";
-            
-            // Start typing
             typeUrl(cardId, textEl, url, 0);
         });
+
     });
 
-    function updateStack(cardArray) {
-        cardArray.forEach((card, index) => {
-            // We set the CSS variable --i which drives the transform
-            card.style.setProperty('--i', index);
-            
-            // We also update data-index for logic
-            card.setAttribute('data-index', index);
-            
-            // Clear text when card goes to background
-            if (index !== 0) {
-                 const cardId = card.id;
-                 if (typingTimeouts[cardId]) clearTimeout(typingTimeouts[cardId]);
-                 card.querySelector('.typing-text').innerHTML = "";
-            }
-        });
-    }
-
-    function typeUrl(cardId, targetElement, text, charIndex) {
-        if (charIndex < text.length) {
-            targetElement.innerHTML += text.charAt(charIndex);
-            // Save the timeout ID so we can stop it if needed
-            typingTimeouts[cardId] = setTimeout(() => {
-                typeUrl(cardId, targetElement, text, charIndex + 1);
-            }, 50); // Speed of typing
-        }
-    }
 });
