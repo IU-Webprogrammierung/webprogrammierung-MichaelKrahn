@@ -6,7 +6,6 @@
 -------------------------------- */
 
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 
@@ -42,47 +41,49 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0.15, 3.3);
 
 /* ------------------------------
-   Improved Lighting Setup
+   Premium Studio Lighting Setup
 -------------------------------- */
 
-// Ambient light for soft fill
-const ambient = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambient);
-
-// Hemisphere light for natural sky/ground lighting
-const hemi = new THREE.HemisphereLight(0xffffff, 0xb0c4de, 0.6);
+// 1. Base Environment Light (Drastically reduced to let shadows live)
+// We removed AmbientLight entirely. The Hemisphere light gives a slight color gradient to the shadows.
+const hemi = new THREE.HemisphereLight(0xffffff, 0x444455, 0.05);
 scene.add(hemi);
 
-// Key light - main illumination with shadows
-const key = new THREE.DirectionalLight(0xfff5e6, 1.5);
-key.position.set(3, 4, 3);
+// 2. Key Light (The sun/main studio strobe)
+// Increased intensity, moved slightly to cast a more dramatic angle
+const key = new THREE.DirectionalLight(0xfff5e6, 0.5);
+key.position.set(4, 5, 3);
 key.castShadow = true;
+
+// 3. Shadow Camera Tightening (CRITICAL FOR GOOD SHADOWS)
 key.shadow.mapSize.width = 2048;
 key.shadow.mapSize.height = 2048;
-key.shadow.camera.near = 0.5;
-key.shadow.camera.far = 20;
-key.shadow.bias = -0.0001;
+// Tightly wrap the shadow camera around the mixer to concentrate resolution
+key.shadow.camera.left = -2;
+key.shadow.camera.right = 2;
+key.shadow.camera.top = 2;
+key.shadow.camera.bottom = -2;
+key.shadow.camera.near = 0.1;
+key.shadow.camera.far = 15;
+key.shadow.bias = -0.0005; // Helps prevent shadow acne/striping
 scene.add(key);
 
-// Fill light - soften shadows
-const fill = new THREE.DirectionalLight(0xe6f0ff, 0.7);
-fill.position.set(-3, 2, 2);
+// 4. Fill Light (Softens the pitch-black shadows on the unlit side)
+// Keep intensity low to maintain the 3D contrast
+const fill = new THREE.DirectionalLight(0xe6f0ff, 0.075);
+fill.position.set(-4, 2, 2);
 scene.add(fill);
 
-// Rim light - edge definition
-const rim = new THREE.DirectionalLight(0xffffff, 0.6);
-rim.position.set(0, 3, -4);
+// 5. Rim / Backlight (Separates the model from the background)
+// High intensity, positioned behind and above
+const rim = new THREE.DirectionalLight(0xffffff, 0.25);
+rim.position.set(0, 4, -4);
 scene.add(rim);
 
-// Bottom fill for underside visibility
-const bottomFill = new THREE.DirectionalLight(0xffffff, 0.3);
-bottomFill.position.set(0, -2, 2);
-scene.add(bottomFill);
-
 // Point light for highlights
-const highlight = new THREE.PointLight(0xffffff, 0.5, 10);
-highlight.position.set(2, 1, 2);
-scene.add(highlight);
+//const highlight = new THREE.PointLight(0xffffff, 0.5, 10);
+//highlight.position.set(2, 1, 2);
+//scene.add(highlight);
 
 const modelCache = new Map();
 
@@ -90,19 +91,19 @@ let activeIndex = 0;
 let currentRoot = null;
 let desiredRotY = 0;
 
-// Shadow-receiving platform
+// Shadow-receiving visible platform (Raised higher)
 const floor = new THREE.Mesh(
-    new THREE.CircleGeometry(1.4, 64),
+    new THREE.CircleGeometry(1.4, 96),
     new THREE.MeshStandardMaterial({
         color: 0xf6f6f8,
-        roughness: 0.8,
-        metalness: 0.0,
+        roughness: 0.7,
+        metalness: 0.1,
         transparent: true,
         opacity: 0.9
     })
 );
 floor.rotation.x = -Math.PI / 2;
-floor.position.y = -0.95;
+floor.position.y = -0.65; // Raised from -0.95
 floor.receiveShadow = true;
 floor.visible = true;
 scene.add(floor);
@@ -113,23 +114,28 @@ pmremGenerator.compileEquirectangularShader();
 
 // Create a simple gradient environment
 function createEnvironment() {
-    const envScene = new THREE.Scene();
-
-    // Gradient background
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
+    canvas.width = 1024;
     canvas.height = 512;
     const ctx = canvas.getContext('2d');
 
-    const gradient = ctx.createLinearGradient(0, 0, 0, 512);
-    gradient.addColorStop(0, '#e8eef5');
-    gradient.addColorStop(0.5, '#f6f6f8');
-    gradient.addColorStop(1, '#d0d8e4');
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, 512, 512);
+    // 1. Make the base environment DARK. 
+    // This stops it from acting like a massive ambient light and washing out shadows.
+    ctx.fillStyle = '#111111';
+    ctx.fillRect(0, 0, 1024, 512);
+
+    // 2. Paint bright "Studio Softbox Lights" for specular reflections
+    ctx.fillStyle = '#ffffff';
+    ctx.filter = 'blur(10px)'; // Soften the edges
+
+    // Left, Right, and Backlight softboxes
+    ctx.fillRect(150, 100, 200, 150);
+    ctx.fillRect(650, 100, 200, 150);
+    ctx.fillRect(400, 300, 200, 100);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.mapping = THREE.EquirectangularReflectionMapping;
+    texture.colorSpace = THREE.SRGBColorSpace;
 
     return texture;
 }
@@ -183,9 +189,9 @@ function loadGLB(url) {
 
                 // Improve material quality
                 if (child.material) {
-                    child.material.envMapIntensity = 1.0;
-                    child.material.roughness = Math.max(child.material.roughness || 0.4, 0.3);
-                    child.material.metalness = Math.min(child.material.metalness || 0.1, 0.5);
+                    // Boost environment reflections to make it look premium/shiny
+                    child.material.envMapIntensity = 2.0;
+                    child.material.needsUpdate = true;
                 }
             }
         });
@@ -201,22 +207,28 @@ function loadGLB(url) {
                 if (!root) return reject(new Error("No scene in GLB"));
 
                 // Enable shadows
+                // Enable shadows, enhance materials, and SMOOTH vertices
                 root.traverse((child) => {
                     if (child.isMesh) {
                         child.castShadow = true;
                         child.receiveShadow = true;
 
-                        // Enhance materials
+                        // Force Three.js to calculate smooth surface normals
+                        if (child.geometry) {
+                            child.geometry.computeVertexNormals();
+                        }
+
+                        // Enhance materials and disable flat shading
                         if (child.material) {
-                            child.material.envMapIntensity = 1.0;
-                            child.material.roughness = Math.max(child.material.roughness || 0.4, 0.3);
-                            child.material.metalness = Math.min(child.material.metalness || 0.1, 0.5);
+                            child.material.flatShading = false; // Ensures smooth curves
+                            child.material.envMapIntensity = 2.0;
+                            child.material.needsUpdate = true;
                         }
                     }
                 });
 
                 root.rotation.set(0, 0, 0);
-                root.position.set(0, -0.85, 0);
+                root.position.set(0, -0.67, 0);
 
                 // Normalize size
                 const box = new THREE.Box3().setFromObject(root);
@@ -262,29 +274,38 @@ function fallbackModel() {
 /* ------------------------------
    Active Model Management
 -------------------------------- */
+let loadSessionId = 0; // Tracks the current active load
 
 async function setActiveModel(index) {
     activeIndex = index;
+    const currentSession = ++loadSessionId; // Increment session on every scroll trigger
 
     const url = sections[index]?.dataset?.model;
     if (!url) return;
 
-    // Remove previous model with cleanup
+    // Remove previous model (but DO NOT dispose it, so our cache stays intact)
     if (currentRoot) {
         scene.remove(currentRoot);
-        disposeObject3D(currentRoot);
         currentRoot = null;
     }
 
     try {
-        currentRoot = await loadGLB(url);
+        const loadedRoot = await loadGLB(url);
+
+        // CRITICAL: If the user scrolled away while this was loading, discard it!
+        if (currentSession !== loadSessionId) return;
+
+        currentRoot = loadedRoot;
+        scene.add(currentRoot);
     } catch (e) {
         console.warn("Model load failed:", url, e);
-        currentRoot = fallbackModel();
+        if (currentSession === loadSessionId) {
+            currentRoot = fallbackModel();
+            scene.add(currentRoot);
+        }
     }
-
-    scene.add(currentRoot);
 }
+
 
 /* ------------------------------
    Contact Section GLB Cleanup
@@ -292,27 +313,21 @@ async function setActiveModel(index) {
 
 // Track when user scrolls to contact section
 const contactSection = document.getElementById('contact');
+// Update the contact observer to just remove, not dispose
 let contactObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // User is viewing contact section - remove GLB model
             if (currentRoot) {
                 scene.remove(currentRoot);
-                disposeObject3D(currentRoot);
+                // Removed disposeObject3D(currentRoot) here as well
                 currentRoot = null;
                 floor.visible = false;
             }
         } else if (!entry.isIntersecting && sections.length > 0) {
-            // User left contact section - restore floor and potentially model
             floor.visible = true;
-
-            // Restore the current section's model
             const activeSection = sections[activeIndex];
-            if (activeSection) {
-                const url = activeSection.dataset?.model;
-                if (url && !currentRoot) {
-                    setActiveModel(activeIndex);
-                }
+            if (activeSection?.dataset?.model && !currentRoot) {
+                setActiveModel(activeIndex);
             }
         }
     });
@@ -646,6 +661,9 @@ function toggleLanguage() {
     // Save preference
     localStorage.setItem('shopLang', currentLang);
 }
+
+// Expose toggleLanguage to global scope so it can be called from HTML onclick
+window.toggleLanguage = toggleLanguage;
 
 // Load saved language preference
 document.addEventListener('DOMContentLoaded', () => {

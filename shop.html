@@ -37,16 +37,11 @@
             </div>
 
             <!-- Hamburger Menu Button -->
-            <div class="navbar-actions">
-                <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
-                    <span class="lang-flag">🇩🇪</span>
-                </button>
-            </div>
+            <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
             <nav class="navbar-center" aria-label="Main navigation">
                 <a href="index.html#about">About</a>
@@ -58,7 +53,9 @@
             </nav>
 
             <div class="navbar-right">
-                <span class="navbar-miniText" id="navbarText"></span>
+                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                    <span class="lang-flag">🇩🇪</span>
+                </button>
             </div>
         </div>
     </header>
@@ -76,7 +73,7 @@
     <!-- Main 3D viewer (fixed background layer) -->
     <div id="stage" aria-hidden="true">
         <canvas id="main3d"></canvas>
-        <div id="vignette"></div>
+        <!--<div id="vignette"></div>-->
     </div>
 
 
@@ -289,8 +286,6 @@
                     <p>© 2026 – Michael Krahn</p>
                     <p><a href="#impressum">Imprint</a> | <a href="#datenschutz">Privacy</a></p>
                 </div>
-
-                <div class="footer-right"></div>
             </div>
         </footer>
     </main>

@@ -51,7 +51,6 @@
   justify-content:center;
   padding: 20px;
   opacity: 0.22;
-  transform: translateY(14px);
   transition: opacity 450ms ease, transform 450ms ease;
 }
 
@@ -63,9 +62,10 @@
 .content{
   /*width: min(1120px, 100%);*/
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1fr 1fr;
   gap: 100px;
   align-items: center;
+  padding-top: 20px;
 }
 
 @media (max-width: 980px){
@@ -82,12 +82,12 @@
   border-radius: var(--radius);
   overflow:hidden;
   box-shadow: var(--shadow);
-  width: 224px;
+  width: 180px;
   padding: 12px;
 }
 
 .photo{
-  max-width: 200px;
+  max-width: 180px;
   object-fit: cover;
   border-radius: 12px;
   display: block;
@@ -252,10 +252,10 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  padding: 6px 10px;
+  padding: 10px 15px;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-left: 10px;
+  margin: 0px 30px;
 }
 
 .lang-toggle:hover {

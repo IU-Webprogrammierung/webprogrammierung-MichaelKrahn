@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // 1) ELEMENTS
   // =============================
 
-  const wrapper = document.getElementById("cv");        // was #timelineWrapper
-  const viewport = document.getElementById("timeline"); // keep (mechanics)
+  const wrapper = document.getElementById("cv");     
+  const viewport = document.getElementById("timeline");
   const track = document.getElementById("timelineTrack");
   if (!wrapper || !viewport || !track) return;
 
@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tooltip = document.getElementById("timelineTooltip");
   const ttTitle = document.getElementById("ttTitle");
   const ttRange = document.getElementById("ttRange");
+  const ttTimespan = document.getElementById("ttTimespan");
   const ttDesc = document.getElementById("ttDesc");
 
   // =============================
@@ -24,16 +25,137 @@ document.addEventListener("DOMContentLoaded", () => {
   END_DATE.setMonth(END_DATE.getMonth() + 6);
   const TOTAL_MS = END_DATE.getTime() - START_DATE.getTime();
 
-  const VIRTUAL_WIDTH = 3000;
+  const VIRTUAL_WIDTH = 4000;
   track.style.width = `${VIRTUAL_WIDTH}px`;
 
   const monthYearFmt = new Intl.DateTimeFormat("de-DE", { month: "long", year: "numeric" });
+  const yearFmt = new Intl.DateTimeFormat("de-DE", { year: "numeric" });
   const clamp01 = (v) => Math.max(0, Math.min(1, v));
   const lerpDate = (a, b, t) => new Date(a.getTime() + (b.getTime() - a.getTime()) * t);
+
+  // Flexible date parser: handles "YYYY", "YYYY-MM", "YYYY-MM-DD"
   const nice = (s) => {
     if (!s) return "";
-    const [y, m] = String(s).split("-").map(Number);
-    return monthYearFmt.format(new Date(y, m - 1, 1));
+    const parts = String(s).split("-").map(Number);
+    const year = parts[0];
+    const month = parts.length > 1 ? parts[1] - 1 : 0; // Default to January
+    const day = parts.length > 2 ? parts[2] : 1; // Default to 1st
+    
+    if (parts.length === 1) {
+      // Just year
+      return yearFmt.format(new Date(year, 0, 1));
+    }
+    return monthYearFmt.format(new Date(year, month, day));
+  };
+
+  // Parse date string to Date object, handling flexible formats
+  const parseDate = (s) => {
+    if (!s) return null;
+    const parts = String(s).split("-").map(Number);
+    const year = parts[0];
+    const month = parts.length > 1 ? parts[1] - 1 : 0;
+    const day = parts.length > 2 ? parts[2] : 1;
+    return new Date(year, month, day);
+  };
+
+  // Calculate duration between two dates in a human-readable format
+  const getDuration = (start, end) => {
+    if (!start || !end) return "";
+    const startDate = parseDate(start);
+    const endDate = parseDate(end);
+    if (!startDate || !endDate) return "";
+    
+    const years = endDate.getFullYear() - startDate.getFullYear();
+    const months = endDate.getMonth() - startDate.getMonth();
+    const totalMonths = years * 12 + months;
+    
+    if (totalMonths >= 12) {
+      const y = Math.floor(totalMonths / 12);
+      const m = totalMonths % 12;
+      return m > 0 ? `${y} Jahr${y > 1 ? 'e' : ''}, ${m} Monat${m > 1 ? 'e' : ''}` : `${y} Jahr${y > 1 ? 'e' : ''}`;
+    }
+    return `${totalMonths} Monat${totalMonths !== 1 ? 'e' : ''}`;
+  };
+
+  // Calculate timespan percentage for visualization (0-100)
+  const getTimespanPercent = (start, end) => {
+    if (!start || !end) return null;
+    const startDate = parseDate(start);
+    const endDate = parseDate(end);
+    if (!startDate || !endDate) return null;
+    
+    const startMs = startDate.getTime() - START_DATE.getTime();
+    const endMs = endDate.getTime() - START_DATE.getTime();
+    
+    const left = (startMs / TOTAL_MS) * 100;
+    const right = (endMs / TOTAL_MS) * 100;
+    
+    return { left: Math.max(0, left), width: Math.min(100 - left, right - left) };
+  };
+
+  // =============================
+  // IMAGE DIMENSION & DEDUPLICATION
+  // =============================
+  
+  // Global set to track rendered image sources (prevent duplicates)
+  const renderedImages = new Set();
+  
+  // Cache for image dimensions: { src: { width, height } }
+  const imageDimensionsCache = {};
+  
+  // Load image and get its natural dimensions
+  const getImageDimensions = (src) => {
+    return new Promise((resolve) => {
+      // Return cached dimensions if available
+      if (imageDimensionsCache[src]) {
+        resolve(imageDimensionsCache[src]);
+        return;
+      }
+      
+      const img = new Image();
+      img.onload = () => {
+        const dims = { width: img.naturalWidth, height: img.naturalHeight };
+        imageDimensionsCache[src] = dims;
+        resolve(dims);
+      };
+      img.onerror = () => {
+        // Fallback dimensions on error
+        const dims = { width: 220, height: 150 };
+        imageDimensionsCache[src] = dims;
+        resolve(dims);
+      };
+      img.src = src;
+    });
+  };
+  
+  // Preload all images from milestones and store their dimensions
+  const preloadImageDimensions = async (items) => {
+    const imageSources = new Set();
+    
+    // Collect all unique image sources
+    items.forEach(item => {
+      if (Array.isArray(item.images)) {
+        item.images.forEach(im => {
+          if (im && im.src) {
+            imageSources.add(im.src);
+          }
+        });
+      }
+    });
+    
+    // Preload each image to get dimensions
+    const promises = Array.from(imageSources).map(src => getImageDimensions(src));
+    await Promise.all(promises);
+  };
+  
+  // Generate randomized dimensions based on real image, scaled by 0.6-1.0
+  const getRandomizedDimensions = (src) => {
+    const dims = imageDimensionsCache[src] || { width: 220, height: 150 };
+    const scaleFactor = 0.4 + Math.random() * 0.3; // Random between 0.4 and 0.7
+    return {
+      width: Math.round(dims.width * scaleFactor),
+      height: Math.round(dims.height * scaleFactor)
+    };
   };
 
   // =============================
@@ -41,7 +163,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
   fetch("data/milestones.json")
     .then((r) => r.json())
-    .then((items) => {
+    .then(async (items) => {
+      // Preload all image dimensions first
+      await preloadImageDimensions(items);
       generateMilestones(items);
       updateTimelineState(); // Initial calculation
       updateMediaScale();
@@ -52,9 +176,9 @@ document.addEventListener("DOMContentLoaded", () => {
     track.innerHTML = "";
 
     // Lanes in px relative to the center line. Negative = above, positive = below.
-    // 2 lanes per side:
-    const LANES_UP = [10, -25];
-    const LANES_DOWN = [10, 40];
+    // 3 lanes per side:
+    const LANES_UP = [15, -25, -65];
+    const LANES_DOWN = [-15, 25, 65];
 
     // Keep placed label ranges per lane to detect overlap (in track coordinates)
     const usedUp = LANES_UP.map(() => []);
@@ -82,12 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const label = div.querySelector(".milestone-label");
 
-      // Measure label width after it’s in DOM
+      // Measure label width after it's in DOM
       const w = label.getBoundingClientRect().width;
 
       // Label range in track coordinates:
-      // left edge = pxPos + labelOffsetX (approx)
-      // If your label is not actually starting at pxPos, adjust labelOffsetX accordingly.
       const x1 = pxPos - w / 2;
       const x2 = pxPos + w / 2;
 
@@ -107,49 +229,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Set vertical offset via CSS variable (optional small jitter)
-      const jitter = (Math.random() * 2 - 1) * 6; // subtle only; keep it readable
-      label.style.setProperty("--y", `${lanes[bestLane] + jitter}px`);
+      // Set vertical offset via CSS variable
+      label.style.setProperty("--y", `${lanes[bestLane]}px`);
 
-      // Store occupied range (add small padding so labels don’t kiss)
+      // Store occupied range
       used[bestLane].push([x1 - 8, x2 + 8]);
-
-
-
-      // --- Optional media images ---
-
-      /*
-      if (Array.isArray(item.images) && item.images.length) {
-        const media = document.createElement("div");
-        media.className = "timeline-media";
-
-        // can have multiple images per milestone
-        item.images.forEach((im, i) => {
-          const card = document.createElement("div");
-          card.className = "timeline-media-card";
-          card.style.width = `${im.w || 200}px`;
-          card.style.height = `${im.h || 135}px`;
-
-          // small staggering if multiple images
-          if (i > 0) {
-            card.style.marginTop = "14px";
-            card.style.marginLeft = `${14 * i}px`;
-            //card.style.opacity = "0.95";
-          }
-
-          const img = document.createElement("img");
-          img.src = im.src;
-          img.alt = item.title || "Timeline image";
-          img.loading = "lazy";
-          card.appendChild(img);
-
-          media.appendChild(card);
-        });
-
-        div.appendChild(media);
-      }
-      */
-
 
       // Tooltip events 
       const dot = div.querySelector(".milestone-dot");
@@ -173,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ambient = document.getElementById("timelineAmbient");
 
-  // 5 Slots um die Mitte (in % der timeline-area)
+  // 5 Slots around the center (in % of timeline-area)
   const SLOTS = [
     { x: 35, y: 32 },
     { x: 50, y: 26 },
@@ -203,15 +287,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function gatherCandidateImages() {
-    // 2–3 Milestones rund um Mitte
-    const closest = getClosestMilestones(2);
+    // 2-3 Milestones around center
+    const closest = getClosestMilestones(3);
 
     const imgs = [];
     for (const m of closest) {
       try {
         const arr = JSON.parse(m.dataset.images || "[]");
         for (const im of arr) {
-          if (im && im.src) imgs.push(im);
+          // Filter out duplicates using the renderedImages Set
+          if (im && im.src && !renderedImages.has(im.src)) {
+            imgs.push(im);
+          }
         }
       } catch (_) { }
     }
@@ -230,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function spawnAmbientCard() {
     if (!ambient) return;
 
-    // Nur wenn CV Section sichtbar ist (optional, aber sinnvoll)
+    // Only when CV Section is visible
     const secRect = wrapper.getBoundingClientRect();
     const inView = secRect.top < window.innerHeight * 0.75 && secRect.bottom > window.innerHeight * 0.25;
     if (!inView) return;
@@ -242,33 +329,29 @@ document.addEventListener("DOMContentLoaded", () => {
     if (slotIndex === -1) return;
 
     const im = pick(candidates);
+    
+    // Mark this image as rendered to prevent duplicates
+    renderedImages.add(im.src);
+    
     slotBusy[slotIndex] = true;
 
     const card = document.createElement("div");
     card.className = "ambient-card";
 
+    // Get randomized dimensions based on real image
+    const dims = getRandomizedDimensions(im.src);
+    
     // slot position
     const s = SLOTS[slotIndex];
     card.style.left = `${s.x}%`;
     card.style.top = `${s.y}%`;
     card.slotIndex = slotIndex;
 
-    // size: take from json or fallback, slight random
-    const w = (im.w || 220) + rand(-44, 44);
-    const h = (im.h || 150) + rand(-30, 30);
-    card.style.setProperty("--w", `${Math.max(180, w)}px`);
-    card.style.setProperty("--h", `${Math.max(120, h)}px`);
-
-    // drift offsets 
-    // old css based drift. to monoton. Switched random js motion
-    /*
-    card.style.setProperty("--dx", `${rand(-14, 14).toFixed(1)}px`);
-    card.style.setProperty("--dy", `${rand(-10, 10).toFixed(1)}px`);
-    card.style.setProperty("--mx", `${rand(8, 18).toFixed(1)}px`);
-    card.style.setProperty("--my", `${rand(-16, -6).toFixed(1)}px`);
-    card.style.setProperty("--dx2", `${rand(-10, 10).toFixed(1)}px`);
-    card.style.setProperty("--dy2", `${rand(-14, 14).toFixed(1)}px`);
-    */
+    // Use randomized dimensions with small random variation
+    const w = dims.width;
+    const h = dims.height;
+    card.style.setProperty("--w", `${Math.max(300, w)}px`);
+    card.style.setProperty("--h", `${Math.max(300, h)}px`);
 
     const img = document.createElement("img");
     img.src = im.src;
@@ -295,46 +378,27 @@ document.addEventListener("DOMContentLoaded", () => {
   let ambientTimer = null;
   function startAmbient() {
     if (ambientTimer) return;
-    // initial small delay, then random cadence
     ambientTimer = setInterval(() => {
-      // 40% chance to spawn each tick -> wirkt weniger „metronomisch“
       if (Math.random() < 0.40) spawnAmbientCard();
     }, 2000);
   }
 
-  function stopAmbient() {
-    if (!ambientTimer) return;
-    clearInterval(ambientTimer);
-    ambientTimer = null;
-  }
-
-  // Optional: beim Scrollen „sanfter“ refresh (kein hard reset)
   viewport.addEventListener("scroll", () => {
-    // du kannst hier bewusst NICHT spawnen,
-    // damit es nicht hektisch wird.
+    // Passive scroll handler
   }, { passive: true });
 
   function updateMediaScale() {
     const centerX = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
 
-    // Only scale items that exist (cards)
     const cards = track.querySelectorAll(".timeline-media-card");
     cards.forEach((card) => {
       const r = card.getBoundingClientRect();
       const cardCenter = r.left + r.width / 2;
 
       const dist = Math.abs(cardCenter - centerX);
-
-      // falloff distance: how quickly scale drops back to 1
       const falloff = viewport.clientWidth * 0.55;
-
-      // 0 at center, 1 at far edges
       const t = clamp01(dist / falloff);
-
-      // ease-out (smooth): feel free to tune
       const ease = 1 - (1 - t) * (1 - t);
-
-      // scale 1.2 at center -> 1.0 at edges
       const s = 1.2 - 0.2 * ease;
 
       card.style.setProperty("--s", s.toFixed(3));
@@ -347,40 +411,30 @@ document.addEventListener("DOMContentLoaded", () => {
     return {
       phase: Math.random() * Math.PI * 2,
       freq: 0.12 + Math.random() * 0.28,
-
       ampX: 8 + Math.random() * 22,
       ampY: 10 + Math.random() * 26,
-
-      // directional drift
       driftX: Math.cos(dir) * (4 + Math.random() * 10),
       driftY: Math.sin(dir) * (2 + Math.random() * 8),
-
       rotSpeed: (Math.random() - 0.5) * 0.12,
     };
   }
 
   function updateCard(card, dt, time) {
-
     card.age += dt;
     const m = card.motion;
     const t = time + m.phase;
 
-    // organic motion
     const swayX = Math.sin(t * m.freq) * m.ampX;
     const swayY = Math.cos(t * m.freq * 0.85) * m.ampY;
     const flutter = Math.sin(t * 2.1) * 1.2;
 
-    // drift
     card.px += m.driftX * dt;
     card.py += m.driftY * dt;
 
     const x = card.px + swayX + flutter;
     const y = card.py + swayY;
 
-    // lifetime visual envelope
     const lifeT = card.age / card.life;
-
-    // life phases
     const fadeInDur = 0.12;
     const fadeOutStart = 0.78;
 
@@ -390,7 +444,6 @@ document.addEventListener("DOMContentLoaded", () => {
     else opacity = 1;
 
     opacity = Math.max(0, Math.min(1, opacity));
-
     const scale = 0.94 + 0.06 * opacity;
 
     card.style.opacity = opacity;
@@ -407,7 +460,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function overlapPenalty(x1, x2, ranges) {
-    // Sum of overlapping pixels against existing ranges in that lane
     let sum = 0;
     for (const [a, b] of ranges) {
       const o1 = Math.max(x1, a);
@@ -418,21 +470,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+
+
+
+
+
+
+
+
   // =============================
-  // 4) SCROLL HANDLER (Updates Labels & Rainbow)
+  // SCROLL HANDLER (Updates Labels & Rainbow)
   // =============================
   function updateTimelineState() {
     const maxShift = viewport.scrollWidth - viewport.clientWidth;
     const scrollLeft = viewport.scrollLeft;
 
-    // 1. Calculate Progress (0 to 1)
     const progress = maxShift > 0 ? clamp01(scrollLeft / maxShift) : 0;
-
-    // 2. Update CSS Variable for Rainbow Color Shift
     wrapper.style.setProperty('--progress', progress);
 
-    // 3. Update Window Labels (Start/End dates)
-    const windowSpan = 0.08; // How much time fits on screen roughly
+    const windowSpan = 0.08;
     const t0 = progress;
     const t1 = clamp01(progress + windowSpan);
 
@@ -452,20 +508,26 @@ document.addEventListener("DOMContentLoaded", () => {
   // Tooltip Logic
   function showTooltip(dot) {
     const dotRect = dot.getBoundingClientRect();
-
-    // IMPORTANT: use the tooltip's containing block
     const area = dot.closest(".timeline-area");
     const areaRect = area.getBoundingClientRect();
 
     ttTitle.textContent = dot.dataset.title;
     ttRange.textContent = `${nice(dot.dataset.start)} → ${nice(dot.dataset.end)}`;
     ttDesc.textContent = dot.dataset.desc;
+    
+    // Show duration if there's an end date
+    const duration = getDuration(dot.dataset.start, dot.dataset.end);
+    if (ttTimespan && duration) {
+      ttTimespan.textContent = duration;
+      ttTimespan.style.display = "block";
+    } else if (ttTimespan) {
+      ttTimespan.style.display = "none";
+    }
 
-    // position relative to timeline-area
+    // Position tooltip
     let left = dotRect.left - areaRect.left + dotRect.width / 2;
     let top = dotRect.top - areaRect.top;
 
-    // clamp horizontally to stay inside timeline-area
     const padding = 12;
     left = Math.max(padding, Math.min(areaRect.width - padding, left));
 
@@ -477,8 +539,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function hideTooltip() { tooltip.classList.remove("active"); }
 });
 
+
+
+
+
+
+
+
 // =====================================================
-// 5) ELASTIC WHEEL HANDOFF (The Feedback Mechanism)
+// ELASTIC WHEEL HANDOFF (The Feedback Mechanism)
 // =====================================================
 (function initElasticHandoff() {
   const main = document.querySelector("#main");
@@ -491,13 +560,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const snapToIndex = (idx) => getSnapSections()[idx]?.scrollIntoView({ behavior: "smooth" });
 
   const WHEEL_SPEED = 1.0;
-  const RESISTANCE = 350; // How much edgeAccumulator is needed to jump
+  const RESISTANCE = 350;
 
   let edgeAccumulator = 0;
   let bounceTimeout;
 
   const onWheel = (e) => {
-    // Only active if CV section is in view
     const r = section.getBoundingClientRect();
     if (r.top > window.innerHeight * 0.35 || r.bottom < window.innerHeight * 0.65) return;
 
@@ -509,38 +577,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const goingForward = delta > 0;
     const goingBack = delta < 0;
 
-    // Normal Horizontal Scroll
     if ((goingForward && !atEnd) || (goingBack && !atStart)) {
       e.preventDefault();
       viewport.scrollLeft += delta * WHEEL_SPEED;
       edgeAccumulator = 0;
-      viewport.style.transform = `translateX(0px)`; // Reset bounce
+      viewport.style.transform = `translateX(0px)`;
       return;
     }
 
-    // EDGE LOGIC: Elastic Bounce Feedback
-    e.preventDefault(); // Stop vertical scroll while building tension
+    e.preventDefault();
     edgeAccumulator += delta;
 
-    // Apply Visual "Stretch" (The Feedback)
-    // We cap the visual stretch at 50px so it doesn't look broken
     const visualStretch = Math.max(-50, Math.min(50, edgeAccumulator * -0.5));
     viewport.style.transform = `translateX(${visualStretch}px)`;
 
-    // Clear previous release timer
     if (bounceTimeout) clearTimeout(bounceTimeout);
 
-    // Check if we pushed hard enough to jump
     if (Math.abs(edgeAccumulator) > RESISTANCE) {
       const idx = getSectionIndex();
       if (goingForward && atEnd) snapToIndex(idx + 1);
       else if (goingBack && atStart) snapToIndex(idx - 1);
 
-      // Reset
       edgeAccumulator = 0;
       viewport.style.transform = `translateX(0px)`;
     } else {
-      // If user stops scrolling before breaking resistance, bounce back
       bounceTimeout = setTimeout(() => {
         edgeAccumulator = 0;
         viewport.style.transform = `translateX(0px)`;

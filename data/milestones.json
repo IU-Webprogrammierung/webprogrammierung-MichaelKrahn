@@ -8,14 +8,13 @@
     "label": "Geburt",
     "images": [
       {
-        "src": "assets/images/timeline-australia.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-australia.jpg"
       },
       {
-        "src": "assets/images/timeline-australia2.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-australia2.jpg"
+      },
+      {
+        "src": "assets/images/timeline-australia3.jpg"
       }
     ]
   },
@@ -28,25 +27,19 @@
     "label": "Grundschule Waldbreitbach",
     "images": [
       {
-        "src": "assets/images/timeline-primaryshool.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-primaryshool.jpg"
       },
       {
-        "src": "assets/images/timeline-primaryshool2.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-primaryshool2.jpg"
       },
       {
-        "src": "assets/images/timeline-primaryshool3.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-primaryshool3.jpg"
       }
     ]
   },
   {
     "category": "edu",
-    "start": "2020-01",
+    "start": "2020",
     "end": "",
     "title": "Lifesafer Badge",
     "desc": "Swimming",
@@ -54,39 +47,30 @@
   },
   {
     "category": "edu",
-    "start": "2008-01",
-    "end": "2016-01",
+    "start": "2008",
+    "end": "2016",
     "title": "Abitur",
     "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
     "label": "Rhein-Wied-Gymnasium, Neuwied"
   },
   {
     "category": "edu",
-    "start": "2016-01",
-    "end": "2017-01",
+    "start": "2016",
+    "end": "2017",
     "title": "Work&Travel Australia",
     "desc": "Had a year with so many expiriences while travelling through astarlia. met many friends and developed my character",
     "label": "Work and Travel",
     "images": [
       {
-        "src": "assets/images/timeline-australia.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-australia.jpg"
       },
       {
-        "src": "assets/images/timeline-australia2.jpg",
-        "w": 160,
-        "h": 220
+        "src": "assets/images/timeline-australia2.jpg"
+      },
+      {
+        "src": "assets/images/timeline-australia3.jpg"
       }
     ]
-  },
-  {
-    "category": "edu",
-    "start": "2018-01",
-    "end": "2019-01",
-    "title": "Maschinenbau (DHBW Mannheim)",
-    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Maschinenbau"
   },
   {
     "category": "edu",
@@ -105,9 +89,7 @@
     "label": "Maschinenbau",
     "images": [
       {
-        "src": "assets/images/timeline-dhbw.jpg",
-        "w": 80,
-        "h": 150
+        "src": "assets/images/timeline-dhbw.jpg"
       }
     ]
   },
@@ -152,14 +134,10 @@
     "label": "Wedding",
     "images": [
       {
-        "src": "assets/images/timeline-wedding.jpg",
-        "w": 120,
-        "h": 80
+        "src": "assets/images/timeline-wedding.jpg"
       },
       {
-        "src": "assets/images/timeline-wedding2.jpg",
-        "w": 70,
-        "h": 120
+        "src": "assets/images/timeline-wedding2.jpg"
       }
     ]
   }

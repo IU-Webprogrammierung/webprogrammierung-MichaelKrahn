@@ -129,6 +129,36 @@
     }
 }
 
+/* Tooltip timespan visualization */
+.tt-timespan {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tt-timespan-bar {
+    position: relative;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 4px;
+    overflow: hidden;
+}
+
+.tt-timespan-fill {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 2px;
+    transition: all 300ms ease;
+}
+
+.tt-timespan-duration {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 4px;
+}
+
 
 /* Rainbow beam (idle wobble + scroll hue shift) */
 .rainbow-beam {
@@ -250,7 +280,7 @@
 
 .milestone:hover .milestone-label {
     opacity: 1;
-    transform: translateX(-50%) translateY(-3px);
+    transform: translateX(-50%) translateY(5px);
 }
 
 .milestone.up .milestone-label {
@@ -300,6 +330,38 @@
     margin-bottom: 8px;
 }
 
+.tt-timespan {
+    display: block;
+    font-size: 11px;
+    opacity: 0.65;
+    margin-bottom: 8px;
+    padding: 4px 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    width: fit-content;
+}
+
+.tt-timespan-bar {
+    display: block;
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    margin-top: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.tt-timespan-bar::before {
+    content: "";
+    position: absolute;
+    left: var(--timespan-left, 0%);
+    width: var(--timespan-width, 20%);
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 200, 255, 0.6), rgba(255, 0, 150, 0.6));
+    border-radius: 2px;
+}
+
 .tt-desc {
     font-size: 13px;
     line-height: 1.35;
@@ -331,7 +393,7 @@
     display: block;
     overflow: hidden;
 
-    /* “hero” vibe: glass + soft border + shadow */
+    /* "hero" vibe: glass + soft border + shadow */
     border-radius: 16px;
     background: var(--glass);
     border: 1px solid var(--glass-border);

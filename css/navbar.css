@@ -123,9 +123,10 @@ body:not(.is-landing) .navbar {
   justify-content: center;
 }
 
+/* Hide navbar-right by default (landing page hero state) */
 .navbar-right {
   /* Ensure the container has a fixed width or handles overflow */
-  display: flex;
+  display: none;
   justify-content: flex-end;
   align-items: center;
   overflow: hidden;
@@ -140,6 +141,7 @@ body:not(.is-landing) .navbar {
 
 /* Sticky state: show ticker area */
 .navbar.is-sticky .navbar-right {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
   transform: none;
@@ -161,6 +163,7 @@ body:not(.is-landing) .navbar {
 
 /* Non-landing pages: always show navbar-right */
 body:not(.is-landing) .navbar-right {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
   transform: none;
@@ -174,10 +177,10 @@ body:not(.is-landing) .navbar-right {
   background: transparent;
   border: 1px solid var(--glass-border);
   border-radius: 8px;
-  padding: 6px 10px;
-  cursor: pointer;
+  padding: 10px 15px;
+  cursor: none;
   transition: all 0.2s ease;
-  margin-left: 12px;
+  margin: 0px 30px;
 }
 
 .lang-toggle:hover {
@@ -196,15 +199,6 @@ body:not(.is-landing) .navbar-right {
 
 .navbar.is-sticky .lang-flag {
   font-size: 1rem;
-}
-
-/* =========================================
-   NAVBAR ACTIONS CONTAINER (hamburger + lang toggle)
-========================================= */
-.navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 /* =========================================
@@ -323,21 +317,8 @@ body:not(.is-landing) .navbar-right {
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   }
 
-  .navbar-right {
+  .navbar-miniText {
     display: none;
-  }
-
-  /* Navbar actions container - holds hamburger and lang toggle on mobile */
-  .navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  /* Language toggle visible on mobile */
-  .lang-toggle {
-    display: flex;
-    margin-left: 0;
   }
 }
 
