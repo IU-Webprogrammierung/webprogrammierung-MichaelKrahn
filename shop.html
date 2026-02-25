@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>KitchenAid Restorations</title>
 
-    <!-- Google Fonts (matching main portfolio) -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-    <!-- Main portfolio styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/contact.css">
@@ -23,11 +21,9 @@
 
 <body>
 
-    <!-- Custom Cursor -->
     <div class="cursor-dot"></div>
     <div class="cursor-outline"></div>
 
-    <!-- NAVBAR -->
     <header id="nav">
         <div class="navbar">
             <div class="navbar-left">
@@ -36,7 +32,6 @@
                 </a>
             </div>
 
-            <!-- Hamburger Menu Button -->
             <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
                 <span></span>
                 <span></span>
@@ -44,12 +39,12 @@
             </button>
 
             <nav class="navbar-center" aria-label="Main navigation">
-                <a href="index.html#about">About</a>
-                <a href="index.html#cv">CV</a>
-                <a href="index.html#projects">Projects</a>
-                <a href="shop.html">Shop</a>
-                <a href="index.html#globe-1">Globe</a>
-                <a href="index.html#contact">Contact</a>
+                <a href="index.html#about" data-en="About" data-de="Über mich">About</a>
+                <a href="index.html#cv" data-en="CV" data-de="Lebenslauf">CV</a>
+                <a href="index.html#projects" data-en="Projects" data-de="Projekte">Projects</a>
+                <a href="shop.html" data-en="Shop" data-de="Shop">Shop</a>
+                <a href="index.html#globe-1" data-en="Globe" data-de="Globus">Globe</a>
+                <a href="index.html#contact" data-en="Contact" data-de="Kontakt">Contact</a>
             </nav>
 
             <div class="navbar-right">
@@ -70,16 +65,11 @@
     </script>
     <script type="module" src="js/shop.js"></script>
 
-    <!-- Main 3D viewer (fixed background layer) -->
     <div id="stage" aria-hidden="true">
         <canvas id="main3d"></canvas>
-        <!--<div id="vignette"></div>-->
-    </div>
+        </div>
 
-
-    <!-- Scroll container -->
     <main id="scroller">
-        <!-- SECTION 1 -->
         <section class="snap-section" data-model="../assets/models/mixer-01.glb"
             data-accessory="../assets/models/knob-01.glb" data-title="Custom Pearl White + Brass Knob"
             data-price="€ 449"
@@ -96,24 +86,21 @@
 
                 <div class="copy">
                     <div class="glass-container">
-                        <div class="kicker">KitchenAid Restoration 01</div>
-                        <h2>Showcase Piece</h2>
+                        <div class="kicker" data-en="KitchenAid Restoration 01" data-de="KitchenAid Restaurierung 01">KitchenAid Restoration 01</div>
+                        <h2 data-en="Showcase Piece" data-de="Vorzeigemodell">Showcase Piece</h2>
 
-                        <!-- Overlay appears after 50% rotation -->
                         <div class="overlay">
                             <div class="overlay-inner">
                                 <div class="price" data-bind="price">€ 449</div>
-                                <div class="title" data-bind="title">Custom Pearl White + Brass Knob</div>
-                                <p class="desc" data-bind="desc">
-                                    Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass
-                                    knob
-                                    set. Includes test run video and service log.
+                                <div class="title" data-bind="title" data-en="Custom Pearl White + Brass Knob" data-de="Perlweiß + Messingknopf">Custom Pearl White + Brass Knob</div>
+                                <p class="desc" data-bind="desc" data-en="Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass knob set. Includes test run video and service log." data-de="Komplette Demontage, neue Lager, neu verkabelter Motor, individuelles Klarlack-Finish und ein Messingknopf-Set. Inklusive Testlauf-Video und Serviceprotokoll.">
+                                    Full teardown, new bearings, rewired motor, custom clearcoat finish, and a brass knob set. Includes test run video and service log.
                                 </p>
 
                                 <div class="accessory">
-                                    <div class="accessory-label">Accessory Preview</div>
+                                    <div class="accessory-label" data-en="Accessory Preview" data-de="Zubehör-Vorschau">Accessory Preview</div>
                                     <canvas class="acc-canvas" width="220" height="220"></canvas>
-                                    <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                                    <div class="accessory-note" data-en="Auto-rotating 3D knob / add-on" data-de="Auto-rotierender 3D-Knopf / Zubehör">Auto-rotating 3D knob / add-on</div>
                                 </div>
 
                                 <a class="cta" href="#contact" data-en="Request to buy"
@@ -125,7 +112,6 @@
             </div>
         </section>
 
-        <!-- SECTION 2 -->
         <section class="snap-section" data-model="../assets/models/mixer-02.glb"
             data-accessory="../assets/models/knob-01.glb" data-title="Matte Black + Minimal Knob" data-price="€ 399"
             data-desc="Matte powder-coat style finish, mechanical refresh, and a minimal knob variant. Clean, modern look.">
@@ -140,21 +126,21 @@
                 </div>
                 <div class="copy">
                     <div class="glass-container">
-                        <div class="kicker">KitchenAid Restoration 02</div>
-                        <h2>Matte Edition</h2>
+                        <div class="kicker" data-en="KitchenAid Restoration 02" data-de="KitchenAid Restaurierung 02">KitchenAid Restoration 02</div>
+                        <h2 data-en="Matte Edition" data-de="Matte Edition">Matte Edition</h2>
                         <div class="overlay">
                             <div class="overlay-inner">
                                 <div class="price">€ 399</div>
-                                <div class="title">Matte Black + Minimal Knob</div>
-                                <p class="desc">Matte powder-coat style finish, mechanical refresh, and a minimal knob
-                                    variant. Clean, modern look.</p>
+                                <div class="title" data-en="Matte Black + Minimal Knob" data-de="Mattschwarz + Minimalistischer Knopf">Matte Black + Minimal Knob</div>
+                                <p class="desc" data-en="Matte powder-coat style finish, mechanical refresh, and a minimal knob variant. Clean, modern look." data-de="Mattes pulverlackartiges Finish, mechanische Überholung und eine minimalistische Knopfvariante. Sauberer, moderner Look.">Matte powder-coat style finish, mechanical refresh, and a minimal knob variant. Clean, modern look.</p>
                                 <div class="accessory">
-                                    <div class="accessory-label">Accessory Preview</div>
+                                    <div class="accessory-label" data-en="Accessory Preview" data-de="Zubehör-Vorschau">Accessory Preview</div>
                                     <canvas class="acc-canvas" width="220" height="220"></canvas>
-                                    <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                                    <div class="accessory-note" data-en="3D rose knob / add-on"
+                                    data-de="3D Rosen Knopf / Zubehör">3D rose knob / add-on</div>
                                 </div>
                                 <a class="cta" href="#contact" data-en="Request to buy"
-                                    data-de="Kaufanfrage stellen">Request to buy</a>
+                                    data-de="Kauf anfragen">Request to buy</a>
                             </div>
                         </div>
                     </div>
@@ -162,7 +148,6 @@
             </div>
         </section>
 
-        <!-- SECTION 3 -->
         <section class="snap-section" data-model="../assets/models/mixer-03.glb"
             data-accessory="../assets/models/knob-01.glb" data-title="Candy Red + Custom Badge" data-price="€ 479"
             data-desc="High-gloss candy finish, polished trim, optional badge customization. Tuned for visual impact under warm light.">
@@ -177,23 +162,19 @@
                 </div>
                 <div class="copy">
                     <div class="glass-container">
-                        <div class="kicker">KitchenAid Restoration 03</div>
-                        <h2>Candy Gloss</h2>
+                        <div class="kicker" data-en="KitchenAid Restoration 03" data-de="KitchenAid Restaurierung 03">KitchenAid Restoration 03</div>
+                        <h2 data-en="Candy Gloss" data-de="Candy Glanz">Candy Gloss</h2>
                         <div class="overlay">
                             <div class="overlay-inner">
                                 <div class="price">€ 479</div>
-                                <div class="title" data-en="Candy Red + Custom Badge" data-de="Rosa & Rosegold">Candy
-                                    Red + Custom Badge</div>
-                                <p class="desc">High-gloss candy finish, polished trim, optional badge customization.
-                                    Tuned
-                                    for visual impact under warm light.</p>
+                                <div class="title" data-en="Candy Red + Custom Badge" data-de="Rosa & Rosegold">Candy Red + Custom Badge</div>
+                                <p class="desc" data-en="High-gloss candy finish, polished trim, optional badge customization. Tuned for visual impact under warm light." data-de="Hochglänzendes Candy-Finish, polierte Zierleisten, optionale Badge-Anpassung. Abgestimmt auf visuelle Wirkung unter warmem Licht.">High-gloss candy finish, polished trim, optional badge customization. Tuned for visual impact under warm light.</p>
                                 <div class="accessory">
-                                    <div class="accessory-label">Accessory Preview</div>
+                                    <div class="accessory-label" data-en="Accessory Preview" data-de="Zubehör-Vorschau">Accessory Preview</div>
                                     <canvas class="acc-canvas" width="220" height="220"></canvas>
-                                    <div class="accessory-note">Auto-rotating 3D knob / add-on</div>
+                                    <div class="accessory-note" data-en="Auto-rotating 3D knob / add-on" data-de="Auto-rotierender 3D-Knopf / Zubehör">Auto-rotating 3D knob / add-on</div>
                                 </div>
-                                <a class="cta" href="#contact" data-en="Request to buy" data-de="Kauf anfragen">Request
-                                    to buy</a>
+                                <a class="cta" href="#contact" data-en="Request to buy" data-de="Kauf anfragen">Request to buy</a>
                             </div>
                         </div>
                     </div>
@@ -201,11 +182,8 @@
             </div>
         </section>
 
-
-        <!-- Contact -->
         <section id="contact">
             <div class="contact-wrapper glass">
-
                 <header class="contact-header">
                     <h2 data-en="Contact" data-de="Kontakt">Contact</h2>
                     <p data-en="Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message."
@@ -233,15 +211,11 @@
                             required></textarea>
                     </div>
 
-                    <button type="submit" class="btn" data-en="Send message" data-de="Nachricht senden">Send
-                        message</button>
+                    <button type="submit" class="btn" data-en="Send message" data-de="Nachricht senden">Send message</button>
                 </form>
-
             </div>
         </section>
 
-        <!-- LAYER _ (no own Layer but snap scrolling is manually disabled for this part) -->
-        <!-- Footer -->
         <footer class="site-footer snap-footer" id="footer">
             <div class="footer-rainbow" aria-hidden="true"></div>
 
@@ -251,7 +225,6 @@
                         <a class="social-btn"
                             href="https://github.com/IU-Webprogrammierung/webprogrammierung-MichaelKrahn"
                             target="_blank" rel="noopener" aria-label="GitHub">
-                            <!-- GitHub icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     d="M12 .5C5.73.5.75 5.61.75 12c0 5.1 3.29 9.43 7.86 10.96.57.11.78-.25.78-.56v-2.1c-3.2.71-3.88-1.58-3.88-1.58-.53-1.38-1.29-1.74-1.29-1.74-1.05-.74.08-.73.08-.73 1.16.08 1.77 1.22 1.77 1.22 1.03 1.8 2.7 1.28 3.36.98.1-.76.4-1.28.73-1.58-2.55-.3-5.23-1.3-5.23-5.78 0-1.28.45-2.33 1.18-3.15-.12-.3-.51-1.52.11-3.16 0 0 .97-.32 3.18 1.2.1.9-.92-.26 39 2.88-.39.98 0 1.96.13 2.88.39 2.2-1.52 3.18-1.2 3.18-1.2.62 1.64.23 2.86.11 3.16.73.82 1.18 1.87 1.18 3.15 0 4.49-2.69 5.48-5.25 5.77.41.36.78 1.08.78 2.18v3.23c0 .31.21.67.79.56 4.56-1.53 7.85-5.86 7.85-10.96C23.25 5.61 18.27.5 12 .5z" />
@@ -260,7 +233,6 @@
 
                         <a class="social-btn" href="https://www.linkedin.com/in/NoAccountYet" target="_blank"
                             rel="noopener" aria-label="LinkedIn">
-                            <!-- LinkedIn icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 23.5h4V7.98h-4V23.5zM8.5 7.98h3.83v2.12h.06c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v9.36h-4v-8.3c0-1.98-.03-4.52-2.76-4.52-2.76 0-3.18 2.16-3.18 4.39v8.43h-4V7.98z" />
@@ -269,7 +241,6 @@
 
                         <a class="social-btn" href="https://www.instagram.com/micha.krahn/" target="_blank"
                             rel="noopener" aria-label="Instagram">
-                            <!-- Instagram icon -->
                             <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path
                                     d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18ZM12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" />
@@ -284,7 +255,7 @@
 
                 <div class="footer-center">
                     <p>© 2026 – Michael Krahn</p>
-                    <p><a href="#impressum">Imprint</a> | <a href="#datenschutz">Privacy</a></p>
+                    <p><a href="#impressum" data-en="Imprint" data-de="Impressum">Imprint</a> | <a href="#datenschutz" data-en="Privacy" data-de="Datenschutz">Privacy</a></p>
                 </div>
             </div>
         </footer>

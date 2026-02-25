@@ -228,7 +228,7 @@ function loadGLB(url) {
                 });
 
                 root.rotation.set(0, 0, 0);
-                root.position.set(0, -0.67, 0);
+                root.position.set(0, -0.66, 0);
 
                 // Normalize size
                 const box = new THREE.Box3().setFromObject(root);
@@ -563,15 +563,25 @@ scroller.addEventListener("scroll", () => {
    Render loop (main viewer)
 -------------------------------- */
 
+/* ------------------------------
+   Render loop (main viewer)
+-------------------------------- */
+
+let idleAngle = 0; // Tracks the continuous background spin
+
 function animate() {
     requestAnimationFrame(animate);
 
-    // Smooth rotation with increased lerp factor for smoother animation
     if (currentRoot) {
+        // 1. Slowly increase the idle angle every frame
+        idleAngle += 0.0045; 
+
+        // 2. Combine scroll rotation with idle rotation
+        const targetRotY = desiredRotY + idleAngle;
+
+        // 3. Smoothly interpolate to the combined target
         const current = currentRoot.rotation.y;
-        // Increased from 0.12 to 0.08 for smoother/slower rotation
-        const next = THREE.MathUtils.lerp(current, desiredRotY, 0.08);
-        currentRoot.rotation.y = next;
+        currentRoot.rotation.y = THREE.MathUtils.lerp(current, targetRotY, 0.08);
 
         // Slight tilt looks premium - smoother interpolation
         const targetTilt = -0.06;
