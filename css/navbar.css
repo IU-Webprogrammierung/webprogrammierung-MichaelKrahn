@@ -18,8 +18,8 @@
   z-index: 10;
 
   background: var(--glass);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   padding: 14px 20px;
@@ -68,8 +68,8 @@ body:not(.is-landing) .navbar {
   padding: 0px;
   
   background: var(--glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--glass-border);
 
   /* Maintain absolute centering on sticky mode */
@@ -381,10 +381,10 @@ body:not(.is-landing) .navbar-right {
   left: 0;
   width: 100%;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   border-top: 1px solid var(--glass-border);
-  padding: 10px 16px;
+  padding: 8px 12px;
   z-index: 9998;
   overflow: hidden;
 }
@@ -422,9 +422,5 @@ body:not(.is-landing) .navbar-right {
 @media (max-width: 900px) {
   .mobile-ticker {
     display: block;
-  }
-
-  .hero-bg {
-    /*display: none;*/
   }
 }

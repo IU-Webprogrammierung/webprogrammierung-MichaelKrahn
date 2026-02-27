@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const gapPx = 45;     // slightly larger than 49 to reduce visual edge intersections
   let dropG = 1500;
   const damp = 0.07;
-  const maxVy = 1500;
+  const maxVy = 5000;
 
   // Presentation tilt (gives "top view" without breaking your DOM anchoring)
   const TILT_X = -0.15;
@@ -339,10 +339,10 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateTargetsFromDOM() {
     const canvasRect = overlay.getBoundingClientRect();
     const canvasW = canvasRect.width;
-    
+
     // Scale towers down on mobile to fit the tighter layout
     const isMobile = window.innerWidth < 900;
-    const tScale = isMobile ? 0.75 : 1.0; 
+    const tScale = isMobile ? 0.75 : 1.0;
 
     for (const t of towers) {
       t.group.scale.set(tScale, tScale, tScale); // Apply scale to the whole tower
@@ -381,15 +381,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function replayDrop() {
     // Check if we are on mobile
     const isMobile = window.innerWidth < 900;
-    
+
     // 1. Aggressive scaling & faster falling for mobile
-    const startScale = isMobile ? 5.5 : 3.2; 
+    const startScale = isMobile ? 5.5 : 3.2;
     dropG = isMobile ? 3000 : 1500; // Double gravity on mobile so it snaps down faster
 
     if (sectionState === "inside" || sectionState === "entering" || sectionState === "leaving") {
       updateTargetsFromDOM();
     }
-    
+
     // Iterate using index (tIdx) to determine which tower we are dropping
     towers.forEach((t, tIdx) => {
       t.anchoredToDOM = true;
@@ -403,10 +403,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       t.blocks.forEach((b, i) => {
         b.vy = 0;
+        b.vRx = 0; b.vRy = 0; b.vRz = 0;
+        b.z = 0;
         b.settled = false;
         b.active = false;
         b.exiting = false;
         b.exitFade = 1;
+        b.scaleVy = 0;
 
         // Apply the tower delay, plus a slight stagger for each individual block
         b.startDelay = towerDelay + (Math.random() * 0.45) + (i * 0.35);
@@ -432,81 +435,90 @@ document.addEventListener("DOMContentLoaded", () => {
         b.settled = true;
         b.active = true;
         b.wrap.visible = true;
+
         b.y = b.targetY;
+        b.z = 0; // Fix depth
         b.vy = 0;
+
         b.wrap.scale.set(1, 1, 1);
+        b.wrap.rotation.set(0, 0, 0); // Fix rotation
       }
     }
   }
 
 
-// REPLACE your startLeaving function with this:
-function startLeaving() {
-  sectionState = "leaving";
+  function startLeaving() {
+    sectionState = "leaving";
 
-  for (const t of towers) {
-    t.blocks.forEach((b, i) => {
-      b.exiting = true;
-      
-      // Calculate normalized height in tower (0 to 1)
-      const total = t.blocks.length;
-      const hf = total > 1 ? i / (total - 1) : 1; 
+    gsap.fromTo(overlay,
+      { filter: "blur(0px)" },
+      {
+        filter: "blur(2px)", duration: 0.15, ease: "power2.in", onComplete: () => {
+          gsap.to(overlay, { filter: "blur(0px)", duration: 0.3, ease: "power2.out" });
+        }
+      }
+    );
 
-      // Random explosion angle
-      const angle = Math.random() * Math.PI * 2;
-      
-      // Speed: Top blocks fly faster
-      const speed = 50 + Math.random() * 75 + (hf * 100);
+    for (const t of towers) {
+      t.blocks.forEach((b, i) => {
+        b.exiting = true;
 
-      // Velocity X/Z (Screen space X and 'depth' drift)
-      b.vX = Math.cos(angle) * speed;
-      
-      // Velocity Y: Negative is UP. 
-      // We give a small pop up (-300) to top blocks, less to bottom blocks
-      b.vy = -75 - (hf * 200) - (Math.random() * 100);
-      
-      // Spin them
-      b.vR += (Math.random() - 0.5) * 8.0;
+        // 1. Sideways Spread (More horizontal inertia)
+        const speedX = 150 + Math.random() * 250;
+        b.vX = (Math.random() - 0.5) * speedX;
 
-      // Reset fade/settled states
-      b.exitFade = 1.0; 
-      b.settled = false;
-    });
+        // 2. Depth Pop (Fly TOWARDS the camera so bigger blocks naturally render in front)
+        b.vZ = 100 + Math.random() * 400;
+
+        // 3. Vertical Pop (Reduced to prevent hitting the top of the screen)
+        b.vy = -50 - Math.random() * 150;
+
+        // 4. Multi-Axis Tumble (Spinning out of control)
+        b.vRx = (Math.random() - 0.5) * 15;
+        b.vRy = (Math.random() - 0.5) * 15;
+        b.vRz = (Math.random() - 0.5) * 15;
+
+        // 5. Gentle Scale Burst (Since they are physically moving closer via Z-axis, we need less scale)
+        b.scaleVy = 0.5 + Math.random() * 1.5;
+
+        b.settled = false;
+      });
+    }
   }
-}
 
 
 
 
 
 
-// State Machine
+  // State Machine
   ScrollTrigger.create({
     trigger: "#about-skills",
-    start: "top 1%",   // Triggers entry when top is 1/4th down, exits when scrolling up
-    end: "bottom 75%",  // Exits quickly as soon as you start scrolling down
+    start: "top 10%",
+    end: "bottom 90%",
     onEnter: () => {
       time = 0;
       sectionState = "entering";
       towersVisible = true;
+      section.classList.add("is-visible");
       updateTargetsFromDOM();
       replayDrop();
     },
     onLeaveBack: () => {
-      // User started scrolling UP to the previous section
       sectionState = "leaving";
+      section.classList.remove("is-visible");
       startLeaving();
     },
     onLeave: () => {
-      // User started scrolling DOWN to the next section
       sectionState = "leaving";
+      section.classList.remove("is-visible");
       startLeaving();
     },
     onEnterBack: () => {
-      // User scrolled BACK UP into this section from the one below
       time = 0;
       sectionState = "entering";
       towersVisible = true;
+      section.classList.add("is-visible");
       updateTargetsFromDOM();
       replayDrop();
     }
@@ -535,17 +547,18 @@ function startLeaving() {
       const n = t.blocks.length || 1;
       for (let i = 0; i < n; i++) {
         const b = t.blocks[i];
+
         if (!b.active && time >= b.startDelay) {
           b.active = true;
           b.wrap.visible = true;
         }
 
-        // FALL + SCALE
         if (b.active && !b.settled && sectionState !== "leaving") {
 
+          b.wrap.rotation.set(0, 0, 0);
+          b.z = 0;
           b.vy += dropG * dt;
           b.vy = clamp(b.vy, -maxVy, maxVy);
-
           b.y += b.vy * dt;
 
           const denom = (b.targetY - b.startY) || 1;
@@ -555,7 +568,6 @@ function startLeaving() {
 
           if (b.y >= b.targetY) {
             b.y = b.targetY;
-
             if (Math.abs(b.vy) < 120) {
               b.vy = 0;
               b.settled = true;
@@ -566,7 +578,7 @@ function startLeaving() {
           }
         }
 
-        // Hover drift physics (unchanged)
+        // Hover drift physics
         const linDrag = 10.5;
         const rotDrag = 12.0;
 
@@ -576,83 +588,71 @@ function startLeaving() {
         b.vR *= Math.exp(-rotDrag * dt);
         b.offR += b.vR * dt;
 
-
-        // --- idle wobble (always-on, but subtle) ---
-        // base wobble: top moves more; kick adds “life” and fades out
+        // Idle wobble
         const t01 = n <= 1 ? 1 : i / (n - 1);
         const topBias = Math.pow(t01, 1.6);
 
-        // decay the kick (fade-out)
         b.wobKick *= Math.exp(-1.25 * dt);
 
-        const baseEnergy = 0.35 + 0.65 * topBias;  // tiny baseline
+        const baseEnergy = 0.35 + 0.65 * topBias;
         const energy = baseEnergy + b.wobKick;
 
         const wobX = Math.sin(time * b.wobFreq + b.wobPhase) * (blockSizePx * 0.020) * energy;
         const wobR = Math.sin(time * (b.wobFreq * 1.35) + b.wobPhase * 1.7) * (0.05) * energy;
 
-
-        // Clamp values
         const maxOffX = blockSizePx * 0.32;
         const maxOffR = 0.42;
         b.offX = clamp(b.offX, -maxOffX, maxOffX);
         b.offR = clamp(b.offR, -maxOffR, maxOffR);
 
-        // 1. Position (Falling):
-        // We move the 'wrap' because that is our Screen-Space container
-        // We add b.offX here because that's "Screen Drift"
-        b.wrap.position.set(
-          b.targetX + b.offX + wobX,
-          b.y,
-          0
-        );
-
-        // 2. Rotation (Yaw):
-        // We add b.offR (hover rotation) to the random base rotation
-        // This spins the block on the "Tilted Table" axis
+        // ---> FIX: Add b.z here so it can fly towards the camera
+        b.wrap.position.set(b.targetX + b.offX + wobX, b.y, b.z || 0);
         b.yaw.rotation.y = b.rY + b.offR + wobR;
 
         // FREE PHYSICS DURING LEAVE (real falling)
         if (sectionState === "leaving" && b.exiting) {
+          b.vy += dropG * dt; // Gravity
 
-          // gravity now pulls DOWN screen space
-          b.vy += dropG * dt;
+          // Friction / Drag
+          b.vX *= Math.exp(-1.2 * dt);
+          b.vZ *= Math.exp(-1.2 * dt);
+          b.vRx *= Math.exp(-0.8 * dt);
+          b.vRy *= Math.exp(-0.8 * dt);
+          b.vRz *= Math.exp(-0.8 * dt);
 
-          // horizontal inertia
-          b.vX *= Math.exp(-12.8 * dt);
-
-          // rotation inertia
-          b.vR *= Math.exp(-12.4 * dt);
-
+          // Apply Movement
           b.y += b.vy * dt;
           b.offX += b.vX * dt;
-          b.offR += b.vR * dt;
-        }
+          b.z += b.vZ * dt;
 
+          // Apply Multi-Axis Tumble
+          b.wrap.rotation.x += b.vRx * dt;
+          b.wrap.rotation.y += b.vRy * dt;
+          b.wrap.rotation.z += b.vRz * dt;
 
-        // EXIT ANIMATION (per block)
-        if (b.exiting) {
-          const s = Math.max(0, b.wrap.scale.x - dt * 0.9);
+          // Scale & Shrink Logic
+          b.scaleVy -= 4.5 * dt; // Gravity for the scale
+          let s = b.wrap.scale.x + (b.scaleVy * dt);
+
+          // Once the pop peaks, force them to shrink rapidly into the distance
+          if (b.scaleVy < 0) {
+            s -= 2.5 * dt;
+          }
+
+          s = Math.max(0, s); // Prevent negative scale crash
           b.wrap.scale.set(s, s, s);
-
-          b.exitFade -= dt * 0.8;
-          b.exitFade = Math.max(0, b.exitFade);
         }
       }
     }
 
-    // Mark as Outside
+    // ---> FIX: Only shut off the canvas when the blocks have actually shrunk to 0
     if (sectionState === "leaving") {
-      const allGone = towers.every(t =>
-        t.blocks.every(b => b.exitFade <= 0.01)
-      );
-
+      const allGone = towers.every(t => t.blocks.every(b => b.wrap.scale.x <= 0.01));
       if (allGone) {
         towersVisible = false;
         sectionState = "outside";
       }
     }
-
 
     if (towersVisible) {
       renderer.render(scene, camera);
@@ -662,29 +662,3 @@ function startLeaving() {
 
   requestAnimationFrame(tick);
 });
-
-
-
-
-
-
-
-//Text Fading
-
-gsap.fromTo(
-  "#about-skills .about-wrapper .about-grid .about-text",
-  { opacity: 0.2, y: 30, filter: "blur(4px)" },
-  {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    ease: "power2.out",
-    scrollTrigger: {
-      trigger: "#about-skills",
-      start: "top 75%",   // section enters viewport
-      end: "bottom bottom",  // section starts leaving viewport
-      toggleActions: "play reverse play reverse", // fade in/out on enter/leave
-      scrub: false,       // no smooth scrubbing; instant fade
-    },
-  }
-);
