@@ -39,7 +39,7 @@ gsap.registerPlugin(ScrollTrigger);
 })();
 
 /* =====================================================
-   NAVBAR COLLAPSE & ACTIVE INDICATOR
+   NAVBAR COLLAPSE
 ===================================================== */
 (function initNavbarStickyAndActive() {
   const navbar = document.querySelector(".navbar");
@@ -52,48 +52,6 @@ gsap.registerPlugin(ScrollTrigger);
   // For non-landing pages, apply sticky state immediately
   if (!isLandingPage) {
     navbar.classList.add("is-sticky");
-  }
-
-  const links = Array.from(nav.querySelectorAll('a[href^="#"]'));
-
-  // --- Build section map
-  const items = links
-    .map(a => {
-      const sel = a.getAttribute("href");
-      const section = sel ? document.querySelector(sel) : null;
-      return section ? { a, section } : null;
-    })
-    .filter(Boolean);
-
-  // --- Indicator
-  let indicator = nav.querySelector(".nav-indicator");
-  if (!indicator) {
-    indicator = document.createElement("span");
-    indicator.className = "nav-indicator";
-    nav.appendChild(indicator);
-  }
-
-  let activeLink = null;
-
-  function moveIndicatorTo(link, immediate = false) {
-    if (!link) return;
-
-    links.forEach(a => a.classList.toggle("active", a === link));
-    activeLink = link;
-
-    const navRect = nav.getBoundingClientRect();
-    const linkRect = link.getBoundingClientRect();
-
-    const left = linkRect.left - navRect.left;
-    const width = linkRect.width;
-
-    gsap.to(indicator, {
-      x: left,
-      width,
-      duration: immediate ? 0 : 0.25,
-      ease: "power2.out",
-      overwrite: "auto"
-    });
   }
 
   // --- FLIP-style transition to sticky
@@ -124,10 +82,6 @@ gsap.registerPlugin(ScrollTrigger);
       }
     );
 
-    // When width/layout changes, indicator must be repositioned
-    requestAnimationFrame(() => {
-      if (activeLink) moveIndicatorTo(activeLink, true);
-    });
   }
 
   // --- Sticky trigger: when leaving the hero section
@@ -140,33 +94,6 @@ gsap.registerPlugin(ScrollTrigger);
       onLeaveBack: () => flipSticky(false),
   });
 
-  // --- Active section logic (robust)
-
-  // --- Click: move immediately (ScrollTrigger will keep it correct on scroll)
-  links.forEach(a => {
-    a.addEventListener("click", () => moveIndicatorTo(a));
-  });
-
-  // --- Initialize to hash or first valid item
-  const initial = items.find(x => `#${x.section.id}` === location.hash)?.a || items[0]?.a || links[0];
-  requestAnimationFrame(() => moveIndicatorTo(initial, true));
-
-  // --- Keep indicator correct on resize/refresh
-  window.addEventListener("resize", () => {
-    if (activeLink) requestAnimationFrame(() => moveIndicatorTo(activeLink, true));
-  });
-
-  ScrollTrigger.create({
-    scroller: "#main",
-    trigger: hero,     // normally should trigger on every section. but there error seo debug set hero
-    start: "top center",
-    end: "bottom center",
-    onToggle: self => { if (self.isActive) moveIndicatorTo(a); },
-    invalidateOnRefresh: true
-  });
-
-  // One refresh after images/fonts settle helps reduce "wrong section" glitches
-  window.addEventListener("load", () => ScrollTrigger.refresh());
 })();
 
 

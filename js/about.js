@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Pixel-world constants
   const blockSizePx = 44;
   const gapPx = 45;     // slightly larger than 49 to reduce visual edge intersections
-  const dropG = 1300;
+  let dropG = 1500;
   const damp = 0.07;
   const maxVy = 1500;
 
@@ -335,15 +335,18 @@ document.addEventListener("DOMContentLoaded", () => {
   ////Animation
 
 
-
-
   // Map DOM -> world targets
-  // With our calibrated perspective camera (no camera tilt), x/y in world = pixels at z=0.
   function updateTargetsFromDOM() {
     const canvasRect = overlay.getBoundingClientRect();
     const canvasW = canvasRect.width;
+    
+    // Scale towers down on mobile to fit the tighter layout
+    const isMobile = window.innerWidth < 900;
+    const tScale = isMobile ? 0.75 : 1.0; 
 
     for (const t of towers) {
+      t.group.scale.set(tScale, tScale, tScale); // Apply scale to the whole tower
+
       const stageEl = t.el.querySelector(".tower-canvas");
       if (!stageEl) continue;
 
@@ -355,9 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // MIRROR X to fix left/right swap
       const baseX = canvasW - cx;
 
-      // keep your bottom anchoring (canvas-local)
-      const baseY = (r.bottom - canvasRect.top) - 40;
-
+      // Adjust vertical anchor slightly for mobile
+      const baseY = (r.bottom - canvasRect.top) - (isMobile ? 25 : 40);
 
       if (t.anchoredToDOM) {
         t.group.position.set(baseX, baseY, 0);
@@ -366,11 +368,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const n = t.blocks.length;
       for (let i = 0; i < n; i++) {
         const b = t.blocks[i];
-
-        // Important: keep targetX clean; random x/z lives in b.offset.position
         b.targetX = 0;
-
-        // Bottom block is fixed at 0; blocks above stack upward (negative Y because Y points down)
         b.targetY = -i * gapPx;
       }
     }
@@ -381,24 +379,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   function replayDrop() {
-    const startScale = 3.2;
+    // Check if we are on mobile
+    const isMobile = window.innerWidth < 900;
+    
+    // 1. Aggressive scaling & faster falling for mobile
+    const startScale = isMobile ? 5.5 : 3.2; 
+    dropG = isMobile ? 3000 : 1500; // Double gravity on mobile so it snaps down faster
 
     if (sectionState === "inside" || sectionState === "entering" || sectionState === "leaving") {
       updateTargetsFromDOM();
     }
-    for (const t of towers) {
+    
+    // Iterate using index (tIdx) to determine which tower we are dropping
+    towers.forEach((t, tIdx) => {
       t.anchoredToDOM = true;
       t.hasDropped = true;
 
       const groupY = t.group.position.y;
+      const currentScale = t.group.scale.y || 1;
 
-      for (const b of t.blocks) {
+      // 2. Desktop Stagger: Delay the top row (indices 0 & 1) so bottom row builds first
+      const towerDelay = (!isMobile && tIdx < 2) ? 0.9 : 0;
+
+      t.blocks.forEach((b, i) => {
         b.vy = 0;
         b.settled = false;
         b.active = false;
+        b.exiting = false;
+        b.exitFade = 1;
 
-        // Start above the top edge in screen-space; higher blocks start higher
-        b.startY = -groupY - (blockSizePx * 2) - Math.random() * 300 + b.targetY;
+        // Apply the tower delay, plus a slight stagger for each individual block
+        b.startDelay = towerDelay + (Math.random() * 0.45) + (i * 0.35);
+
+        // Increase startY randomly on mobile so the larger blocks have room to accelerate
+        const heightOffset = isMobile ? 600 : 350;
+        b.startY = (-groupY / currentScale) - (blockSizePx * 2) - (Math.random() * heightOffset) + b.targetY;
         b.y = b.startY;
 
         b.startScale = startScale;
@@ -407,8 +422,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         b.offX = 0; b.vX = 0;
         b.offR = 0; b.vR = 0;
-      }
-    }
+      });
+    });
   }
 
   function settleNow() {
@@ -465,11 +480,11 @@ function startLeaving() {
 
 
 
-  // State Machine
+// State Machine
   ScrollTrigger.create({
     trigger: "#about-skills",
-    start: "top 75%",
-    end: "bottom bottom",
+    start: "top 1%",   // Triggers entry when top is 1/4th down, exits when scrolling up
+    end: "bottom 75%",  // Exits quickly as soon as you start scrolling down
     onEnter: () => {
       time = 0;
       sectionState = "entering";
@@ -478,17 +493,24 @@ function startLeaving() {
       replayDrop();
     },
     onLeaveBack: () => {
-      // Towers collapse / leave
+      // User started scrolling UP to the previous section
       sectionState = "leaving";
       startLeaving();
     },
     onLeave: () => {
-      // Scroll down past section → collapse towers as well
+      // User started scrolling DOWN to the next section
       sectionState = "leaving";
       startLeaving();
     },
+    onEnterBack: () => {
+      // User scrolled BACK UP into this section from the one below
+      time = 0;
+      sectionState = "entering";
+      towersVisible = true;
+      updateTargetsFromDOM();
+      replayDrop();
+    }
   });
-
 
 
 
@@ -597,10 +619,10 @@ function startLeaving() {
           b.vy += dropG * dt;
 
           // horizontal inertia
-          b.vX *= Math.exp(-1.8 * dt);
+          b.vX *= Math.exp(-12.8 * dt);
 
           // rotation inertia
-          b.vR *= Math.exp(-1.4 * dt);
+          b.vR *= Math.exp(-12.4 * dt);
 
           b.y += b.vy * dt;
           b.offX += b.vX * dt;

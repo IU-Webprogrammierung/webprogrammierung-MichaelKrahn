@@ -274,64 +274,121 @@ function fallbackModel() {
 /* ------------------------------
    Active Model Management
 -------------------------------- */
-let loadSessionId = 0; // Tracks the current active load
+let loadSessionId = 0;
 
 async function setActiveModel(index) {
     activeIndex = index;
-    const currentSession = ++loadSessionId; // Increment session on every scroll trigger
+    const currentSession = ++loadSessionId;
 
     const url = sections[index]?.dataset?.model;
     if (!url) return;
 
-    // Remove previous model (but DO NOT dispose it, so our cache stays intact)
-    if (currentRoot) {
-        scene.remove(currentRoot);
-        currentRoot = null;
-    }
+    //Trigger the CSS filter (desaturate, blur, etc.)
+    mainCanvas.classList.add("is-loading");
+
+    // Let the old model keep spinning while the CSS filter reaches its peak!
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    if (currentSession !== loadSessionId) return;
 
     try {
         const loadedRoot = await loadGLB(url);
 
-        // CRITICAL: If the user scrolled away while this was loading, discard it!
         if (currentSession !== loadSessionId) return;
+
+        if (currentRoot) {
+            loadedRoot.rotation.y = currentRoot.rotation.y;
+            loadedRoot.rotation.x = currentRoot.rotation.x;
+
+            scene.remove(currentRoot);
+        } else {
+            loadedRoot.rotation.y = desiredRotY + idleAngle;
+        }
 
         currentRoot = loadedRoot;
         scene.add(currentRoot);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                if (currentSession === loadSessionId) {
+                    mainCanvas.classList.remove("is-loading");
+                }
+            });
+        });
+
     } catch (e) {
         console.warn("Model load failed:", url, e);
         if (currentSession === loadSessionId) {
+            if (currentRoot) scene.remove(currentRoot);
             currentRoot = fallbackModel();
             scene.add(currentRoot);
+            mainCanvas.classList.remove("is-loading");
         }
     }
+}
+
+/* ------------------------------
+   Info Section Cinematic Effect
+-------------------------------- */
+const infoSection = document.getElementById('info');
+
+let infoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            // Darken and desaturate the rotating machine in the background
+            mainCanvas.classList.add("is-info");
+
+            // Trigger the CSS fade-in animation for the text
+            entry.target.classList.add("is-active");
+        } else {
+            // Restore color when scrolling away
+            mainCanvas.classList.remove("is-info");
+
+            // Reset the text animation so it fades in again next time
+            entry.target.classList.remove("is-active");
+        }
+    });
+}, { threshold: 0.4 });
+
+if (infoSection) {
+    infoObserver.observe(infoSection);
 }
 
 
 /* ------------------------------
    Contact Section GLB Cleanup
 -------------------------------- */
-
-// Track when user scrolls to contact section
 const contactSection = document.getElementById('contact');
-// Update the contact observer to just remove, not dispose
+
 let contactObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            // 1. Instantly apply the permanent, heavy background blur
+            mainCanvas.classList.add("is-contact");
+
+            // 2. Wait for the CSS blur to fully cover the screen (150ms)
+            // Then secretly remove the mixer so only the blurred floor remains
             if (currentRoot) {
-                scene.remove(currentRoot);
-                // Removed disposeObject3D(currentRoot) here as well
-                currentRoot = null;
-                floor.visible = false;
+                setTimeout(() => {
+                    scene.remove(currentRoot);
+                    currentRoot = null;
+                }, 150);
             }
+
         } else if (!entry.isIntersecting && sections.length > 0) {
-            floor.visible = true;
+            // User scrolled back up from contact section
+
+            // 1. Remove the heavy blur
+            mainCanvas.classList.remove("is-contact");
+
+            // 2. Load the correct model back in (setActiveModel handles its own quick loading blur)
             const activeSection = sections[activeIndex];
             if (activeSection?.dataset?.model && !currentRoot) {
                 setActiveModel(activeIndex);
             }
         }
     });
-}, { threshold: 0.5 });
+}, { threshold: 0.25 }); // Lowered threshold slightly so it triggers earlier
 
 if (contactSection) {
     contactObserver.observe(contactSection);
@@ -530,7 +587,6 @@ async function initAccessories() {
 /* ------------------------------
    Scroll-driven rotation + overlay
 -------------------------------- */
-
 let ticking = false;
 
 function updateFromScroll() {
@@ -540,9 +596,10 @@ function updateFromScroll() {
     if (!activeSection) return;
 
     const p = getSectionProgress(activeSection);
-    desiredRotY = p * Math.PI * 2; // full rotation per section
 
-    // Overlay after half rotation
+    desiredRotY = (scroller.scrollTop / window.innerHeight) * Math.PI * 3;
+
+    // Overlay after half section progress
     activeSection.classList.toggle("show-overlay", p >= 0.5);
 
     // Accessory canvases: run only for active section
@@ -553,6 +610,13 @@ function updateFromScroll() {
 }
 
 scroller.addEventListener("scroll", () => {
+    if (scroller.scrollTop > 10) {
+        const firstLoadSection = document.querySelector('.snap-section.is-first-load');
+        if (firstLoadSection) {
+            firstLoadSection.classList.remove('is-first-load');
+        }
+    }
+
     if (!ticking) {
         ticking = true;
         requestAnimationFrame(updateFromScroll);
@@ -574,7 +638,7 @@ function animate() {
 
     if (currentRoot) {
         // 1. Slowly increase the idle angle every frame
-        idleAngle += 0.0045; 
+        idleAngle += 0.0045;
 
         // 2. Combine scroll rotation with idle rotation
         const targetRotY = desiredRotY + idleAngle;
@@ -625,23 +689,56 @@ function updateNav() {
 scroller.addEventListener('scroll', updateNav, { passive: true });
 
 /* ------------------------------
-   Boot
+   Boot & Cinematic Initial Load
 -------------------------------- */
-
 (async function boot() {
-    // Mark first section active immediately
-    sections[0]?.classList.add("is-active");
+    // 1. Lock the ENTIRE page's text animations
+    document.body.classList.add("is-booting"); 
+    
+    // Lock the canvas
+    mainCanvas.classList.add("is-booting");
+
     await setActiveModel(0);
-
     await initAccessories();
-
-    // Initial compute for overlay/rotation/accessories
     updateFromScroll();
-
     animate();
+
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            // Force a slow, luxurious transition for the 3D machine
+            mainCanvas.style.transition = "opacity 1.5s ease-out, filter 1.5s ease-out, transform 1.5s ease-out";
+
+            // Un-hide the 3D machine
+            mainCanvas.classList.remove("is-booting");
+            mainCanvas.style.transform = "scale(1)";
+
+            // Queue up the specific delays for the text and gallery
+            sections[0]?.classList.add("is-first-load");
+            sections[0]?.classList.add("is-active");
+
+            // 2. UNLOCK the text animations! 
+            // Now that the lock is gone, the elements will read the 1.6s and 2.6s delays and start animating!
+            document.body.classList.remove("is-booting");
+
+            // Clean up transitions after the boot sequence finishes
+            setTimeout(() => {
+                mainCanvas.style.transition = "";
+                sections[0]?.classList.remove("is-first-load");
+            }, 2500);
+        });
+    });
 })();
 
 
+
+
+
+
+
+
+/* ------------------------------
+   LANGUAGE
+-------------------------------- */
 let currentLang = 'en';
 
 function toggleLanguage() {

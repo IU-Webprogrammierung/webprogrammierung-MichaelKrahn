@@ -1,12 +1,15 @@
 /* =========================================
    NAVBAR
 ========================================= */
-.navbar a.active {
-  opacity: 1;
-}
 
-/* Hero state (page load) - ONLY for index.html landing page */
-body.is-landing .navbar {
+/* =========================================
+   DEFAULT STATES (Applies to Desktop & Mobile)
+========================================= */
+/* =========================================
+   NAVBAR - DEFAULT STATES (Desktop & Base)
+========================================= */
+.navbar {
+  /* Floating Hero State */
   position: fixed;
   top: 30%;
   left: 6%;
@@ -19,157 +22,207 @@ body.is-landing .navbar {
   backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  padding: 14px 18px;
+  padding: 14px 20px;
 
+  /* FIX: Grid guarantees the center is perfectly centered on the page */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
 }
 
-/* Sticky state (after collapse) - for landing page */
-body.is-landing .navbar.is-sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: none;
-  padding: 0px 10px;
+.navbar-left {
+  justify-self: start;
+  padding: 0px 15px;
+}
 
-  width: 100vw;
-  height: 8%;
-  z-index: 9999;
+.navbar-center {
+  /* FIX: Un-cramp the links */
+  display: flex;
+  gap: 30px; 
+  justify-self: center;
+  align-items: center;
+}
 
-  border: none;
-  border-radius: 0;
-
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border);
+.navbar-right {
+  justify-self: end;
+  display: none; /* Hidden on landing until sticky */
+  align-items: center;
+  gap: 20px; /* Space between Ticker/Lang and Hamburger */
 }
 
 /* =========================================
-   UNIFIED STICKY NAVBAR (for all non-landing pages)
-   This includes: imprint.html, shop.html, and future pages
+   STICKY & NON-LANDING PAGES
 ========================================= */
+.navbar.is-sticky,
 body:not(.is-landing) .navbar {
   position: fixed;
   top: 0;
   left: 0;
   transform: none;
-  padding: 0px 10px;
   width: 100vw;
-  height: 8%;
+  height: 8%; 
+  min-height: 60px;
   z-index: 9999;
-
   border: none;
   border-radius: 0;
-
+  padding: 0px;
+  
   background: var(--glass);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--glass-border);
 
+  /* Maintain absolute centering on sticky mode */
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
 }
 
-/* Hero state - keep fallback for pages without body class */
-.navbar {
-  position: fixed;
-  top: 30%;
-  left: 6%;
-  transform: translateY(-50%);
-  width: min(72vw, 820px);
-  z-index: 10;
-
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 14px 18px;
-
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-}
-
-/* Sticky state (after collapse) */
-.navbar.is-sticky {
-  position: fixed;
-  top: 0;
-  left: 0;
-  transform: none;
-  padding: 0px 10px;
-
-  width: 100vw;
-  height: 8%;
-  z-index: 9999;
-
-  border: none;
-  border-radius: 0;
-
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border);
-}
-
-/* Navbar */
-.navbar-center {
+/* Show right elements on sticky */
+.navbar.is-sticky .navbar-right,
+body:not(.is-landing) .navbar-right {
   display: flex;
-  gap: 18px;
-  justify-content: center;
-}
-
-/* Hide navbar-right by default (landing page hero state) */
-.navbar-right {
-  /* Ensure the container has a fixed width or handles overflow */
-  display: none;
-  justify-content: flex-end;
-  align-items: center;
-  overflow: hidden;
-  /* Hide text that hasn't "scrolled" in yet if you align left */
-  min-width: 350px;
-  /* Reserve space so navbar doesn't jitter */
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-4px);
-  transition: opacity .25s ease, transform .25s ease;
-}
-
-/* Sticky state: show ticker area */
-.navbar.is-sticky .navbar-right {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-  transform: none;
 }
 
 .navbar-miniText {
   font-family: 'Courier New', Courier, monospace;
-  /* Monospace looks best for tickers */
   font-size: 0.8rem;
   white-space: pre;
-  /* IMPORTANT: Preserves spaces so text doesn't collapse */
   color: var(--text);
   text-transform: uppercase;
-
-  /* Optional: fade out the left side to make it look like it's emerging */
-  /*mask-image: linear-gradient(to right, transparent, black 20%);
-  -webkit-mask-image: linear-gradient(to right, transparent, black 20%);*/
 }
 
-/* Non-landing pages: always show navbar-right */
-body:not(.is-landing) .navbar-right {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-  transform: none;
+
+
+
+
+
+
+
+/* =========================================
+   NAVBAR LINKS & ACTIVE UNDERLINE
+========================================= */
+.navbar-center a {
+  position: relative;
+  text-decoration: none;
+  color: var(--text);
+  padding-bottom: 4px; /* Space between text and underline */
 }
 
-/* Language Toggle Button (for shop.html) */
+/* The invisible underline */
+.navbar-center a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--text); /* Uses your text variable color */
+  transition: width 0.3s ease-out;
+}
+
+/* Expand the underline on hover AND when active */
+.navbar-center a:hover::after,
+.navbar-center a.active::after {
+  width: 100%;
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   MOBILE RESPONSIVE (Max-width: 900px)
+========================================= */
+@media (max-width: 900px) {
+  .navbar {
+    width: 90vw;
+    left: 5vw;
+    padding: 15px;
+
+    /* Switch to Flexbox on mobile to easily manage wrapping */
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+  }
+
+  /* Floating Mobile State: Links drop to a second row under the logo */
+  .navbar:not(.is-sticky) .navbar-center {
+    width: 100%;
+    margin-top: 15px;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Sticky Mobile State: Snap logo left, hamburger right */
+  .navbar.is-sticky,
+  body:not(.is-landing) .navbar {
+    width: 100vw;
+    left: 0;
+    flex-wrap: nowrap; /* Forces everything onto one line */
+    padding: 0 20px;
+  }
+
+  .navbar.is-sticky .navbar-toggle,
+  body:not(.is-landing) .navbar-toggle {
+    display: flex;
+  }
+
+  /* Hide Ticker on mobile top-bar */
+  .navbar-miniText {
+    display: none;
+  }
+
+  /* Hamburger Menu Layout (Hidden state) */
+  .navbar.is-sticky .navbar-center,
+  body:not(.is-landing) .navbar-center {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 60px);
+    background: rgba(246, 246, 248, 0.8);
+    flex-direction: column;
+    justify-content: flex-end;
+    grid-template-columns: auto auto;
+    align-items: center;
+    padding: 0px;
+    margin-top: 0px;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease;
+    z-index: 9998;
+  }
+
+  /* FIX: Specificity override to make sliding work again! */
+  .navbar.is-sticky .navbar-center.is-open,
+  body:not(.is-landing) .navbar-center.is-open {
+    transform: translateX(0);
+    z-index: -1;
+  }
+
+  .navbar.is-sticky .navbar-center a,
+  body:not(.is-landing) .navbar-center a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.2rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+}
+
+
+
+
+
+/* =========================================
+   Language Toggle Button (for shop.html)
+========================================= */
 .lang-toggle {
   display: flex;
   align-items: center;
@@ -180,11 +233,12 @@ body:not(.is-landing) .navbar-right {
   padding: 10px 15px;
   cursor: none;
   transition: all 0.2s ease;
-  margin: 0px 30px;
+  margin: 0px 15px;
 }
 
 .lang-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .lang-flag {
@@ -192,7 +246,8 @@ body:not(.is-landing) .navbar-right {
   line-height: 1;
 }
 
-/* Language toggle on sticky navbar */
+
+/* Language toggle on sticky navbar
 .navbar.is-sticky .lang-toggle {
   padding: 4px 8px;
 }
@@ -200,6 +255,9 @@ body:not(.is-landing) .navbar-right {
 .navbar.is-sticky .lang-flag {
   font-size: 1rem;
 }
+*/
+
+
 
 /* =========================================
    HAMBURGER MENU ICON
@@ -241,86 +299,19 @@ body:not(.is-landing) .navbar-right {
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
+
+
+
+
+
+
+
+
+
+
 /* =========================================
-   MOBILE NAVBAR STYLES
+   Hero Styles
 ========================================= */
-@media (max-width: 900px) {
-  /* Hamburger menu button */
-  .navbar-toggle {
-    display: flex;
-  }
-
-  /* Always sticky on mobile */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    transform: none;
-    padding: 2vw;
-    width: 96vw;
-    height: auto;
-    min-height: 60px;
-    z-index: 9999;
-    border: none;
-    border-radius: 0;
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--glass-border);
-    
-    /* Layout for mobile */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .navbar-left {
-    flex-shrink: 0;
-  }
-
-  .navbar-left img {
-    width: 70px;
-    height: auto;
-  }
-
-  /* Hide nav links by default on mobile */
-  .navbar-center {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 60px);
-    background: rgba(246, 246, 248, 0.98);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0;
-    padding: 20px 0;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 9998;
-  }
-
-  /* Show nav links when menu is open */
-  .navbar-center.is-open {
-    transform: translateX(0);
-  }
-
-  .navbar-center a {
-    display: block;
-    width: 100%;
-    padding: 16px 24px;
-    text-align: center;
-    font-size: 1.2rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  }
-
-  .navbar-miniText {
-    display: none;
-  }
-}
 
 .hero-bg {
   position: absolute;
@@ -383,13 +374,6 @@ body:not(.is-landing) .navbar-right {
 /* =========================================
    MOBILE HERO STYLES
 ========================================= */
-@media (max-width: 900px) {
-  .hero-bg {
-    display: none;
-  }
-}
-
-/* Mobile News Ticker Bar */
 .mobile-ticker {
   display: none;
   position: fixed;
@@ -426,12 +410,21 @@ body:not(.is-landing) .navbar-right {
 }
 
 @keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 900px) {
   .mobile-ticker {
     display: block;
+  }
+
+  .hero-bg {
+    /*display: none;*/
   }
 }

@@ -19,19 +19,38 @@
   z-index: 0;
   pointer-events: none;
 }
-#main3d{
-  width: 100%;
-  height: 100%;
-  display: block;
+
+#main3d {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+    filter: blur(0px) saturate(100%); 
 }
-#vignette{
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(1200px 700px at 50% 40%, rgba(255,255,255,0.06), transparent 60%),
-    radial-gradient(900px 700px at 20% 30%, rgba(120,160,255,0.05), transparent 55%),
-    radial-gradient(900px 700px at 80% 30%, rgba(255,120,160,0.03), transparent 55%),
-    linear-gradient(to bottom, rgba(0,0,0,0.15), rgba(0,0,0,0.35));
+
+#main3d.is-loading {
+    opacity: 1; 
+    filter: blur(0px) saturate(20%);
+}
+
+/* Cinematic Canvas Effect for Info Section */
+#main3d.is-info {
+    opacity: 0.7;
+    filter: blur(8px) saturate(0%);
+}
+
+/* Persistent blur for the background of the contact section */
+#main3d.is-contact {
+    opacity: 0.7;
+    filter: blur(8px) saturate(100%);
+}
+
+/* The initial hidden state before the page fully loads */
+#main3d.is-booting {
+    opacity: 0 !important;
+    filter: blur(24px) saturate(0%) brightness(2) !important;
+    transform: scale(1.25);
+    transition: none !important;
 }
 
 #scroller{
@@ -41,33 +60,70 @@
   height: 100vh;
   overflow-y: auto;
 }
+/* ========================================= */
+/* --- ANIMATION & SCROLL SNAP LOGIC --- */
+/* ========================================= */
 
-.snap-section{
+.snap-section {
   height: 100vh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 20px;
   opacity: 0.22;
   transition: opacity 450ms ease, transform 450ms ease;
 }
 
-.snap-section.is-active{
+/* 1. Fix the transparent bug! Bring the active section container to full visibility */
+.snap-section.is-active {
   opacity: 1;
-  transform: translateY(0);
 }
 
-.content{
-  /*width: min(1120px, 100%);*/
+/* 2. Initial hidden states for Context (.copy) and Details (.media) */
+.snap-section .copy {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.snap-section .media {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), 
+              transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.snap-section.is-active .copy {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.25s;
+}
+
+.snap-section.is-active .media {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 2.0s; 
+}
+
+.snap-section.is-first-load.is-active .copy {
+  transition-delay: 1.2s;
+}
+body.is-booting .snap-section .copy,
+body.is-booting .snap-section .media {
+    opacity: 0 !important;
+    transform: translateY(40px) !important;
+    transition: none !important;
+}
+
+.content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 100px;
   align-items: center;
   padding-top: 20px;
 }
-
 @media (max-width: 980px){
   .content{ grid-template-columns: 1fr; }
 }
@@ -102,15 +158,31 @@
   padding: 10px 2px;
 }
 
-/* Glass effect for text container */
+/* Initial state: No blur, so it doesn't pop harshly */
 .copy .glass-container {
   background: var(--glass);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   border-radius: var(--radius);
   padding: 24px;
+  
+  /* Animate the blur property smoothly */
+  transition: backdrop-filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
+              -webkit-backdrop-filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Active state: Ramp up the blur */
+.snap-section.is-active .copy .glass-container {
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  transition-delay: 0.25s; /* Matches standard .copy delay */
+}
+
+/* Boot state: Match the slow boot delay */
+.snap-section.is-first-load.is-active .copy .glass-container {
+  transition-delay: 1.2s;
 }
 
 .kicker{
@@ -134,7 +206,7 @@
   box-shadow: var(--shadow);
   padding: 18px 18px 16px;
   opacity: 0;
-  transform: translateY(14px) scale(0.985);
+  transform: translateY(14px) scale(0.9);
   transition: opacity 520ms ease, transform 520ms ease;
   pointer-events: none;
   
@@ -153,7 +225,7 @@
 }
 
 @keyframes overlayPop{
-  from{ filter: blur(1px); }
+  from{ filter: blur(4px); }
   to{ filter: blur(0); }
 }
 
@@ -244,26 +316,62 @@
   }
 }
 
-/* Language Toggle Button */
-.lang-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 10px 15px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 0px 30px;
+
+
+/* --------------------------- */
+/* --- Info Section Layout --- */
+/* --------------------------- */
+.info-wrapper {
+    max-width: 800px;
+    padding: 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 600ms ease, transform 600ms ease;
 }
 
-.lang-toggle:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+/* Animate in when the section snaps into view */
+#info.is-active .info-wrapper {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-.lang-flag {
-  font-size: 18px;
-  line-height: 1;
+.info-wrapper h2 {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.info-wrapper .subtitle {
+    color: var(--muted);
+    font-size: 20px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--stroke);
+    padding-bottom: 20px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.info-item h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+}
+
+.info-item p {
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .info-wrapper {
+        padding: 24px;
+    }
 }

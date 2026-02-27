@@ -129,7 +129,13 @@ footer{
 }
 
 .snap-footer{
-  scroll-snap-align: start;  /* gives a valid snap target */
-  min-height: 17vh;          /* ensures you can land there */
+  scroll-snap-align: start; 
+  min-height: 17vh;     
   padding: 0px 10%;
+}
+
+@media (max-width: 900px) {
+  .snap-footer{
+    min-height: 30vh;         
+  }
 }

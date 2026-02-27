@@ -67,3 +67,47 @@ body.dark-mode .form-group textarea {
   box-shadow: 0 0 0 2px rgba(90, 185, 255, 0.6);
   transform: translateY(-1px);
 }
+
+
+
+/* ========================================= 
+   CONTACT - MOBILE RESPONSIVE TWEAKS
+========================================= */
+@media (max-width: 900px) {
+  /* Reduce the massive desktop padding to give the form room to breathe */
+  .contact-wrapper {
+    width: 90vw; /* Prevents the glass box from touching screen edges */
+    padding: 24px 20px; 
+    border-radius: 24px; /* Slightly softer radius for smaller screens */
+  }
+
+  /* Scale down the typography so it doesn't wrap awkwardly */
+  .contact-header h2 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .contact-header p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  /* Tighten the gap so the submit button stays visible above the mobile keyboard */
+  .contact-form {
+    gap: 16px;
+  }
+
+  /* Ensure the text area isn't too tall on small screens */
+  .form-group textarea {
+    min-height: 120px; 
+  }
+
+  /* Make the submit button full-width for an easier thumb-tap target */
+  .contact-form .btn {
+    width: 100%;
+    margin-top: 8px;
+    padding: 16px; /* Taller touch target */
+    font-size: 1.1rem;
+    justify-content: center;
+  }
+}
