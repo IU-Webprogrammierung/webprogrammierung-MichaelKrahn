@@ -18,8 +18,8 @@
 
 .about-wrapper {
   width: min(1100px, 100%);
-  height: 92%;
-  max-height: 800px;
+  height: 80%;
+  max-height: 650px;
   display: flex;
   flex-direction: column;
   padding: clamp(16px, 3vh, 32px);
@@ -66,13 +66,25 @@
   flex-shrink: 1;
 }
 
+.about-text-desktop {
+  display: none;
+}
+
+.about-text-mobile {
+  display: block;
+}
+
+.about-text-mobile {
+  max-width: 65ch;
+}
+
 .about-aside {
   margin-top: auto;
 }
 
 /* ---------- Section layout ---------- */
 #about-skills {
-  height: 100vh; 
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -121,57 +133,76 @@
 }
 
 .tower-label .lvl {
-  display: none; 
+  display: none;
 }
 
 .tower-canvas {
   width: 100%;
-  height: clamp(60px, 10vh, 100px);     
+  height: clamp(60px, 10vh, 100px);
   display: block;
   border-radius: 8px;
-  background: radial-gradient(circle at 50% 35%, rgba(255,255,255,0.08), rgba(0,0,0,0.10));
-  border: 1px solid rgba(255,255,255,0.10);
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.10));
+  border: 1px solid rgba(255, 255, 255, 0.10);
   margin-top: auto;
 }
 
 /* Desktop override */
 @media (min-width: 900px) {
+  .about-text-desktop {
+    display: block;
+  }
+
+  .about-text-mobile {
+    display: none;
+  }
+
   .about-grid {
     flex-direction: row;
     display: grid;
     grid-template-columns: 1.3fr 0.9fr;
     align-items: top;
   }
+
   .skills-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .about-aside {
     margin-top: 0;
   }
+
   .tower-label {
     flex-direction: row;
     justify-content: space-between;
     align-items: baseline;
   }
+
   .tower-label .lvl {
     display: block;
     font-size: 0.7rem;
     color: var(--tower-accent-soft);
     text-shadow: 0 0 14px color-mix(in srgb, var(--tower-accent) 45%, transparent);
   }
+
   .tower-canvas {
     height: 130px;
   }
+
   .skill-tower {
     padding: 8px;
     border-radius: 18px;
+  }
+
+  .about-wrapper {
+    height: 92%;
+    max-height: 800px;
   }
 }
 
 /* HOVER ANIMATION */
 .skill-tower:hover {
   transform: translateY(-3px);
-  box-shadow: 0 22px 46px rgba(0,0,0,0.32);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.32);
 }
 
 
@@ -186,6 +217,7 @@
   filter: blur(12px);
   transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.8s ease;
 }
+
 #about-skills.is-visible .about-wrapper {
   opacity: 1;
   transform: translateY(0) scale(1);
@@ -199,15 +231,17 @@
   transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-#about-skills.is-visible .about-head h2 { 
-  transition-delay: 0.2s; 
-  opacity: 1; 
-  transform: translateY(0); 
+
+#about-skills.is-visible .about-head h2 {
+  transition-delay: 0.2s;
+  opacity: 1;
+  transform: translateY(0);
 }
-#about-skills.is-visible .about-head .about-kicker { 
-  transition-delay: 0.3s; 
-  opacity: 1; 
-  transform: translateY(0); 
+
+#about-skills.is-visible .about-head .about-kicker {
+  transition-delay: 0.3s;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* 3. The glowing gradient line expands from the left like a laser */
@@ -216,6 +250,7 @@
   transition: width 1s cubic-bezier(0.8, 0, 0.2, 1);
   transition-delay: 0.4s;
 }
+
 #about-skills.is-visible .about-accent {
   width: 100%;
 }
@@ -227,9 +262,27 @@
   filter: blur(8px);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.6s ease;
 }
-#about-skills.is-visible .about-text p:nth-child(1) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); filter: blur(0); }
-#about-skills.is-visible .about-text p:nth-child(2) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); filter: blur(0); }
-#about-skills.is-visible .about-text p:nth-child(3) { transition-delay: 0.6s; opacity: 1; transform: translateY(0); filter: blur(0); }
+
+#about-skills.is-visible .about-text p:nth-child(1) {
+  transition-delay: 0.4s;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+#about-skills.is-visible .about-text p:nth-child(2) {
+  transition-delay: 0.5s;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+#about-skills.is-visible .about-text p:nth-child(3) {
+  transition-delay: 0.6s;
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
 
 /* 5. The empty tower glass bases fade in right before the blocks land */
 #about-skills .skill-tower {
@@ -237,8 +290,24 @@
   transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-#about-skills.is-visible .skill-tower { opacity: 1; transform: translateY(0); }
-#about-skills.is-visible .skill-tower:nth-child(1) { transition-delay: 0.6s; }
-#about-skills.is-visible .skill-tower:nth-child(2) { transition-delay: 0.7s; }
-#about-skills.is-visible .skill-tower:nth-child(3) { transition-delay: 0.8s; }
-#about-skills.is-visible .skill-tower:nth-child(4) { transition-delay: 0.9s; }
+
+#about-skills.is-visible .skill-tower {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#about-skills.is-visible .skill-tower:nth-child(1) {
+  transition-delay: 0.6s;
+}
+
+#about-skills.is-visible .skill-tower:nth-child(2) {
+  transition-delay: 0.7s;
+}
+
+#about-skills.is-visible .skill-tower:nth-child(3) {
+  transition-delay: 0.8s;
+}
+
+#about-skills.is-visible .skill-tower:nth-child(4) {
+  transition-delay: 0.9s;
+}

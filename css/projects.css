@@ -26,7 +26,6 @@
     max-width: var(--card-max-width);
     /* Keeps the iframe proportional without hardcoding height */
     aspect-ratio: 16 / 10;
-    margin-top: 100px;
     perspective: 1300px;
 }
 
@@ -198,6 +197,6 @@ iframe {
     }
 
     .projects-wrapper {
-        padding-bottom: 100px;
+        gap: 150px;
     }
 }

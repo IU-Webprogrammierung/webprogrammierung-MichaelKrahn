@@ -40,7 +40,6 @@
 }
 
 html, body {
-  overflow-x: hidden;
   margin: 0;
   padding: 0;
   height: 100%;
@@ -52,8 +51,8 @@ html, body {
 }
 
 body {
-  overflow: hidden;
   cursor: none;
+  overflow: hidden;
 }
 
 /* Custom Cursor */
@@ -89,6 +88,7 @@ body {
 #main{
   position: relative;
   overflow-y: auto;
+  overflow-x: hidden;
   z-index: 1;
   height: 100vh;
 
@@ -96,7 +96,14 @@ body {
   scroll-behavior: smooth;
 
   scroll-padding-top: 0px;
+
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE / Edge legacy */
 }
+#main::-webkit-scrollbar{
+  display: none;                  /* Chrome / Safari */
+}
+
 
 
 /* =========================================
@@ -132,26 +139,19 @@ body::before{
   100% { transform: translate3d(0,0,0); }
 }
 
-/* Hide scrollbar but keep scrolling */
-#main{
-  scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none;       /* IE / Edge legacy */
-}
-#main::-webkit-scrollbar{
-  display: none;                  /* Chrome / Safari */
-}
-
 
 
 /* --- SECTIONS --- */
 section {
-    height: 100vh;
+    padding: 0px 10%;
+    scroll-snap-align: start;
+    overflow: hidden;
+    min-height: 100vh;   /* fallback */
+    min-height: 100dvh;  /* modern mobile-safe viewport */
     display: grid;
     justify-content: center;
     align-items: center;
-    padding: 0px 10%;
-    scroll-snap-align: start;
-    overflow-x: hidden;
+
     /*border: 1px solid red; /* Debug to see trigger positions */
 }
 
@@ -375,15 +375,28 @@ a:focus-visible::before{
    MOBILE LAYOUT
 ========================================= */
 @media (max-width: 900px) {
+  html, body {
+    line-height: 1.4;
+    font-size: 0.9rem;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.5px;
+    font-size: clamp(1.8rem, 2.5vw, 3rem);
+  }
+  h1 {
+      font-size: 6vw;
+      letter-spacing: -3px;
+  }
+
   section {
     padding: 0px 6%;
     height: 100dvh;
     position: relative;
     overflow: hidden;
-  }
-
-  .hero-portrait {
-    display: none;
   }
 
   .navbar-center {
