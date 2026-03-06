@@ -145,6 +145,7 @@ body::before{
 section {
     padding: 0px 10%;
     scroll-snap-align: start;
+    scroll-snap-stop: always;
     overflow: hidden;
     min-height: 100vh;   /* fallback */
     min-height: 100dvh;  /* modern mobile-safe viewport */

@@ -65,12 +65,7 @@
 /* ========================================= */
 
 .snap-section {
-  height: 100vh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
   display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 20px;
   opacity: 0.22;
   transition: opacity 450ms ease, transform 450ms ease;
@@ -386,13 +381,13 @@ body.is-booting .snap-section .media {
   .content {
     display: block; /* Disable flex layout */
     width: 100%;
-    height: 100%;
+    height: 90%;
   }
   
   /* 1. Glass Card: Anchored High Up */
   .copy {
     position: absolute;
-    top: 120px;
+    top: 100px;
     left: 16px;
     right: 16px;
     width: auto;
@@ -402,7 +397,7 @@ body.is-booting .snap-section .media {
   /* 2. Media: Anchored to the strict bottom */
   .media {
     position: absolute;
-    bottom: 30px;
+    bottom: 50px;
     left: 16px;
     right: 16px;
     width: auto;
@@ -430,7 +425,7 @@ body.is-booting .snap-section .media {
   
   /* --- Expandable Glass Card Logic --- */
   .copy .glass-container {
-    padding: 16px;
+    padding: 12px;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -442,7 +437,7 @@ body.is-booting .snap-section .media {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    margin-top: 0;
+    margin-top: -25px;
   }
   
   /* Override desktop scroll animations */
@@ -462,12 +457,12 @@ body.is-booting .snap-section .media {
   /* --- The Expanded State --- */
   .glass-container.is-expanded .overlay {
     grid-template-rows: 1fr;
-    margin-top: 14px;
   }
   
   .glass-container.is-expanded .overlay-inner {
     opacity: 1;
     padding: 10px; /* Reset padding for neat alignment */
     pointer-events: auto;
+    /*margin-top: -30px;*/
   }
 }

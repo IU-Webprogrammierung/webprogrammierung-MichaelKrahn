@@ -103,7 +103,7 @@ body.dark-mode .form-group textarea {
 
   /* Ensure the text area isn't too tall on small screens */
   .form-group textarea {
-    min-height: 120px; 
+    min-height: 95px; 
   }
 
   /* Make the submit button full-width for an easier thumb-tap target */

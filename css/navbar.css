@@ -38,16 +38,18 @@
 .navbar-center {
   /* FIX: Un-cramp the links */
   display: flex;
-  gap: 30px; 
+  gap: 30px;
   justify-self: center;
   align-items: center;
 }
 
 .navbar-right {
   justify-self: end;
-  display: none; /* Hidden on landing until sticky */
+  display: none;
+  /* Hidden on landing until sticky */
   align-items: center;
-  gap: 20px; /* Space between Ticker/Lang and Hamburger */
+  gap: 20px;
+  /* Space between Ticker/Lang and Hamburger */
 }
 
 /* =========================================
@@ -60,13 +62,13 @@ body:not(.is-landing) .navbar {
   left: 0;
   transform: none;
   width: 100vw;
-  height: 8%; 
+  height: 8%;
   min-height: 60px;
   z-index: 9999;
   border: none;
   border-radius: 0;
   padding: 0px;
-  
+
   background: var(--glass);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
@@ -106,7 +108,8 @@ body:not(.is-landing) .navbar-right {
   position: relative;
   text-decoration: none;
   color: var(--text);
-  padding-bottom: 4px; /* Space between text and underline */
+  padding-bottom: 4px;
+  /* Space between text and underline */
 }
 
 /* The invisible underline */
@@ -117,7 +120,8 @@ body:not(.is-landing) .navbar-right {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: var(--text); /* Uses your text variable color */
+  background-color: var(--text);
+  /* Uses your text variable color */
   transition: width 0.3s ease-out;
 }
 
@@ -147,7 +151,7 @@ body:not(.is-landing) .navbar-right {
 
     /* Switch to Flexbox on mobile to easily manage wrapping */
     display: flex;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
     justify-content: space-between;
   }
 
@@ -155,7 +159,6 @@ body:not(.is-landing) .navbar-right {
     margin-right: -35vw;
   }
 
-  /* Floating Mobile State: Links drop to a second row under the logo */
   .navbar:not(.is-sticky) .navbar-center {
     width: 100%;
     margin-top: 15px;
@@ -164,12 +167,11 @@ body:not(.is-landing) .navbar-right {
     flex-wrap: wrap;
   }
 
-  /* Sticky Mobile State: Snap logo left, hamburger right */
   .navbar.is-sticky,
   body:not(.is-landing) .navbar {
     width: 100vw;
     left: 0;
-    flex-wrap: nowrap; /* Forces everything onto one line */
+    flex-wrap: nowrap;
     padding: 0 20px;
   }
 
@@ -178,19 +180,17 @@ body:not(.is-landing) .navbar-right {
     display: flex;
   }
 
-  /* Hide Ticker on mobile top-bar */
   .navbar-miniText {
     display: none;
   }
 
-  /* Hamburger Menu Layout (Hidden state) */
   .navbar.is-sticky .navbar-center,
   body:not(.is-landing) .navbar-center {
     position: fixed;
     top: 70px;
     left: 0;
     width: 100%;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 170px);
     background: rgba(246, 246, 248, 0.8);
     flex-direction: column;
     justify-content: flex-end;
@@ -203,7 +203,6 @@ body:not(.is-landing) .navbar-right {
     z-index: 9998;
   }
 
-  /* FIX: Specificity override to make sliding work again! */
   .navbar.is-sticky .navbar-center.is-open,
   body:not(.is-landing) .navbar-center.is-open {
     transform: translateX(0);
@@ -268,9 +267,7 @@ body:not(.is-landing) .navbar-right {
 ========================================= */
 .navbar-toggle {
   display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   width: 40px;
   height: 40px;
   background: transparent;
@@ -280,19 +277,35 @@ body:not(.is-landing) .navbar-right {
   z-index: 1000;
 }
 
+/* Base line style */
 .navbar-toggle span {
-  display: block;
+  position: absolute;
+  left: 50%;
   width: 24px;
   height: 2px;
   background-color: var(--text);
-  margin: 3px 0;
-  transition: all 0.3s ease;
   border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease, opacity 0.2s ease;
 }
 
-/* Hamburger animation when open */
+/* Position the 3 lines */
+.navbar-toggle span:nth-child(1) {
+  top: 12px;
+}
+
+.navbar-toggle span:nth-child(2) {
+  top: 19px;
+}
+
+.navbar-toggle span:nth-child(3) {
+  top: 26px;
+}
+
+/* Active state */
 .navbar-toggle.is-active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
+  top: 19px;
+  transform: translateX(-50%) rotate(45deg);
 }
 
 .navbar-toggle.is-active span:nth-child(2) {
@@ -300,9 +313,9 @@ body:not(.is-landing) .navbar-right {
 }
 
 .navbar-toggle.is-active span:nth-child(3) {
-  transform: rotate(-45deg) translate(5px, -5px);
+  top: 19px;
+  transform: translateX(-50%) rotate(-45deg);
 }
-
 
 
 /* =========================================

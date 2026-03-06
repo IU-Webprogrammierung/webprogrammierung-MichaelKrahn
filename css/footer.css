@@ -53,8 +53,6 @@ footer{
 
 
 
-
-/* Footer links*/
 .site-footer a{
   opacity: 0.85;
 }
@@ -138,7 +136,7 @@ footer{
 }
 
 .social-btn:hover::after{
-  opacity: 0.55;
+  opacity: 0.1;
 }
 
 @media (prefers-reduced-motion: reduce){
