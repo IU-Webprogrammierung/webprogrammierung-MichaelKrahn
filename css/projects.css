@@ -180,10 +180,9 @@ iframe {
 @media (max-width: 768px) {
     :root {
         /* Reduce peeking offsets so background cards don't slide off screen */
-        --peek-right: 25px;
-        --peek-top: 50px;
-        --scale-factor: 0.03;
-        /* slightly more scaling to distinct cards */
+        --peek-right: 21px;
+        --peek-top: 42px;
+        --scale-factor: 0.04;
     }
 
     .stack-container {
@@ -197,6 +196,6 @@ iframe {
     }
 
     .projects-wrapper {
-        gap: 150px;
+        gap: 125px;
     }
 }

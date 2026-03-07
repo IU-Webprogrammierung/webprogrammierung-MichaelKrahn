@@ -16,87 +16,98 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
-<body>
+<body class="legal-page"></body>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
 
-    <header id="nav">
-        <div class="navbar">
-            <div class="navbar-left">
-                <a href="index.html">
-                    <img src="assets/Logo.png" alt="logo" width="80" height="auto">
-                </a>
-            </div>
-
-            <nav class="navbar-center" aria-label="Main navigation">
-                <a href="index.html#about" data-en="About" data-de="Über mich">About</a>
-                <a href="index.html#cv" data-en="CV" data-de="Lebenslauf">CV</a>
-                <a href="index.html#projects" data-en="Projects" data-de="Projekte">Projects</a>
-                <a href="shop.html" data-en="Shop" data-de="Shop">Shop</a>
-                <a href="index.html#globe-1" data-en="Globe" data-de="Globus">Globe</a>
-                <a href="index.html#contact" data-en="Contact" data-de="Kontakt">Contact</a>
-            </nav>
-
-            <div class="navbar-right">
-                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
-                    <span class="lang-flag">🇩🇪</span>
-                </button>
-                <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+<header id="nav">
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">
+                <img class="logo" src="assets/Logo.png" alt="logo">
+            </a>
+            <span class="nav-separator">|</span>
+            <a href="index.html" class="nav-btn nav-btn-left" data-en="Portfolio" data-de="Portfolio">Portfolio</a>
+            <span class="nav-separator">|</span>
+            <a href="shop.html" class="nav-btn nav-btn-left" data-en="Shop" data-de="Shop">Shop</a>
         </div>
-    </header>
 
-    <section id="datenschutz">
-        <h2 data-en="Privacy Policy" data-de="Datenschutzerklärung">Privacy Policy</h2>
+        <nav class="navbar-center" aria-label="Main navigation">
+        </nav>
 
-        <h3 data-en="1. An overview of data protection" data-de="1. Datenschutz auf einen Blick">1. An overview of data protection</h3>
-        <p data-en="The following information will provide you with an easy to navigate overview of what will happen with your personal data when you visit this website. Personal data includes all data that can be used to personally identify you." 
-           data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.">
-            The following information will provide you with an easy to navigate overview of what will happen with your personal data when you visit this website. Personal data includes all data that can be used to personally identify you.
-        </p>
+        <div class="navbar-right">
+            <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                <span class="lang-flag">🇩🇪</span>
+            </button>
+        </div>
+    </div>
+</header>
 
-        <h3 data-en="2. Responsible Entity" data-de="2. Verantwortliche Stelle">2. Responsible Entity</h3>
-        <p>
-            Michael Krahn<br>
-            Glockscheiderweg 6<br>
-            56588 Waldbreitbach<br>
-            <span data-en="Germany" data-de="Deutschland">Germany</span><br><br>
-            <span data-en="Email:" data-de="E-Mail:">Email:</span> michael.penner97@web.de
-        </p>
+<section id="datenschutz">
+    <h2 data-en="Privacy Policy" data-de="Datenschutzerklärung">Privacy Policy</h2>
 
-        <h3 data-en="3. Data collection on this website (Server Logs)" data-de="3. Datenerfassung auf dieser Website (Server-Log-Dateien)">3. Data collection on this website (Server Logs)</h3>
-        <p data-en="The provider of this website automatically collects and stores information in so-called server log files, which your browser automatically transmits to us. These include: Browser type/version, operating system, referrer URL, host name of the accessing computer, and time of the server request. This data is not merged with other data sources." 
-           data-de="Der Provider der Seiten erhebt und speichert automatisch Informationen in so-called Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp/Browserversion, verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners und Uhrzeit der Serveranfrage. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.">
-            The provider of this website automatically collects and stores information in so-called server log files, which your browser automatically transmits to us. These include: Browser type/version, operating system, referrer URL, host name of the accessing computer, and time of the server request. This data is not merged with other data sources.
-        </p>
+    <h3 data-en="1. An overview of data protection" data-de="1. Datenschutz auf einen Blick">1. An overview of data
+        protection</h3>
+    <p data-en="The following information will provide you with an easy to navigate overview of what will happen with your personal data when you visit this website. Personal data includes all data that can be used to personally identify you."
+        data-de="Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.">
+        The following information will provide you with an easy to navigate overview of what will happen with your
+        personal data when you visit this website. Personal data includes all data that can be used to personally
+        identify you.
+    </p>
 
-        <h3 data-en="4. Contact Form & EmailJS" data-de="4. Kontaktformular & EmailJS">4. Contact Form & EmailJS</h3>
-        <p data-en="If you submit inquiries to us via our contact form, the information provided in the form as well as any contact information provided therein will be stored by us in order to handle your inquiry and in the event that we have further questions. We use the service 'EmailJS' to process and send these messages. Your data will be transmitted to EmailJS servers. We will not share this information without your consent." 
-           data-de="Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Für die Verarbeitung und den Versand der Nachrichten nutzen wir den Dienst 'EmailJS'. Dabei werden Ihre Daten an die Server von EmailJS übertragen. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.">
-            If you submit inquiries to us via our contact form, the information provided in the form as well as any contact information provided therein will be stored by us in order to handle your inquiry and in the event that we have further questions. We use the service 'EmailJS' to process and send these messages. Your data will be transmitted to EmailJS servers. We will not share this information without your consent.
-        </p>
+    <h3 data-en="2. Responsible Entity" data-de="2. Verantwortliche Stelle">2. Responsible Entity</h3>
+    <p>
+        Michael Krahn<br>
+        Glockscheiderweg 6<br>
+        56588 Waldbreitbach<br>
+        <span data-en="Germany" data-de="Deutschland">Germany</span><br><br>
+        <span data-en="Email:" data-de="E-Mail:">Email:</span> michael.penner97@web.de
+    </p>
 
-        <h3 data-en="5. Third-Party Services (CDNs & Fonts)" data-de="5. Dienste von Drittanbietern (CDNs & Fonts)">5. Third-Party Services (CDNs & Fonts)</h3>
-        <p data-en="To ensure fast and secure loading of external assets (such as 3D libraries), this site uses Content Delivery Networks (CDNs) like jsDelivr. When loading these resources, your IP address is transmitted to the server of the CDN provider. Additionally, this site may load Google Fonts to display text properly. This also requires transmitting your IP address to Google servers." 
-           data-de="Um ein schnelles und sicheres Laden externer Assets (wie z.B. 3D-Bibliotheken) zu gewährleisten, nutzt diese Seite Content Delivery Networks (CDNs) wie jsDelivr. Beim Laden dieser Ressourcen wird Ihre IP-Adresse an den Server des CDN-Anbieters übertragen. Zudem lädt diese Seite möglicherweise Google Fonts, um Texte korrekt darzustellen. Auch hierbei wird Ihre IP-Adresse an Server von Google übertragen.">
-            To ensure fast and secure loading of external assets (such as 3D libraries), this site uses Content Delivery Networks (CDNs) like jsDelivr. When loading these resources, your IP address is transmitted to the server of the CDN provider. Additionally, this site may load Google Fonts to display text properly. This also requires transmitting your IP address to Google servers.
-        </p>
+    <h3 data-en="3. Data collection on this website (Server Logs)"
+        data-de="3. Datenerfassung auf dieser Website (Server-Log-Dateien)">3. Data collection on this website
+        (Server Logs)</h3>
+    <p data-en="The provider of this website automatically collects and stores information in so-called server log files, which your browser automatically transmits to us. These include: Browser type/version, operating system, referrer URL, host name of the accessing computer, and time of the server request. This data is not merged with other data sources."
+        data-de="Der Provider der Seiten erhebt und speichert automatisch Informationen in so-called Server-Log-Dateien, die Ihr Browser automatisch an uns übermittelt. Dies sind: Browsertyp/Browserversion, verwendetes Betriebssystem, Referrer URL, Hostname des zugreifenden Rechners und Uhrzeit der Serveranfrage. Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen.">
+        The provider of this website automatically collects and stores information in so-called server log files,
+        which your browser automatically transmits to us. These include: Browser type/version, operating system,
+        referrer URL, host name of the accessing computer, and time of the server request. This data is not merged
+        with other data sources.
+    </p>
 
-        <h3 data-en="6. Your Rights" data-de="6. Ihre Rechte">6. Your Rights</h3>
-        <p data-en="You have the right to receive information about the origin, recipient, and purpose of your stored personal data at any time free of charge. You also have the right to request that this data be corrected or deleted. You can contact us at any time at the address given in the legal notice if you have further questions on the subject of data protection." 
-           data-de="Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.">
-            You have the right to receive information about the origin, recipient, and purpose of your stored personal data at any time free of charge. You also have the right to request that this data be corrected or deleted. You can contact us at any time at the address given in the legal notice if you have further questions on the subject of data protection.
-        </p>
-    </section>
+    <h3 data-en="4. Contact Form & EmailJS" data-de="4. Kontaktformular & EmailJS">4. Contact Form & EmailJS</h3>
+    <p data-en="If you submit inquiries to us via our contact form, the information provided in the form as well as any contact information provided therein will be stored by us in order to handle your inquiry and in the event that we have further questions. We use the service 'EmailJS' to process and send these messages. Your data will be transmitted to EmailJS servers. We will not share this information without your consent."
+        data-de="Wenn Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Für die Verarbeitung und den Versand der Nachrichten nutzen wir den Dienst 'EmailJS'. Dabei werden Ihre Daten an die Server von EmailJS übertragen. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.">
+        If you submit inquiries to us via our contact form, the information provided in the form as well as any
+        contact information provided therein will be stored by us in order to handle your inquiry and in the event
+        that we have further questions. We use the service 'EmailJS' to process and send these messages. Your data
+        will be transmitted to EmailJS servers. We will not share this information without your consent.
+    </p>
 
-    <script src="js/navbar.js" defer></script>
-    <script src="js/custom_cursor.js" defer></script>
-    <script src="js/language.js" defer></script>
+    <h3 data-en="5. Third-Party Services (CDNs & Fonts)" data-de="5. Dienste von Drittanbietern (CDNs & Fonts)">5.
+        Third-Party Services (CDNs & Fonts)</h3>
+    <p data-en="To ensure fast and secure loading of external assets (such as 3D libraries), this site uses Content Delivery Networks (CDNs) like jsDelivr. When loading these resources, your IP address is transmitted to the server of the CDN provider. Additionally, this site may load Google Fonts to display text properly. This also requires transmitting your IP address to Google servers."
+        data-de="Um ein schnelles und sicheres Laden externer Assets (wie z.B. 3D-Bibliotheken) zu gewährleisten, nutzt diese Seite Content Delivery Networks (CDNs) wie jsDelivr. Beim Laden dieser Ressourcen wird Ihre IP-Adresse an den Server des CDN-Anbieters übertragen. Zudem lädt diese Seite möglicherweise Google Fonts, um Texte korrekt darzustellen. Auch hierbei wird Ihre IP-Adresse an Server von Google übertragen.">
+        To ensure fast and secure loading of external assets (such as 3D libraries), this site uses Content Delivery
+        Networks (CDNs) like jsDelivr. When loading these resources, your IP address is transmitted to the server of
+        the CDN provider. Additionally, this site may load Google Fonts to display text properly. This also requires
+        transmitting your IP address to Google servers.
+    </p>
+
+    <h3 data-en="6. Your Rights" data-de="6. Ihre Rechte">6. Your Rights</h3>
+    <p data-en="You have the right to receive information about the origin, recipient, and purpose of your stored personal data at any time free of charge. You also have the right to request that this data be corrected or deleted. You can contact us at any time at the address given in the legal notice if you have further questions on the subject of data protection."
+        data-de="Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden.">
+        You have the right to receive information about the origin, recipient, and purpose of your stored personal
+        data at any time free of charge. You also have the right to request that this data be corrected or deleted.
+        You can contact us at any time at the address given in the legal notice if you have further questions on the
+        subject of data protection.
+    </p>
+</section>
+
+<script src="js/navbar.js" defer></script>
+<script src="js/custom_cursor.js" defer></script>
+<script src="js/language.js" defer></script>
 
 </body>
 

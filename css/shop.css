@@ -423,6 +423,35 @@ body.is-booting .snap-section .media {
     border-radius: 8px;
   }
   
+  .accessory {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 
+      "label canvas"
+      "note  canvas";
+    gap: 2px 12px;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .accessory-label {
+    grid-area: label;
+    width: auto;
+    align-self: end;
+  }
+
+  .acc-canvas {
+    grid-area: canvas;
+    width: 80px;
+    height: 80px;
+  }
+
+  .accessory-note {
+    grid-area: note;
+    max-width: 100%;
+    align-self: start;
+  }
+
   /* --- Expandable Glass Card Logic --- */
   .copy .glass-container {
     padding: 12px;
@@ -437,7 +466,7 @@ body.is-booting .snap-section .media {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    margin-top: -25px;
+    /*margin-top: -25px;*/
   }
   
   /* Override desktop scroll animations */
@@ -451,6 +480,7 @@ body.is-booting .snap-section .media {
   .overlay-inner {
     overflow: hidden;
     padding: 10px;
+    transform: none; /* Kill desktop scale animation on mobile */
     transition: opacity 0.3s ease, padding 0.3s ease;
   }
   
@@ -463,6 +493,5 @@ body.is-booting .snap-section .media {
     opacity: 1;
     padding: 10px; /* Reset padding for neat alignment */
     pointer-events: auto;
-    /*margin-top: -30px;*/
   }
 }

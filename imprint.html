@@ -16,107 +16,135 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 
-<body>
+<body class="legal-page">
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
 
-    <header id="nav">
-        <div class="navbar">
-            <div class="navbar-left">
-                <a href="index.html">
-                    <img src="assets/Logo.png" alt="logo" width="80" height="auto">
-                </a>
-            </div>
-
-            <nav class="navbar-center" aria-label="Main navigation">
-                <a href="index.html#about" data-en="About" data-de="Über mich">About</a>
-                <a href="index.html#cv" data-en="CV" data-de="Lebenslauf">CV</a>
-                <a href="index.html#projects" data-en="Projects" data-de="Projekte">Projects</a>
-                <a href="shop.html" data-en="Shop" data-de="Shop">Shop</a>
-                <a href="index.html#globe-1" data-en="Globe" data-de="Globus">Globe</a>
-                <a href="index.html#contact" data-en="Contact" data-de="Kontakt">Contact</a>
-            </nav>
-
-            <div class="navbar-right">
-                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
-                    <span class="lang-flag">🇩🇪</span>
-                </button>
-                <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+<header id="nav">
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="index.html">
+                <img class="logo" src="assets/Logo.png" alt="logo">
+            </a>
+            <span class="nav-separator">|</span>
+            <a href="index.html" class="nav-btn nav-btn-left" data-en="Portfolio" data-de="Portfolio">Portfolio</a>
+            <span class="nav-separator">|</span>
+            <a href="shop.html" class="nav-btn nav-btn-left" data-en="Shop" data-de="Shop">Shop</a>
         </div>
-    </header>
 
-    <section id="impressum">
-        <h2 data-en="Imprint" data-de="Impressum">Imprint</h2>
+        <nav class="navbar-center" aria-label="Main navigation">
+        </nav>
 
-        <h3 data-en="Information according to § 5 TMG" data-de="Angaben gemäß § 5 TMG">
-            Information according to § 5 TMG
-        </h3>
+        <div class="navbar-right">
+            <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                <span class="lang-flag">🇩🇪</span>
+            </button>
+        </div>
+    </div>
+</header>
 
-        <p>
-            Michael Krahn<br>
-            Glockscheiderweg 6<br>
-            56588 Waldbreitbach<br>
-            <span data-en="Germany" data-de="Deutschland">Germany</span>
-        </p>
+<section id="impressum">
+    <h2 data-en="Imprint" data-de="Impressum">Imprint</h2>
 
-        <h3 data-en="Contact" data-de="Kontakt">Contact</h3>
-        <p>
-            <span data-en="Email:" data-de="E-Mail:">Email:</span> <a href="mailto:michael.penner97@web.de">michael.penner97@web.de</a>
-        </p>
+    <h3 data-en="Information according to § 5 TMG" data-de="Angaben gemäß § 5 TMG">
+        Information according to § 5 TMG
+    </h3>
 
-        <h3 data-en="Responsible for content according to § 55 Abs. 2 RStV:" data-de="Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:">Responsible for content according to § 55 Abs. 2 RStV:</h3>
-        <p>
-            Michael Krahn<br>
-            Glockscheiderweg 6<br>
-            56588 Waldbreitbach<br>
-            <span data-en="Germany" data-de="Deutschland">Germany</span>
-        </p>
+    <p>
+        Michael Krahn<br>
+        Glockscheiderweg 6<br>
+        56588 Waldbreitbach<br>
+        <span data-en="Germany" data-de="Deutschland">Germany</span>
+    </p>
 
-        <h3 data-en="Liability for Content" data-de="Haftung für Inhalte">Liability for Content</h3>
-        <p data-en="The contents of my pages were created with the greatest care. However, I cannot guarantee the accuracy, completeness, and timeliness of the content. As a service provider, I am responsible for my own content on these pages in accordance with general laws according to § 7 Abs.1 TMG." 
-           data-de="Die Inhalte meiner Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als Diensteanbieter bin ich gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.">
-            The contents of my pages were created with the greatest care. However, I cannot guarantee the accuracy, completeness, and timeliness of the content. As a service provider, I am responsible for my own content on these pages in accordance with general laws according to § 7 Abs.1 TMG.
-        </p>
+    <h3 data-en="Contact" data-de="Kontakt">Contact</h3>
+    <p>
+        <span data-en="Email:" data-de="E-Mail:">Email:</span> <a
+            href="mailto:michael.penner97@web.de">michael.penner97@web.de</a>
+    </p>
 
-        <h3 data-en="Liability for Links" data-de="Haftung für Links">Liability for Links</h3>
-        <p data-en="My website may contain links to external third-party websites, over whose content I have no influence. Therefore, I cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the contents of the linked pages." 
-           data-de="Meine Website kann Links zu externen Websites Dritter enthalten, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.">
-            My website may contain links to external third-party websites, over whose content I have no influence. Therefore, I cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the contents of the linked pages.
-        </p>
+    <h3 data-en="Responsible for content according to § 55 Abs. 2 RStV:"
+        data-de="Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:">Responsible for content according to § 55
+        Abs. 2 RStV:</h3>
+    <p>
+        Michael Krahn<br>
+        Glockscheiderweg 6<br>
+        56588 Waldbreitbach<br>
+        <span data-en="Germany" data-de="Deutschland">Germany</span>
+    </p>
 
-        <h3 data-en="Copyright" data-de="Urheberrecht">Copyright</h3>
-        <p>
-            <span data-en="The content, images, renderings, texts, and 3D models published on this website were, unless otherwise indicated, created by myself and are subject to my copyright." data-de="Die auf dieser Website veröffentlichten Inhalte, Bilder, Renderings, Texte sowie 3D-Modelle wurden, sofern nicht anders gekennzeichnet, von mir selbst erstellt und unterliegen meinem Urheberrecht.">The content, images, renderings, texts, and 3D models published on this website were, unless otherwise indicated, created by myself and are subject to my copyright.</span><br><br>
-            
-            <span data-en="Duplication, processing, or distribution of the content outside the limits of copyright law requires my explicit written consent." data-de="Eine Vervielfältigung, Bearbeitung oder Weiterverbreitung der Inhalte außerhalb der Grenzen des Urheberrechts bedarf meiner ausdrücklichen schriftlichen Zustimmung.">Duplication, processing, or distribution of the content outside the limits of copyright law requires my explicit written consent.</span><br><br>
-            
-            <span data-en="Downloads and copies of this site are only permitted for private, non-commercial use." data-de="Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.">Downloads and copies of this site are only permitted for private, non-commercial use.</span>
-        </p>
+    <h3 data-en="Liability for Content" data-de="Haftung für Inhalte">Liability for Content</h3>
+    <p data-en="The contents of my pages were created with the greatest care. However, I cannot guarantee the accuracy, completeness, and timeliness of the content. As a service provider, I am responsible for my own content on these pages in accordance with general laws according to § 7 Abs.1 TMG."
+        data-de="Die Inhalte meiner Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als Diensteanbieter bin ich gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.">
+        The contents of my pages were created with the greatest care. However, I cannot guarantee the accuracy,
+        completeness, and timeliness of the content. As a service provider, I am responsible for my own content on
+        these pages in accordance with general laws according to § 7 Abs.1 TMG.
+    </p>
 
-        <h3 data-en="Trademark Notice" data-de="Hinweis zu Markenrechten">Trademark Notice</h3>
-        <p>
-            <span data-en="The name &quot;KitchenAid&quot; is a registered trademark of KitchenAid or the respective trademark owners." data-de="Die Bezeichnung „KitchenAid“ ist eine eingetragene Marke der KitchenAid bzw. der jeweiligen Markeninhaber.">The name "KitchenAid" is a registered trademark of KitchenAid or the respective trademark owners.</span><br><br>
-            
-            <span data-en="The use of the brand name on this website is solely for describing compatible devices or restored original machines. There is no commercial connection to the manufacturer or trademark owner." data-de="Die Verwendung des Markennamens auf dieser Website dient ausschließlich der Beschreibung kompatibler Geräte oder restaurierter Originalmaschinen. Es besteht keinerlei wirtschaftliche Verbindung zum Hersteller oder Markeninhaber.">The use of the brand name on this website is solely for describing compatible devices or restored original machines. There is no commercial connection to the manufacturer or trademark owner.</span>
-        </p>
+    <h3 data-en="Liability for Links" data-de="Haftung für Links">Liability for Links</h3>
+    <p data-en="My website may contain links to external third-party websites, over whose content I have no influence. Therefore, I cannot assume any liability for these external contents. The respective provider or operator of the pages is always responsible for the contents of the linked pages."
+        data-de="Meine Website kann Links zu externen Websites Dritter enthalten, auf deren Inhalte ich keinen Einfluss habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.">
+        My website may contain links to external third-party websites, over whose content I have no influence.
+        Therefore, I cannot assume any liability for these external contents. The respective provider or operator of
+        the pages is always responsible for the contents of the linked pages.
+    </p>
 
-        <h3 data-en="Notice regarding restored devices and 3D models" data-de="Hinweis zu restaurierten Geräten und 3D-Modellen">Notice regarding restored devices and 3D models</h3>
-        <p>
-            <span data-en="Restored kitchen machines presented on this website are individually refurbished devices. Paintwork, modifications, and 3D-printed adapters or mounts were developed and produced by myself." data-de="Auf dieser Website präsentierte restaurierte Küchenmaschinen sind individuell überarbeitete Geräte. Lackierungen, Modifikationen sowie 3D-gedruckte Adapter oder Halterungen wurden von mir selbst entwickelt und hergestellt.">Restored kitchen machines presented on this website are individually refurbished devices. Paintwork, modifications, and 3D-printed adapters or mounts were developed and produced by myself.</span><br><br>
-            
-            <span data-en="The presented 3D models are proprietary developments and have no connection to the original manufacturer of the devices." data-de="Die dargestellten 3D-Modelle sind Eigenentwicklungen und stehen in keiner Verbindung zum Originalhersteller der Geräte.">The presented 3D models are proprietary developments and have no connection to the original manufacturer of the devices.</span>
-        </p>
-    </section>
+    <h3 data-en="Copyright" data-de="Urheberrecht">Copyright</h3>
+    <p>
+        <span
+            data-en="The content, images, renderings, texts, and 3D models published on this website were, unless otherwise indicated, created by myself and are subject to my copyright."
+            data-de="Die auf dieser Website veröffentlichten Inhalte, Bilder, Renderings, Texte sowie 3D-Modelle wurden, sofern nicht anders gekennzeichnet, von mir selbst erstellt und unterliegen meinem Urheberrecht.">The
+            content, images, renderings, texts, and 3D models published on this website were, unless otherwise
+            indicated, created by myself and are subject to my copyright.</span><br><br>
 
-    <script src="js/navbar.js" defer></script>
-    <script src="js/custom_cursor.js" defer></script>
-    <script src="js/language.js" defer></script>
+        <span
+            data-en="Duplication, processing, or distribution of the content outside the limits of copyright law requires my explicit written consent."
+            data-de="Eine Vervielfältigung, Bearbeitung oder Weiterverbreitung der Inhalte außerhalb der Grenzen des Urheberrechts bedarf meiner ausdrücklichen schriftlichen Zustimmung.">Duplication,
+            processing, or distribution of the content outside the limits of copyright law requires my explicit
+            written consent.</span><br><br>
+
+        <span data-en="Downloads and copies of this site are only permitted for private, non-commercial use."
+            data-de="Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.">Downloads
+            and copies of this site are only permitted for private, non-commercial use.</span>
+    </p>
+
+    <h3 data-en="Trademark Notice" data-de="Hinweis zu Markenrechten">Trademark Notice</h3>
+    <p>
+        <span
+            data-en="The name &quot;KitchenAid&quot; is a registered trademark of KitchenAid or the respective trademark owners."
+            data-de="Die Bezeichnung „KitchenAid“ ist eine eingetragene Marke der KitchenAid bzw. der jeweiligen Markeninhaber.">The
+            name "KitchenAid" is a registered trademark of KitchenAid or the respective trademark
+            owners.</span><br><br>
+
+        <span
+            data-en="The use of the brand name on this website is solely for describing compatible devices or restored original machines. There is no commercial connection to the manufacturer or trademark owner."
+            data-de="Die Verwendung des Markennamens auf dieser Website dient ausschließlich der Beschreibung kompatibler Geräte oder restaurierter Originalmaschinen. Es besteht keinerlei wirtschaftliche Verbindung zum Hersteller oder Markeninhaber.">The
+            use of the brand name on this website is solely for describing compatible devices or restored original
+            machines. There is no commercial connection to the manufacturer or trademark owner.</span>
+    </p>
+
+    <h3 data-en="Notice regarding restored devices and 3D models"
+        data-de="Hinweis zu restaurierten Geräten und 3D-Modellen">Notice regarding restored devices and 3D models
+    </h3>
+    <p>
+        <span
+            data-en="Restored kitchen machines presented on this website are individually refurbished devices. Paintwork, modifications, and 3D-printed adapters or mounts were developed and produced by myself."
+            data-de="Auf dieser Website präsentierte restaurierte Küchenmaschinen sind individuell überarbeitete Geräte. Lackierungen, Modifikationen sowie 3D-gedruckte Adapter oder Halterungen wurden von mir selbst entwickelt und hergestellt.">Restored
+            kitchen machines presented on this website are individually refurbished devices. Paintwork,
+            modifications, and 3D-printed adapters or mounts were developed and produced by myself.</span><br><br>
+
+        <span
+            data-en="The presented 3D models are proprietary developments and have no connection to the original manufacturer of the devices."
+            data-de="Die dargestellten 3D-Modelle sind Eigenentwicklungen und stehen in keiner Verbindung zum Originalhersteller der Geräte.">The
+            presented 3D models are proprietary developments and have no connection to the original manufacturer of
+            the devices.</span>
+    </p>
+</section>
+
+<script src="js/navbar.js" defer></script>
+<script src="js/custom_cursor.js" defer></script>
+<script src="js/language.js" defer></script>
 
 </body>
 

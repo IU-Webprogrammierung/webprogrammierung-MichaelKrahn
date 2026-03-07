@@ -44,20 +44,25 @@
     <header id="nav">
         <div class="navbar">
             <div class="navbar-left">
-                <img src="assets/Logo.png" alt="logo" width="80" height="auto">
+                <img class="logo" src="assets/Logo.png" alt="logo">
+                <span class="nav-separator">|</span>
+                <a href="shop.html" class="nav-btn nav-btn-left" data-en="Shop" data-de="Shop">Shop</a>
             </div>
 
             <nav class="navbar-center" aria-label="Main navigation">
-                <a href="#about-skills">About</a>
-                <a href="#cv">CV</a>
-                <a href="#projects">Projects</a>
-                <a href="shop.html">Shop</a>
-                <a href="#globe-1">Globe</a>
-                <a href="#contact">Contact</a>
+                <a href="#about-skills" data-en="About" data-de="Über mich">About</a>
+                <a href="#cv" data-en="CV" data-de="Lebenslauf">CV</a>
+                <a href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
+                <a href="#globe-1" data-en="Globe" data-de="Globus">Globe</a>
+                <a href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
             </nav>
 
             <div class="navbar-right">
                 <span class="navbar-miniText" id="navbarText"></span>
+                <button class="lang-toggle" aria-label="Switch language" onclick="toggleLanguage()">
+                    <span class="lang-flag">🇩🇪</span>
+                </button>
+
                 <!-- Hamburger Menu Button -->
                 <div class="navbar-actions">
                     <button class="navbar-toggle" aria-label="Open menu" aria-expanded="false">
@@ -92,7 +97,7 @@
                     <span id="typingText"></span>
                     <span class="cursor">|</span>
                 </div>
-                <p class="hero-subline">Web Designer • UI/UX Enthusiast • Problem Solver</p>
+                <p class="hero-subline" data-en="Web Designer • UI/UX Enthusiast • Problem Solver" data-de="Webdesigner • UI/UX-Enthusiast • Problemlöser">Web Designer • UI/UX Enthusiast • Problem Solver</p>
             </div>
         </section>
 
@@ -102,27 +107,27 @@
         <section id="about-skills">
             <div class="about-wrapper glass">
                 <header class="about-head">
-                    <h2>About Me</h2>
-                    <p class="about-kicker">Creative Developer • UI/UX • Motion Design</p>
+                    <h2 data-en="About Me" data-de="Über mich">About Me</h2>
+                    <p class="about-kicker" data-en="Creative Developer • UI/UX • Motion Design" data-de="Creative Developer • UI/UX • Motion Design">Creative Developer • UI/UX • Motion Design</p>
                     <div class="about-accent" aria-hidden="true"></div>
                 </header>
 
                 <div class="about-grid">
                     <div class="about-text-desktop about-text">
-                        <p>
+                        <p data-en="I am Michael Krahn, an aspiring web and creative developer with a particular interest in modern frontend technologies, interactive user interfaces and visual web experiences." data-de="Ich bin Michael Krahn, ein angehender Web- und Creative Developer mit besonderem Interesse an modernen Frontend-Technologien, interaktiven Benutzeroberflächen und visuellen Web-Erlebnissen.">
                             I am Michael Krahn, an aspiring web and creative developer with a particular
                             interest in modern frontend technologies, interactive user interfaces
                             and visual web experiences.
                         </p>
 
-                        <p>
+                        <p data-en="My focus lies on combining technical understanding with design excellence. I work extensively with JavaScript-based animations, responsive design and the development of performant and accessible web applications." data-de="Mein Fokus liegt darauf, technisches Verständnis mit Design-Exzellenz zu verbinden. Ich arbeite intensiv mit JavaScript-basierten Animationen, responsivem Design und der Entwicklung performanter und barrierefreier Webanwendungen.">
                             My focus lies on combining technical understanding with
                             design excellence. I work extensively with
                             JavaScript-based animations, responsive design and the development
                             of performant and accessible web applications.
                         </p>
 
-                        <p>
+                        <p data-en="This website serves as a personal portfolio and experimental space. It showcases selected projects, design ideas and technical concepts that have emerged from my studies and personal interests." data-de="Diese Website dient als persönliches Portfolio und Experimentierraum. Sie zeigt ausgewählte Projekte, Design-Ideen und technische Konzepte, die aus meinem Studium und meinen persönlichen Interessen entstanden sind.">
                             This website serves as a personal portfolio and experimental space.
                             It showcases selected projects, design ideas and technical concepts
                             that have emerged from my studies and personal interests.
@@ -130,44 +135,46 @@
                     </div>
 
                     <div class="about-text-mobile about-text">
-                        <p>
-                            I'm Michael Krahn, a creative developer blending technical precision with visual design. I specialize in modern frontend tech, 3D web experiences, and interactive UIs.
+                        <p data-en="I'm Michael Krahn, a creative developer blending technical precision with visual design. I specialize in modern frontend tech, 3D web experiences, and interactive UIs." data-de="Ich bin Michael Krahn, ein Creative Developer, der technische Präzision mit visuellem Design verbindet. Ich bin spezialisiert auf moderne Frontend-Technologien, 3D-Web-Erlebnisse und interaktive UIs.">
+                            I'm Michael Krahn, a creative developer blending technical precision with visual design. I
+                            specialize in modern frontend tech, 3D web experiences, and interactive UIs.
                         </p>
-                        <p>
-                            This portfolio is my experimental sandbox, showcasing projects born from a passion for JavaScript animation, responsive design, and embedded systems.
-                        </p>      
+                        <p data-en="This portfolio is my experimental sandbox, showcasing projects born from a passion for JavaScript animation, responsive design, and embedded systems." data-de="Dieses Portfolio ist mein experimenteller Sandkasten, in dem ich Projekte zeige, die aus meiner Leidenschaft für JavaScript-Animationen, responsives Design und eingebettete Systeme entstanden sind.">
+                            This portfolio is my experimental sandbox, showcasing projects born from a passion for
+                            JavaScript animation, responsive design, and embedded systems.
+                        </p>
                     </div>
 
                     <aside class="about-aside">
                         <div class="skills-grid skills-grid--towers">
                             <article class="skill-tower" data-tower="web">
                                 <div class="tower-label">
-                                    <span class="name">Web Development</span>
-                                    <span class="lvl">HTML • CSS • JS</span>
+                                    <span class="name" data-en="Web Development" data-de="Web-Entwicklung">Web Development</span>
+                                    <span class="lvl" data-en="HTML • CSS • JS" data-de="HTML • CSS • JS">HTML • CSS • JS</span>
                                 </div>
                                 <canvas class="tower-canvas" aria-label="Web Development tower"></canvas>
                             </article>
 
                             <article class="skill-tower" data-tower="embedded">
                                 <div class="tower-label">
-                                    <span class="name">Embedded Systems</span>
-                                    <span class="lvl">Arduino • Smart Home • MCU</span>
+                                    <span class="name" data-en="Embedded Systems" data-de="Eingebettete Systeme">Embedded Systems</span>
+                                    <span class="lvl" data-en="Arduino • Smart Home • MCU" data-de="Arduino • Smart Home • MCU">Arduino • Smart Home • MCU</span>
                                 </div>
                                 <canvas class="tower-canvas" aria-label="Embedded Systems tower"></canvas>
                             </article>
 
                             <article class="skill-tower" data-tower="visual">
                                 <div class="tower-label">
-                                    <span class="name">Visual Design</span>
-                                    <span class="lvl">Blender • PS • UI</span>
+                                    <span class="name" data-en="Visual Design" data-de="Visuelles Design">Visual Design</span>
+                                    <span class="lvl" data-en="Blender • PS • UI" data-de="Blender • PS • UI">Blender • PS • UI</span>
                                 </div>
                                 <canvas class="tower-canvas" aria-label="Visual Design tower"></canvas>
                             </article>
 
                             <article class="skill-tower" data-tower="proto">
                                 <div class="tower-label">
-                                    <span class="name">Prototyping</span>
-                                    <span class="lvl">3D Print • Metal • Wood</span>
+                                    <span class="name" data-en="Prototyping" data-de="Prototyping">Prototyping</span>
+                                    <span class="lvl" data-en="3D Print • Metal • Wood" data-de="3D-Druck • Metall • Holz">3D Print • Metal • Wood</span>
                                 </div>
                                 <canvas class="tower-canvas" aria-label="Prototyping tower"></canvas>
                             </article>
@@ -185,24 +192,24 @@
 
             <div class="cv-header">
                 <div class="header-top">
-                    <h2>Curriculum Vitae</h2>
-                    <a class="btn" href="data/Michael Krahn Resume.pdf" download aria-label="Download CV PDF">
+                    <h2 data-en="Curriculum Vitae" data-de="Lebenslauf">Curriculum Vitae</h2>
+                    <a class="btn" href="data/Michael Krahn Resume.pdf" download aria-label="Download CV PDF" data-en="Download PDF" data-de="PDF herunterladen">
                         Download PDF
                     </a>
                 </div>
 
                 <div class="cv-facts">
                     <div class="fact">
-                        <span class="fact-k">Focus</span>
-                        <span class="fact-v">Frontend • Motion • Development</span>
+                        <span class="fact-k" data-en="Focus" data-de="Fokus">Focus</span>
+                        <span class="fact-v" data-en="Frontend • Motion • Development" data-de="Frontend • Motion • Entwicklung">Frontend • Motion • Development</span>
                     </div>
                     <div class="fact">
-                        <span class="fact-k">Tools</span>
-                        <span class="fact-v">own Hands • Three.js • Git • Home Assistant</span>
+                        <span class="fact-k" data-en="Tools" data-de="Tools">Tools</span>
+                        <span class="fact-v" data-en="own Hands • Three.js • Git • Home Assistant" data-de="Eigene Hände • Three.js • Git • Home Assistant">own Hands • Three.js • Git • Home Assistant</span>
                     </div>
                     <div class="fact">
-                        <span class="fact-k">Interests</span>
-                        <span class="fact-v">Interaction • Smart Home • Prototyping</span>
+                        <span class="fact-k" data-en="Interests" data-de="Interessen">Interests</span>
+                        <span class="fact-v" data-en="Interaction • Smart Home • Prototyping" data-de="Interaktion • Smart Home • Prototyping">Interaction • Smart Home • Prototyping</span>
                     </div>
                 </div>
             </div>
@@ -246,7 +253,7 @@
         <!-- Projects -->
         <section id="projects">
             <div class="projects-wrapper">
-                <h2>OWN PROJECTS & INSPIRATION</h2>
+                <h2 data-en="OWN PROJECTS &amp; INSPIRATION" data-de="EIGENE PROJEKTE &amp; INSPIRATION">OWN PROJECTS & INSPIRATION</h2>
 
                 <div class="stack-container">
 
@@ -360,22 +367,22 @@
 
         <section id="globe-2" class="globe-section">
             <div class="copy-block copy-left">
-                <h2>The World</h2>
-                <p>As I travelled our great planet...</p>
+                <h2 data-en="The World" data-de="Die Welt">The World</h2>
+                <p data-en="As I travelled our great planet..." data-de="Auf meinen Reisen über unseren großartigen Planeten...">As I travelled our great planet...</p>
             </div>
         </section>
 
         <section id="globe-3" class="globe-section">
             <div class="copy-block copy-right">
-                <h2>Footprint</h2>
-                <p>... this is my natural footprint & places I wish are yet to come.</p>
+                <h2 data-en="Footprint" data-de="Fußabdruck">Footprint</h2>
+                <p data-en="... this is my natural footprint &amp; places I wish are yet to come." data-de="... ist dies mein natürlicher Fußabdruck &amp; Orte, die ich noch bereisen möchte.">... this is my natural footprint & places I wish are yet to come.</p>
             </div>
         </section>
 
         <section id="globe-4" class="globe-section">
             <div class="globe-4-content">
-                <h2>Got your attention?</h2>
-                <h3>Feel free to leave me a message.</h3>
+                <h2 data-en="Got your attention?" data-de="Aufmerksamkeit geweckt?">Got your attention?</h2>
+                <h3 data-en="Feel free to leave me a message." data-de="Schreib mir gerne eine Nachricht.">Feel free to leave me a message.</h3>
             </div>
         </section>
 
@@ -387,27 +394,27 @@
             <div class="contact-wrapper glass">
 
                 <header class="contact-header">
-                    <h2>Contact</h2>
-                    <p>Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message.</p>
+                    <h2 data-en="Contact" data-de="Kontakt">Contact</h2>
+                    <p data-en="Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message." data-de="Interessiert an Ideenaustausch, Feedback oder Zusammenarbeit? Schreib mir gerne eine Nachricht.">Interested in exchanging ideas, feedback or collaboration? Feel free to send me a message.</p>
                 </header>
 
                 <form id="contact-form" class="contact-form" autocomplete="off">
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input id="name" type="text" placeholder="Your name" required>
+                        <label for="name" data-en="Name" data-de="Name">Name</label>
+                        <input id="name" type="text" placeholder="Your name" data-placeholder-en="Your name" data-placeholder-de="Dein Name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input id="email" type="email" placeholder="your@email.com" required>
+                        <label for="email" data-en="Email" data-de="E-Mail">Email</label>
+                        <input id="email" type="email" placeholder="your@email.com" data-placeholder-en="your@email.com" data-placeholder-de="deine@email.com" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" rows="5" placeholder="Your message..." required></textarea>
+                        <label for="message" data-en="Message" data-de="Nachricht">Message</label>
+                        <textarea id="message" rows="5" placeholder="Your message..." data-placeholder-en="Your message..." data-placeholder-de="Deine Nachricht..." required></textarea>
                     </div>
 
-                    <button type="submit" class="btn">Send message</button>
+                    <button type="submit" class="btn" data-en="Send message" data-de="Nachricht senden">Send message</button>
                 </form>
 
             </div>
@@ -460,7 +467,7 @@
 
                 <div class=" footer-center">
                     <p>© 2026 – Michael Krahn</p>
-                    <p><a href="imprint.html">Impressum</a> | <a href="datasecurity.html">Datenschutz</a></p>
+                    <p><a href="imprint.html" data-en="Imprint" data-de="Impressum">Impressum</a> | <a href="datasecurity.html" data-en="Data Security" data-de="Datenschutz">Datenschutz</a></p>
                 </div>
 
                 <div class="footer-right"></div>
@@ -488,6 +495,7 @@
     <script src="js/projects.js" defer></script>
     <script src="js/contact.js" defer></script>
     <script src="js/custom_cursor.js" defer></script>
+    <script src="js/language.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 </body>
