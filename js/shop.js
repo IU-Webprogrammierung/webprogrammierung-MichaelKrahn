@@ -400,24 +400,36 @@ function getSectionProgress(section) {
    Fade + active section tracking
 -------------------------------- */
 
-const io = new IntersectionObserver((entries) => {
-    // Choose the most visible section as active
-    let best = { idx: activeIndex, ratio: 0 };
+const sectionRatios = new Array(sections.length).fill(0);
 
+const io = new IntersectionObserver((entries) => {
+    // Update the ratio for any sections that had a threshold change
     for (const entry of entries) {
         const idx = sections.indexOf(entry.target);
         if (idx >= 0) {
+            sectionRatios[idx] = entry.intersectionRatio;
             entry.target.classList.toggle("is-active", entry.isIntersecting);
-            if (entry.intersectionRatio > best.ratio) best = { idx, ratio: entry.intersectionRatio };
         }
     }
 
-    if (best.idx !== activeIndex) {
-        setActiveModel(best.idx);
+    // Find the section that covers the most screen area
+    let bestIdx = activeIndex;
+    let maxRatio = -1;
+
+    for (let i = 0; i < sectionRatios.length; i++) {
+        if (sectionRatios[i] > maxRatio) {
+            maxRatio = sectionRatios[i];
+            bestIdx = i;
+        }
+    }
+
+    // Switch model if a different section is significantly visible
+    if (bestIdx !== activeIndex && maxRatio > 0) {
+        setActiveModel(bestIdx);
     }
 }, {
     root: scroller,
-    threshold: [0.15, 0.25, 0.35, 0.5, 0.65, 0.8]
+    threshold: [0.15, 0.25, 0.35, 0.5, 0.65, 0.8, 0.95, 1.0]
 });
 
 sections.forEach(s => io.observe(s));
@@ -438,28 +450,28 @@ class AccessoryViewer {
             antialias: true,
             alpha: true,
             powerPreference: "high-performance",
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: 1.2
         });
 
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight, false);
         this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        this.renderer.toneMappingExposure = 1.0;
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(40, 1, 0.01, 20);
         this.camera.position.set(0, 0.15, 2.2);
 
         // Improved lighting for accessory
-        this.scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x101828, 0.6);
+        this.scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x101828, 1.2);
         this.scene.add(hemiLight);
 
-        const dl = new THREE.DirectionalLight(0xffffff, 1.0);
+        const dl = new THREE.DirectionalLight(0xffffff, 2.0);
         dl.position.set(1.5, 2, 2);
         this.scene.add(dl);
 
-        const fillLight = new THREE.DirectionalLight(0xe6f0ff, 0.4);
+        const fillLight = new THREE.DirectionalLight(0xe6f0ff, 1.0);
         fillLight.position.set(-1.5, 1, 1);
         this.scene.add(fillLight);
 

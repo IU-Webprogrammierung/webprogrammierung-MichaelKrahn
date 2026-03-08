@@ -9,7 +9,7 @@
 .contact-wrapper {
   width: min(1100px, 100%);
   height: auto;
-  max-height: 500px;
+  max-height: none;
   display: flex;
   flex-direction: column;
   padding: clamp(16px, 3vh, 32px);

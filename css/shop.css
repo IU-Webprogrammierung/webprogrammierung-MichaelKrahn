@@ -29,8 +29,8 @@
 }
 
 #main3d.is-loading {
-    opacity: 1; 
-    filter: blur(0px) saturate(20%);
+    opacity: 0.8; 
+    filter: blur(10px) saturate(0%);
 }
 
 /* Cinematic Canvas Effect for Info Section */
@@ -66,6 +66,8 @@
 
 .snap-section {
   display: flex;
+  min-height: 100vh;
+  box-sizing: border-box;
   padding: 20px;
   opacity: 0.22;
   transition: opacity 450ms ease, transform 450ms ease;
@@ -153,31 +155,14 @@ body.is-booting .snap-section .media {
   padding: 10px 2px;
 }
 
-/* Initial state: No blur, so it doesn't pop harshly */
 .copy .glass-container {
   background: var(--glass);
-  -webkit-backdrop-filter: blur(0px);
-  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   border: 1px solid var(--glass-border);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   border-radius: var(--radius);
   padding: 24px;
-  
-  /* Animate the blur property smoothly */
-  transition: backdrop-filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-              -webkit-backdrop-filter 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-/* Active state: Ramp up the blur */
-.snap-section.is-active .copy .glass-container {
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  transition-delay: 0.25s; /* Matches standard .copy delay */
-}
-
-/* Boot state: Match the slow boot delay */
-.snap-section.is-first-load.is-active .copy .glass-container {
-  transition-delay: 1.2s;
 }
 
 .kicker{
@@ -364,10 +349,27 @@ body.is-booting .snap-section .media {
 @media (max-width: 768px) {
     .info-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 12px;
     }
     .info-wrapper {
-        padding: 24px;
+        padding: 20px;
+    }
+    .info-wrapper h2 {
+        font-size: 24px;
+    }
+    .info-wrapper .subtitle {
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+    }
+    .info-item h3 {
+        font-size: 16px;
+        margin-bottom: 4px;
+        color: var(--fg);
+    }
+    .info-item p {
+        display: none; 
+        /* Hiding the full descriptive text on mobile to ensure it fits one screen */
     }
 }
 
