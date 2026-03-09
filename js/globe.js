@@ -65,7 +65,7 @@ starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
 const createStarTexture = () => {
     const c = document.createElement('canvas');
     c.width = c.height = 64;
-    const ctx = c.getContext('2d');
+    const ctx = c.getContext('2d', { willReadFrequently: true });
     const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
     grad.addColorStop(0, 'white');
     grad.addColorStop(0.2, 'white');
@@ -115,7 +115,7 @@ globeRig.position.set(0, 0, 0);
 const createGlowTexture = () => {
     const canvas = document.createElement('canvas');
     canvas.width = 256; canvas.height = 256;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const grad = ctx.createRadialGradient(128, 128, 64, 128, 128, 128);
     // Adjust these colors if you want a warmer or cooler glow!
     grad.addColorStop(0, 'rgba(154, 209, 255, 0.35)'); // Inner glow

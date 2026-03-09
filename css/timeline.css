@@ -21,6 +21,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 1;
+    /* Reset behind the timeline so the timeline is fully interactive */
 }
 
 .timeline-scroll {
@@ -150,36 +151,8 @@
 }
 
 .rainbow-beam {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    top: 50%;
-    height: 6px;
-    transform: translateY(-50%);
-    border-radius: 999px;
-
-    background: linear-gradient(90deg,
-            rgba(0, 200, 255, 0),
-            rgba(0, 200, 255, 0.55) 20%,
-            rgba(255, 0, 150, 0.75) 50%,
-            rgba(255, 200, 0, 0.55) 80%,
-            rgba(255, 200, 0, 0));
-
-    opacity: 0.75;
-    filter: hue-rotate(calc(var(--progress) * 180deg)) blur(6px);
-    animation: beamWobble 6s ease-in-out infinite alternate;
-}
-
-@keyframes beamWobble {
-    0% {
-        opacity: 0.55;
-        transform: translateY(-50%) scaleY(0.95);
-    }
-
-    100% {
-        opacity: 0.9;
-        transform: translateY(-50%) scaleY(1.25);
-    }
+    display: none;
+    /* User requested removal to prioritize milestone duration beams */
 }
 
 .timeline-window-label {
@@ -211,6 +184,51 @@
     width: 1px;
 }
 
+.milestone-duration {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 8px;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(90deg,
+            rgba(0, 200, 255, 0.7),
+            rgba(160, 32, 240, 0.75) 33%,
+            rgba(255, 0, 150, 0.8) 66%,
+            rgba(255, 200, 0, 0.7));
+    border-radius: 999px;
+    opacity: 0;
+    filter: blur(4px) drop-shadow(0 0 8px rgba(255, 0, 150, 0.5));
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.milestone:hover .milestone-duration {
+    transform: translateY(-50%) scaleX(1);
+    opacity: 0.8;
+    animation: beamWobble 6s ease-in-out infinite alternate;
+}
+
+@keyframes beamWobble {
+    0% {
+        filter: blur(3px) drop-shadow(0 0 8px rgba(255, 0, 150, 0.4)); /* Pink */
+    }
+
+    33% {
+        filter: blur(5px) drop-shadow(0 0 10px rgba(160, 32, 240, 0.6)); /* Purple */
+    }
+
+    66% {
+        filter: blur(7px) drop-shadow(0 0 12px rgba(0, 200, 255, 0.7)); /* Cyan */
+    }
+
+    100% {
+        filter: blur(5px) drop-shadow(0 0 10px rgba(255, 200, 0, 0.5)); /* Yellow */
+    }
+}
+
+
 .milestone-dot {
     position: absolute;
     top: 50%;
@@ -223,6 +241,8 @@
 
     background: var(--text);
     border: solid, 2px, var(--text);
+    z-index: 2;
+    /* Needs to be above the duration bar */
 
     transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
@@ -251,17 +271,18 @@
 
     padding: 6px 10px;
     border-radius: 10px;
-    background: var(--glass);
+    background: rgba(255, 255, 255, 0.7);
     border: 1px solid var(--glass-border);
 
-    opacity: 0.55;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    opacity: 0.5;
+    transition: opacity 0.2s ease, visibility 0.2s;
     z-index: 3;
 }
 
-.milestone:hover .milestone-label {
-    opacity: 1;
-    transform: translateX(-50%) translateY(5px);
+/* Hide the label immediately when hovering the dot (tooltip appears) */
+.milestone-dot:hover+.milestone-label {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .milestone.up .milestone-label {
@@ -291,13 +312,15 @@
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 
     opacity: 0;
-    transform: translate(-50%, -110%) scale(0.98);
+    /* higher base offset */
+    transform: translate(-50%, -150%) scale(0.98);
     transition: opacity 0.12s ease, transform 0.12s ease;
 }
 
 .timeline-tooltip.active {
     opacity: 1;
-    transform: translate(-50%, -175%) scale(1);
+    /* higher active offset */
+    transform: translate(-50%, -200%) scale(1);
 }
 
 .tt-title {
@@ -359,14 +382,16 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 18%;
+    top: 5%;
+    /* Higher */
     z-index: 2;
     pointer-events: none;
 }
 
 .milestone.down .timeline-media {
     top: auto;
-    bottom: 18%;
+    bottom: 5%;
+    /* Higher (further from bottom) */
 }
 
 .timeline-media-card {
@@ -410,14 +435,16 @@
     position: absolute;
     width: var(--w, 220px);
     height: var(--h, 150px);
-    border-radius: 16px;
+    border-radius: 8px;
+    /* more minimal, less rounded corners */
     overflow: hidden;
 
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.30);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    /* Very subtle glass effect with thin border, removed heavy shadow */
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 
     opacity: 0;
     transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(0.98);
@@ -429,22 +456,29 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0.85;
+    /* slight transparency for minimal look */
+    filter: grayscale(20%) contrast(1.1);
+    /* more modern, muted vibe */
+    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-@keyframes ambientDrift {
-    0% {
-        transform: translate(-50%, -50%) translate3d(var(--dx, 0px), var(--dy, 0px), 0) scale(1);
+/* Fallback DOM hover, but prioritizing the JS-applied .is-hovered class */
+.ambient-card.is-hovered img,
+.ambient-card:hover img {
+    opacity: 1;
+    filter: grayscale(0%) contrast(1);
+}
+
+/* On touch devices where hover is impossible, just show full color by default */
+@media (hover: none) {
+    .ambient-card img {
+        opacity: 1;
+        filter: grayscale(0%) contrast(1);
     }
-
-    100% {
-        transform: translate(-50%, -50%) translate3d(calc(var(--dx, 0px) + var(--mx, 10px)),
-                calc(var(--dy, 0px) + var(--my, -8px)), 0) scale(1);
-    }
 }
 
-.ambient-card.is-in {
-    animation: ambientDrift 6.5s ease-in-out infinite alternate;
-}
+/* Dynamic procedural animation replaces CSS drift */
 
 
 /* Media Query responsive Layout*/

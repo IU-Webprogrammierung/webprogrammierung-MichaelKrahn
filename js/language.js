@@ -27,9 +27,15 @@ function toggleLanguage() {
     // Update language toggle button
     const langToggle = document.querySelector('.lang-toggle');
     langToggle.innerHTML = currentLang === 'en' ? '<span class="lang-flag">🇩🇪</span>' : '<span class="lang-flag">🇬🇧</span>';
+    
+    // Set status on body so timeline.js can read it dynamically 
+    document.body.setAttribute('data-current-lang', currentLang);
 
     // Save preference
     localStorage.setItem('shopLang', currentLang);
+    
+    // Dispatch a custom event so timeline.js or others can re-render open components
+    window.dispatchEvent(new CustomEvent('languageToggled', { detail: { lang: currentLang } }));
 }
 
 // Expose toggleLanguage to global scope so it can be called from HTML onclick

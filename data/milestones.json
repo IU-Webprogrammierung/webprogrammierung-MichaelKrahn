@@ -1,144 +1,192 @@
 [
   {
-    "category": "edu",
     "start": "1997-01-28",
     "end": "",
-    "title": "Geburt",
-    "desc": "Born in a small village called Waldbreitbach im staying loyal to my roots.",
-    "label": "Geburt",
+    "en": {
+      "title": "Birth",
+      "desc": "Born in a small village called Waldbreitbach. I'm staying loyal to my roots.",
+      "label": "Birth"
+    },
+    "de": {
+      "title": "Geburt",
+      "desc": "Geboren in einem kleinen Dorf namens Waldbreitbach. Ich bleibe meinen Wurzeln treu.",
+      "label": "Geburt"
+    },
     "images": [
-      {
-        "src": "assets/images/timeline-australia.jpg"
-      },
-      {
-        "src": "assets/images/timeline-australia2.jpg"
-      },
-      {
-        "src": "assets/images/timeline-australia3.jpg"
-      }
+      { "src": "assets/images/timeline-australia.jpg" },
+      { "src": "assets/images/timeline-australia2.jpg" },
+      { "src": "assets/images/timeline-australia3.jpg" }
     ]
   },
   {
-    "category": "edu",
     "start": "2004-01",
     "end": "2008-01",
-    "title": "Grundschule",
-    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Grundschule Waldbreitbach",
+    "en": {
+      "title": "Primary School",
+      "desc": "Technical basics, analytical work, project thinking.",
+      "label": "Primary School Waldbreitbach"
+    },
+    "de": {
+      "title": "Grundschule",
+      "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+      "label": "Grundschule Waldbreitbach"
+    },
     "images": [
-      {
-        "src": "assets/images/timeline-primaryshool.jpg"
-      },
-      {
-        "src": "assets/images/timeline-primaryshool2.jpg"
-      },
-      {
-        "src": "assets/images/timeline-primaryshool3.jpg"
-      }
+      { "src": "assets/images/timeline-primaryshool.jpg" },
+      { "src": "assets/images/timeline-primaryshool2.jpg" },
+      { "src": "assets/images/timeline-primaryshool3.jpg" }
     ]
   },
   {
-    "category": "edu",
     "start": "2020",
     "end": "",
-    "title": "Lifesafer Badge",
-    "desc": "Swimming",
-    "label": "Mannheim"
+    "en": {
+      "title": "Lifesaver Badge",
+      "desc": "Swimming certification.",
+      "label": "Mannheim"
+    },
+    "de": {
+      "title": "DLRG Rettungsschwimmer",
+      "desc": "Schwimmabzeichen.",
+      "label": "Mannheim"
+    }
   },
   {
-    "category": "edu",
     "start": "2008",
     "end": "2016",
-    "title": "Abitur",
-    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Rhein-Wied-Gymnasium, Neuwied"
+    "en": {
+      "title": "High School (Abitur)",
+      "desc": "Technical basics, analytical work, project thinking.",
+      "label": "Rhein-Wied-Gymnasium, Neuwied"
+    },
+    "de": {
+      "title": "Abitur",
+      "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+      "label": "Rhein-Wied-Gymnasium, Neuwied"
+    }
   },
   {
-    "category": "edu",
     "start": "2016",
     "end": "2017",
-    "title": "Work&Travel Australia",
-    "desc": "Had a year with so many expiriences while travelling through astarlia. met many friends and developed my character",
-    "label": "Work and Travel",
+    "en": {
+      "title": "Work & Travel Australia",
+      "desc": "Had a year with so many experiences while travelling through Australia. Met many friends and developed my character.",
+      "label": "Work and Travel"
+    },
+    "de": {
+      "title": "Work & Travel Australien",
+      "desc": "Hatte ein Jahr mit so vielen Erfahrungen während der Reise durch Australien. Viele Freunde getroffen und meinen Charakter entwickelt.",
+      "label": "Work and Travel"
+    },
     "images": [
-      {
-        "src": "assets/images/timeline-australia.jpg"
-      },
-      {
-        "src": "assets/images/timeline-australia2.jpg"
-      },
-      {
-        "src": "assets/images/timeline-australia3.jpg"
-      }
+      { "src": "assets/images/timeline-australia.jpg" },
+      { "src": "assets/images/timeline-australia2.jpg" },
+      { "src": "assets/images/timeline-australia3.jpg" }
     ]
   },
   {
-    "category": "edu",
     "start": "2017-04",
     "end": "2018-03",
-    "title": "Studium Architektur (HS Koblenz)",
-    "desc": "Grundlagen Entwurf, Gestaltung, technisches Verständnis.",
-    "label": "Architektur"
+    "en": {
+      "title": "Architecture Studies (HS Koblenz)",
+      "desc": "Basics of design, aesthetics, and technical understanding.",
+      "label": "Architecture"
+    },
+    "de": {
+      "title": "Studium Architektur (HS Koblenz)",
+      "desc": "Grundlagen Entwurf, Gestaltung, technisches Verständnis.",
+      "label": "Architektur"
+    }
   },
   {
-    "category": "edu",
     "start": "2018-10",
     "end": "2019-09",
-    "title": "Maschinenbau (DHBW Mannheim)",
-    "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
-    "label": "Maschinenbau",
+    "en": {
+      "title": "Mechanical Engineering (DHBW Mannheim)",
+      "desc": "Technical basics, analytical work, project thinking.",
+      "label": "Engineering"
+    },
+    "de": {
+      "title": "Maschinenbau (DHBW Mannheim)",
+      "desc": "Technische Grundlagen, analytisches Arbeiten, Projektdenken.",
+      "label": "Maschinenbau"
+    },
     "images": [
-      {
-        "src": "assets/images/timeline-dhbw.jpg"
-      }
+      { "src": "assets/images/timeline-dhbw.jpg" }
     ]
   },
   {
-    "category": "edu",
     "start": "2019-10",
     "end": "2026-01",
-    "title": "Computervisualistik (Uni Koblenz)",
-    "desc": "Schwerpunkt: Visual Computing, Interaktion, Web/UX-nahe Projekte.",
-    "label": "Studium"
+    "en": {
+      "title": "Computational Visualistics (Uni Koblenz)",
+      "desc": "Focus: Visual computing, interaction, web/UX-related projects.",
+      "label": "University"
+    },
+    "de": {
+      "title": "Computervisualistik (Uni Koblenz)",
+      "desc": "Schwerpunkt: Visual Computing, Interaktion, Web/UX-nahe Projekte.",
+      "label": "Studium"
+    }
   },
   {
-    "category": "proj",
     "start": "2019-10",
     "end": "2020-03",
-    "title": "Erstes Webprojekt",
-    "desc": "HTML/CSS Basics, erste Layouts, kleine Animationen.",
-    "label": "2019"
+    "en": {
+      "title": "First Web Project",
+      "desc": "HTML/CSS Basics, early layouts, small animations.",
+      "label": "2019"
+    },
+    "de": {
+      "title": "Erstes Webprojekt",
+      "desc": "HTML/CSS Basics, erste Layouts, kleine Animationen.",
+      "label": "2019"
+    }
   },
   {
-    "category": "work",
     "start": "2021-04",
     "end": "2026-01",
-    "title": "HiWi: KinderUni / Web Design",
-    "desc": "Konzeption, UI-Umsetzung, Responsive Design.",
-    "label": "HiWi Web"
+    "en": {
+      "title": "HiWi: KinderUni / Web Design",
+      "desc": "Conceptualization, UI implementation, Responsive Design.",
+      "label": "HiWi Web"
+    },
+    "de": {
+      "title": "HiWi: KinderUni / Web Design",
+      "desc": "Konzeption, UI-Umsetzung, Responsive Design.",
+      "label": "HiWi Web"
+    }
   },
   {
-    "category": "proj",
     "start": "2025-01",
     "end": "2026-01",
-    "title": "Portfolio Webseite",
-    "desc": "Scroll-Animationen, Parallax, Glass UI, Prototyping.",
-    "label": "Portfolio"
+    "en": {
+      "title": "Portfolio Website",
+      "desc": "Scroll animations, parallax, Glass UI, prototyping.",
+      "label": "Portfolio"
+    },
+    "de": {
+      "title": "Portfolio Webseite",
+      "desc": "Scroll-Animationen, Parallax, Glass UI, Prototyping.",
+      "label": "Portfolio"
+    }
   },
   {
-    "category": "proj",
     "start": "2022-06-30",
     "end": "",
-    "title": "Hochzeit Vivi&Micha",
-    "desc": "We had our Dream Wedding on an old Burg",
-    "label": "Wedding",
+    "en": {
+      "title": "Wedding Vivi & Micha",
+      "desc": "We had our dream wedding on an old castle.",
+      "label": "Wedding"
+    },
+    "de": {
+      "title": "Hochzeit Vivi & Micha",
+      "desc": "Wir hatten unsere Traumhochzeit auf einer alten Burg.",
+      "label": "Hochzeit"
+    },
     "images": [
-      {
-        "src": "assets/images/timeline-wedding.jpg"
-      },
-      {
-        "src": "assets/images/timeline-wedding2.jpg"
-      }
+      { "src": "assets/images/timeline-wedding.jpg" },
+      { "src": "assets/images/timeline-wedding2.jpg" }
     ]
   }
 ]

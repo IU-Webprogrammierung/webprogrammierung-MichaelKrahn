@@ -105,6 +105,8 @@ body:not(.is-landing) .navbar {
   text-transform: uppercase;
   text-align: right;
   width: 100%;
+  /* Fine-tune vertical alignment so it isn't slightly higher than center */
+  transform: translateY(1px);
 }
 
 .navbar:not(.is-sticky) .navbar-miniText {
@@ -301,6 +303,8 @@ body:not(.is-landing) .navbar {
 .lang-flag {
   font-size: 1.1rem;
   line-height: 1;
+  /* Fine-tune vertical alignment so the text/emoji isn't slightly lower than center */
+  transform: translateY(-1.5px);
 }
 
 

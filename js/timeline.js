@@ -20,10 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // =============================
   // 2) CONFIG & HELPERS
   // =============================
+  // Add 1 extra year of padding before birth to make start easier to read
   const START_DATE = new Date("1996-06-28");
   const END_DATE = new Date();
   END_DATE.setMonth(END_DATE.getMonth() + 6);
-  const TOTAL_MS = END_DATE.getTime() - START_DATE.getTime();
+  const PADDED_START_DATE = new Date("1995-06-28"); // start virtual scrolling a year earlier
+  const TOTAL_MS = END_DATE.getTime() - PADDED_START_DATE.getTime();
 
   const VIRTUAL_WIDTH = 4000;
   track.style.width = `${VIRTUAL_WIDTH}px`;
@@ -84,8 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const endDate = parseDate(end);
     if (!startDate || !endDate) return null;
     
-    const startMs = startDate.getTime() - START_DATE.getTime();
-    const endMs = endDate.getTime() - START_DATE.getTime();
+    const startMs = startDate.getTime() - PADDED_START_DATE.getTime();
+    const endMs = endDate.getTime() - PADDED_START_DATE.getTime();
     
     const left = (startMs / TOTAL_MS) * 100;
     const right = (endMs / TOTAL_MS) * 100;
@@ -185,8 +187,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const usedDown = LANES_DOWN.map(() => []);
 
     items.forEach((item, index) => {
-      const itemTime = new Date(item.start).getTime();
-      const pct = (itemTime - START_DATE.getTime()) / TOTAL_MS;
+      const startDate = parseDate(item.start);
+      if (!startDate) return;
+      
+      const itemTime = startDate.getTime();
+      const pct = (itemTime - PADDED_START_DATE.getTime()) / TOTAL_MS;
       const pxPos = pct * VIRTUAL_WIDTH;
 
       const div = document.createElement("div");
@@ -195,12 +200,38 @@ document.addEventListener("DOMContentLoaded", () => {
       div.style.left = `${pxPos}px`;
       div.dataset.images = JSON.stringify(item.images || []);
 
+      let durationWidth = 0;
+      if (item.end) {
+        const endDate = parseDate(item.end);
+        if (endDate) {
+           const endPct = (endDate.getTime() - PADDED_START_DATE.getTime()) / TOTAL_MS;
+           durationWidth = Math.max(0, (endPct * VIRTUAL_WIDTH) - pxPos);
+        }
+      }
+
+      // Pull default language strings for data attributes
+      const titleDe = item.de?.title || item.title || "";
+      const titleEn = item.en?.title || item.title || "";
+      const descDe = item.de?.desc || item.desc || "";
+      const descEn = item.en?.desc || item.desc || "";
+      const labelDe = item.de?.label || item.label || "";
+      const labelEn = item.en?.label || item.label || "";
+
+      // Only insert the physical duration bar if we calculated a valid pixel width
+      const durationHtml = durationWidth > 0 
+          ? `<div class="milestone-duration" style="width: ${durationWidth}px;"></div>` 
+          : '';
+
       div.innerHTML = `
+      ${durationHtml}
       <button class="milestone-dot" type="button"
-        data-title="${item.title}" data-start="${item.start}" 
-        data-end="${item.end}" data-desc="${item.desc}">
+        data-start="${item.start}" data-end="${item.end}"
+        data-title-de="${titleDe}" data-title-en="${titleEn}" 
+        data-desc-de="${descDe}" data-desc-en="${descEn}">
       </button>
-      <span class="milestone-label">${nice(item.start)} • ${item.title}</span>
+      <span class="milestone-label">
+        ${nice(item.start)} • <span data-de="${labelDe}" data-en="${labelEn}">${labelDe}</span>
+      </span>
     `;
       track.appendChild(div);
 
@@ -246,7 +277,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function animationLoop(t) {
     const now = t * 0.001;
-    const dt = animationLoop.last ? now - animationLoop.last : 0;
+    let dt = animationLoop.last ? now - animationLoop.last : 0.016;
+    
+    // Performance Guard: Clamp dt. If the browser tab goes to sleep or lags,
+    // dt can become massive (e.g., 5-10 seconds). This huge multiplier gets applied
+    // to the image's drift velocity, catapulting it at lightning speed across the screen
+    // (creating the rogue high-momentum effect). Cap it at 100ms max.
+    if (dt > 0.1) dt = 0.016; 
+    
     animationLoop.last = now;
 
     activeCards.forEach(card => updateCard(card, dt, now));
@@ -257,13 +295,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ambient = document.getElementById("timelineAmbient");
 
-  // 5 Slots around the center (in % of timeline-area)
+  // Reset slots to a wide grid mapping top and mid canvas 
   const SLOTS = [
-    { x: 35, y: 32 },
-    { x: 50, y: 26 },
-    { x: 65, y: 32 },
-    { x: 40, y: 68 },
-    { x: 60, y: 68 },
+    { x: 20, y: 5 },  // Top Left
+    { x: 50, y: 0 },  // Top Center
+    { x: 80, y: 5 },  // Top Right
+    { x: 10, y: 25 }, // Mid Far Left
+    { x: 35, y: 20 }, // Mid Inner Left
+    { x: 65, y: 20 }, // Mid Inner Right
+    { x: 90, y: 25 }, // Mid Far Right
   ];
 
   const slotBusy = new Array(SLOTS.length).fill(false);
@@ -314,21 +354,30 @@ document.addEventListener("DOMContentLoaded", () => {
     return pick(free);
   }
 
-  function spawnAmbientCard() {
+  function spawnAmbientCard(forcedImage = null) {
     if (!ambient) return;
+
+    // Hard limit: never spawn more than 3 active ambient cards at a time to prevent flooding
+    if (activeCards.size >= 3) return;
 
     // Only when CV Section is visible
     const secRect = wrapper.getBoundingClientRect();
     const inView = secRect.top < window.innerHeight * 0.75 && secRect.bottom > window.innerHeight * 0.25;
-    if (!inView) return;
+    if (!inView && !forcedImage) return; // Allow forced images even if technically out of strict view bounds
 
-    const candidates = gatherCandidateImages();
-    if (!candidates.length) return;
+    let im = null;
+    if (forcedImage) {
+      im = forcedImage;
+      // Do not force spawn if it's already rendered on the screen
+      if (renderedImages.has(im.src)) return; 
+    } else {
+      const candidates = gatherCandidateImages();
+      if (!candidates.length) return;
+      im = pick(candidates);
+    }
 
     const slotIndex = findFreeSlot();
     if (slotIndex === -1) return;
-
-    const im = pick(candidates);
     
     // Mark this image as rendered to prevent duplicates
     renderedImages.add(im.src);
@@ -361,7 +410,8 @@ document.addEventListener("DOMContentLoaded", () => {
     card.motion = createMotion();
     card.age = 0;
     card.life = 6 + Math.random() * 4;
-
+    card.imgSrc = im.src; // save reference for cleanup
+    
     card.px = 0;
     card.py = 0;
     card.appendChild(img);
@@ -381,6 +431,31 @@ document.addEventListener("DOMContentLoaded", () => {
     ambientTimer = setInterval(() => {
       if (Math.random() < 0.40) spawnAmbientCard();
     }, 2000);
+
+    // Custom hit-testing to trigger hover states on images since they are natively blocked by timeline z-index
+    let hoveredCard = null;
+    document.addEventListener("mousemove", (e) => {
+      let found = null;
+      // Reverse array to test the top-most (most recently spawned) card first
+      const cards = Array.from(activeCards).reverse();
+      for (const card of cards) {
+        // Opacity filter: don't hover practically invisible cards
+        if (parseFloat(card.style.opacity) < 0.1) continue; 
+        
+        const rect = card.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+          found = card;
+          break; 
+        }
+      }
+      
+      if (found !== hoveredCard) {
+        if (hoveredCard) hoveredCard.classList.remove("is-hovered");
+        if (found) found.classList.add("is-hovered");
+        hoveredCard = found;
+      }
+    }, {passive: true});
   }
 
   viewport.addEventListener("scroll", () => {
@@ -406,16 +481,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createMotion() {
-    const dir = Math.random() * Math.PI * 2;
-
     return {
       phase: Math.random() * Math.PI * 2,
-      freq: 0.12 + Math.random() * 0.28,
-      ampX: 8 + Math.random() * 22,
-      ampY: 10 + Math.random() * 26,
-      driftX: Math.cos(dir) * (4 + Math.random() * 10),
-      driftY: Math.sin(dir) * (2 + Math.random() * 8),
-      rotSpeed: (Math.random() - 0.5) * 0.12,
+      freq: 0.05 + Math.random() * 0.05, 
+      ampX: 10 + Math.random() * 10,
+      ampY: 5 + Math.random() * 5, 
+      
+      // Explicitly allow negative (left) and positive (right) drift up to 8px/sec
+      driftX: (Math.random() - 0.5) * 16, 
+      
+      // Explicitly allow negative (up) and positive (down) drift up to 4px/sec
+      driftY: (Math.random() - 0.5) * 8, 
+      
+      rotSpeed: (Math.random() - 0.5) * 0.1,
+      scalePhase: Math.random() * Math.PI * 2,
     };
   }
 
@@ -424,9 +503,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const m = card.motion;
     const t = time + m.phase;
 
+    // Slower, more organic sway
     const swayX = Math.sin(t * m.freq) * m.ampX;
     const swayY = Math.cos(t * m.freq * 0.85) * m.ampY;
-    const flutter = Math.sin(t * 2.1) * 1.2;
+    const flutter = Math.sin(t * 1.5) * 2.0;
 
     card.px += m.driftX * dt;
     card.py += m.driftY * dt;
@@ -435,24 +515,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const y = card.py + swayY;
 
     const lifeT = card.age / card.life;
-    const fadeInDur = 0.12;
-    const fadeOutStart = 0.78;
+    const fadeInDur = 0.15;
+    // Start fading out earlier (at 60% life) for a much smoother, lingering disappearance
+    const fadeOutStart = 0.60; 
 
     let opacity;
     if (lifeT < fadeInDur) opacity = lifeT / fadeInDur;
-    else if (lifeT > fadeOutStart) opacity = 1 - (lifeT - fadeOutStart) / (1 - fadeOutStart);
+    else if (lifeT > fadeOutStart) {
+      // Use smoothstep-like easing curve for natural fade out
+      // Math.pow ensures a softer descent to 0 so it doesn't pop at the very end
+      const fadeProgress = (lifeT - fadeOutStart) / (1 - fadeOutStart);
+      opacity = Math.max(0, Math.pow(Math.cos(fadeProgress * Math.PI / 2), 1.5)); 
+    }
     else opacity = 1;
 
     opacity = Math.max(0, Math.min(1, opacity));
-    const scale = 0.94 + 0.06 * opacity;
+    
+    // Subtle breathing scale effect
+    const breath = 1 + Math.sin(time * 0.5 + m.scalePhase) * 0.03;
+    const scale = (0.94 + 0.06 * opacity) * breath;
 
     card.style.opacity = opacity;
-    card.style.transform =
-      `translate(${x}px, ${y}px) rotate(${m.rotSpeed * card.age}deg) scale(${scale})`;
+    // CRITICAL FIX: Base CSS relies on translate(-50%, -50%) to center cards on their X/Y slot origin!
+    // Overwriting it with a raw translate(px) meant 0,0 was Top-Left, forcing all negative drift to look buggy
+    // and all positive drift to physically sweep Bottom-Right.
+    card.style.transform = `translate(-50%, -50%) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) rotate(${m.rotSpeed * card.age}deg) scale(${scale})`;
 
     // natural removal
     if (card.age >= card.life) {
       activeCards.delete(card);
+      // Remove from rendered tracker so it can spawn again later!
+      if (card.imgSrc) renderedImages.delete(card.imgSrc);
       card.remove();
       slotBusy[card.slotIndex] = false;
     }
@@ -492,11 +585,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const t0 = progress;
     const t1 = clamp01(progress + windowSpan);
 
-    const dateLeft = lerpDate(START_DATE, END_DATE, t0);
-    const dateRight = lerpDate(START_DATE, END_DATE, t1);
+    const dateLeft = lerpDate(PADDED_START_DATE, END_DATE, t0);
+    const dateRight = lerpDate(PADDED_START_DATE, END_DATE, t1);
 
-    if (windowStartEl) windowStartEl.textContent = monthYearFmt.format(dateLeft);
-    if (windowEndEl) windowEndEl.textContent = monthYearFmt.format(dateRight);
+    // Custom window labels, override to hide the padded '95 year before actual birth
+    if (windowStartEl && windowEndEl) {
+        const d1 = dateLeft.getFullYear() < 1996 ? new Date("1996-01-01") : dateLeft;
+        windowStartEl.textContent = monthYearFmt.format(d1);
+        windowEndEl.textContent = monthYearFmt.format(dateRight);
+    }
   }
 
   viewport.addEventListener("scroll", () => {
@@ -511,9 +608,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const area = dot.closest(".timeline-area");
     const areaRect = area.getBoundingClientRect();
 
-    ttTitle.textContent = dot.dataset.title;
-    ttRange.textContent = `${nice(dot.dataset.start)} → ${nice(dot.dataset.end)}`;
-    ttDesc.textContent = dot.dataset.desc;
+    // Fetch current language from language.js setting on body, default to de (German)
+    const lang = document.body.getAttribute('data-current-lang') || "de";
+
+    ttTitle.textContent = dot.dataset[`title${lang === 'en' ? 'En' : 'De'}`];
+    
+    const startStr = nice(dot.dataset.start);
+    const endStr = dot.dataset.end ? nice(dot.dataset.end) : "";
+    ttRange.textContent = endStr ? `${startStr} → ${endStr}` : startStr;
+    
+    ttDesc.textContent = dot.dataset[`desc${lang === 'en' ? 'En' : 'De'}`];
     
     // Show duration if there's an end date
     const duration = getDuration(dot.dataset.start, dot.dataset.end);
@@ -534,9 +638,32 @@ document.addEventListener("DOMContentLoaded", () => {
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top - 10}px`;
     tooltip.classList.add("active");
+
+    // Spawn dedicated image for this milestone immediately
+    try {
+      const imagesRaw = dot.parentElement.dataset.images;
+      if (imagesRaw) {
+        const msImgs = JSON.parse(imagesRaw);
+        if (msImgs && msImgs.length > 0) {
+           // pick one random image from this milestone to pop up instantly
+           const imgToSpawn = msImgs[Math.floor(Math.random() * msImgs.length)];
+           spawnAmbientCard(imgToSpawn);
+        }
+      }
+    } catch(e) { console.error(e); }
   }
 
   function hideTooltip() { tooltip.classList.remove("active"); }
+
+  // Listen for global language toggles to refresh all static labels
+  window.addEventListener('languageToggled', (e) => {
+    // Retrigger tooltip logic if it's currently open
+    if (tooltip.classList.contains("active")) {
+      // Find the currently hovered dot and re-render it
+      const dots = document.querySelectorAll(".milestone-dot:hover");
+      if (dots.length > 0) showTooltip(dots[0]); 
+    }
+  });
 });
 
 
